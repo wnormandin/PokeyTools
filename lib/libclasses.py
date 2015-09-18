@@ -8,6 +8,8 @@ spark_logger = logging.getLogger('spark_tools.py')
 
 #********************************GLOBALS********************************
 
+# Google Drive URL to diagram : https://drive.draw.io/#G0B6z1IIlV5HAPSWtrUTdjeW0tUU0
+
 # Button Labels
 win_title = 'HG Tools'
 pc_button_text = 'Broadcast'
@@ -44,8 +46,6 @@ search_box_tooltip = 'Specify a search term for\nyour AHK/Script search'
 depth_box_tooltip = 'Specify a search term in months (Max 12)'
 keyword_box_tooltip = 'Specify keyword(s) to search'
 chatroom_box_tooltip = 'Specify a chat room to search'
-
-
 
 #********************************/GLOBALS*******************************
 
