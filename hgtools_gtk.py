@@ -22,9 +22,12 @@ def tools_main():
 	
 	global favicon
 	
+	gtk_style()
 	win = hgt_window()
 	win.connect("delete-event", Gtk.main_quit)
+	hgt_logger.debug('[*] Showing Window')
 	win.show_all()
+	hgt_logger.debug('[*] Entering Gtk.main()')
 	Gtk.main()
 	
 if __name__ == '__main__':

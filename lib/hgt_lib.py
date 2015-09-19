@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from gi.repository import GObject
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 import sys, getopt, datetime, time, os
 import dbus, dbus.glib, dbus.decorators
 import logging
@@ -362,7 +362,72 @@ def pc_main(*argv, **kwargs):
 		
 #******************************/PASS_CHATS******************************
 
+#*********************************STYLE*********************************
+def gtk_style():
+	css = b"""
+* {
+    transition-property: color, background-color, border-color, background-image, padding, border-width;
+    transition-duration: 0.5s;
+    font: 15px arial, sans-serif;
+}
+GtkWindow {
+    background: linear-gradient(153deg, #151515, #151515 5px, transparent 5px) 0 0,
+                linear-gradient(333deg, #151515, #151515 5px, transparent 5px) 10px 5px,
+                linear-gradient(153deg, #222, #222 5px, transparent 5px) 0 5px,
+                linear-gradient(333deg, #222, #222 5px, transparent 5px) 10px 10px,
+                linear-gradient(90deg, #1b1b1b, #1b1b1b 10px, transparent 10px),
+                linear-gradient(#1d1d1d, #1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+    background-color: #131313;
+    background-size: 20px 20px;
+    border-style: solid;
+    border-width: 5px 0 2px 2px;
+    border-color: #FFF;
+    font: 15px arial, sans-serif;
+}
+.button {
+    color: black;
+    background-color: #bbb;
+    border-style: solid;
+    border-width: 2px 0 2px 2px;
+    border-color: #333;
+    box-shadow: 0 0 5px #333 inset;
+    padding: 12px 4px;
+    font: 15px arial, sans-serif;
+}
+.button:first-child {
+    border-radius: 2px 0 0 2px;
+    font: 15px arial, sans-serif;
+}
+.button:last-child {
+    border-radius: 0 2px 2px 0;
+    border-width: 2px;
+    font: 15px arial, sans-serif;
+}
+.button:hover {
+    background-color: #4870bc;
+    font: 15px arial, sans-serif;
+}
+.button *:hover {
+    color: white;
+    font: 15px arial, sans-serif;
+}
+.button:hover:active,
+.button:active {
+    background-color: #993401;
+    font: 15px arial, sans-serif;
+}
+.GtkLabel {
+	font: 15px arial, sans-serif;
+}
+        """
+	style_provider = Gtk.CssProvider()
+	style_provider.load_from_data(css)
 
+	Gtk.StyleContext.add_provider_for_screen(
+		Gdk.Screen.get_default(),
+		style_provider,
+		Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+		
 #*********************************Classes*******************************
 class hgt_window(Gtk.Window):
 	
@@ -372,22 +437,31 @@ class hgt_window(Gtk.Window):
 	
 	def __init__(self):
 		
-		
-		win_title = 'HG Tools'
-		Gtk.Window.__init__(self, title=win_title)
-		hgt_logger.debug("[*] HGTools GUI spawned")
-		self.set_icon_from_file(favicon)
-		
-		# Widget Enumeration
-		widgets = self.widget_config()
-		
-		# Grid/Box Constructor
-		grid = Gtk.Grid()
-		self.box_config(grid, widgets)
-		self.add(grid)
+		try:
+			win_title = 'HG Tools'
+			Gtk.Window.__init__(self, title=win_title)
+			hgt_logger.debug("[*] HGTools GUI spawned")
+			self.set_icon_from_file(favicon)
+			
+			# Widget Enumeration
+			widgets = self.widget_config()
+			
+			# Grid/Box Constructor
+			grid = Gtk.Grid()
+			grid.set_border_width(1)
+			grid.set_column_homogeneous(True)
+			grid.set_row_homogeneous(False)
+			grid.set_column_spacing(6)
+			grid.set_row_spacing(6)
+			self.box_config(grid, widgets)
+			self.add(grid)
 
-		self.set_position(Gtk.WindowPosition.CENTER)
-		
+			self.set_position(Gtk.WindowPosition.CENTER)
+			
+		except Exception as e:
+			hgt_logger.debug('[*] {:}'.format(e))
+			Gtk.main_quit()
+			
 	# Signal Events
 
 	def pc_button_exec(self, widget):
@@ -409,6 +483,7 @@ class hgt_window(Gtk.Window):
 	def menu_cl_button_exec(self, widget):
 		# Close the window
 		hgt_logger.debug("[*] cl_button clicked")
+		Gtk.main_quit()
 		
 	def menu_log_button_exec(self, widget):
 		# Show the last_run log file
@@ -416,7 +491,7 @@ class hgt_window(Gtk.Window):
 		
 	def pc_add_button_exec(self, widget):
 		# Add a user to the pass_chats list
-		hgt_logger.debug("add_button clicked")
+		hgt_logger.debug("[*] add_button clicked")
 		
 	def pc_remove_button_exec(self, widget):
 		# Remove a user from the pass_chats list
@@ -430,7 +505,7 @@ class hgt_window(Gtk.Window):
 		# Search depth combo changed
 		hgt_logger.debug("[*] sl_depth_combo changed")
 		
-	def pc_chatlist_selection_changed(selection):
+	def pc_chatlist_selection_changed(self, selection):
 		# pc_chatlist_treeview changed
 		model, treeiter = selection.get_selected()
 		if treeiter != None:
@@ -441,39 +516,39 @@ class hgt_window(Gtk.Window):
 
 	def box_config(self, grid, widgets):
 		hgt_logger.debug('[*] Configuring Boxes')
-
+		
+		hgt_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		
 		pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 		pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
-		hgt_logger.debug('\tpc_widgets {:}'.format(pc_widgets))
 		for item in pc_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(pc_widgets)))
 		self.pc_box_build(pc_box, pc_widgets)
-		grid.add(pc_box)
 
 		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
-		hgt_logger.debug('\tsl_widgets {:}'.format(sl_widgets))
 		for item in sl_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
-		grid.attach_next_to(sl_box, pc_box, Gtk.PositionType.RIGHT, 1, 2)
+		
+		hgt_top_box.pack_start(pc_box, True, True, 0)
+		hgt_top_box.pack_start(sl_box, True, True, 0)
+		grid.add(hgt_top_box)
 
 		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
-		hgt_logger.debug('\thgt_widgets {:}'.format(hgt_widgets))
 		for item in hgt_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(hgt_widgets) : {}'.format(len(hgt_widgets)))
 		self.hgt_box_build(hgt_box, hgt_widgets)
-		grid.attach_next_to(hgt_box, pc_box, Gtk.PositionType.BOTTOM, 1, 2)
+		grid.attach_next_to(hgt_box, hgt_top_box, Gtk.PositionType.BOTTOM, 1, 2)
 
 		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
-		hgt_logger.debug('\tmenu_widgets {:}'.format(menu_widgets))
 		for item in menu_widgets:
-			hgt_logger.debug('\t\t{}'.format(item[0]))
+			hgt_logger.debug('\t\t{}'.format(item[:]))
 		hgt_logger.debug('\tlen(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
 		grid.attach_next_to(menu_box, hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
@@ -491,6 +566,10 @@ class hgt_window(Gtk.Window):
 		pc_chats_combo = Gtk.ComboBox.new_with_model(pc_chats_combo_store)
 		pc_chats_combo.set_tooltip_text(pc_widgets[1][2])
 		pc_chats_combo.connect(*pc_widgets[1][3])
+		renderer_text = Gtk.CellRendererText()
+		pc_chats_combo.pack_start(renderer_text, True)
+		pc_chats_combo.add_attribute(renderer_text, "text", 0)
+		pc_chats_combo.set_active(0)
 		
 		# pc_chatlist_store
 		pc_chatlist_store = Gtk.ListStore(str)
@@ -532,7 +611,7 @@ class hgt_window(Gtk.Window):
 		pc_button.set_tooltip_text(pc_widgets[7][2])
 		pc_button.connect(*pc_widgets[7][3])
 		
-		pc_box.pack_start(pc_label, True, True, 0)
+		pc_box.pack_start(pc_label, True, True, 0l)
 		pc_box.pack_start(pc_chats_combo, True, True, 0)
 		pc_box.pack_start(pc_chatlist_treeview, True, True, 0)
 		pc_box.pack_start(pc_remove_button, True, True, 0)
@@ -553,6 +632,11 @@ class hgt_window(Gtk.Window):
 		sl_depth_combo = Gtk.ComboBox.new_with_model(sl_depth_combo_store)
 		sl_depth_combo.set_tooltip_text(sl_widgets[1][2])
 		sl_depth_combo.connect(*sl_widgets[1][3])
+		sl_depth_combo.set_entry_text_column(0)
+		renderer_text = Gtk.CellRendererText()
+		sl_depth_combo.pack_start(renderer_text, True)
+		sl_depth_combo.add_attribute(renderer_text, "text", 0)
+		sl_depth_combo.set_active(0)
 		
 		# sl_date_box
 		sl_date_box = Gtk.Entry()
@@ -571,6 +655,10 @@ class hgt_window(Gtk.Window):
 		sl_chatroom_combo = Gtk.ComboBox.new_with_model(sl_chatroom_combo_store)
 		sl_chatroom_combo.set_tooltip_text(sl_widgets[4][2])
 		sl_chatroom_combo.connect(*sl_widgets[4][3])
+		renderer_text = Gtk.CellRendererText()
+		sl_chatroom_combo.pack_start(renderer_text, True)
+		sl_chatroom_combo.add_attribute(renderer_text, "text", 0)
+		sl_chatroom_combo.set_active(0)
 		
 		# sl_user_box
 		sl_user_box = Gtk.Entry()
@@ -610,9 +698,9 @@ class hgt_window(Gtk.Window):
 		hgt_logger.debug('\tmenu_box_build')
 		
 		# menu_cl_button
-		menu_cl_button =  Gtk.Button.new_with_label(menu_widgets[1][1])
-		menu_cl_button.set_tooltip_text(menu_widgets[1][2])
-		menu_cl_button.connect(*menu_widgets[1][3])
+		menu_cl_button =  Gtk.Button.new_with_label(menu_widgets[0][1])
+		menu_cl_button.set_tooltip_text(menu_widgets[0][2])
+		menu_cl_button.connect(*menu_widgets[0][3])
 		
 		# menu_log_button
 		menu_log_button =  Gtk.Button.new_with_label(menu_widgets[1][1])
@@ -687,7 +775,7 @@ class hgt_window(Gtk.Window):
 		
 		# sl_depth_combo (Combo Box)
 		sl_depth_combo_values = []
-		sl_depth_combo_values.append('# Months')
+		sl_depth_combo_values.append('# of Months')
 		sl_depth_combo_values.extend(range(1, 12))
 		
 		hgt_widget.append(('sl_depth_combo', 
@@ -736,7 +824,7 @@ class hgt_window(Gtk.Window):
 		
 		# Menu Section
 		# menu_cl_button (Action Button)
-		hgt_widget.append(('menu_cl_button', 'Close Window'
+		hgt_widget.append(('menu_cl_button', 'Close Window',
 							'Closes this window',
 							["clicked", self.menu_cl_button_exec]))
 
