@@ -1,0 +1,23 @@
+# Compiled Python source
+########################
+*.pyc
+
+# Temporary files
+########################
+tmp/.
+
+# Log files
+########################
+*.log
+
+# Packages 
+########################
+# it's better to unpack these files and commit the raw source
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
