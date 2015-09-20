@@ -25,6 +25,42 @@ PURPLE_CONV_TYPE_IM=1
 # GUI
 ENV_USER = getpass.getuser()
 
+UI_INFO = """
+<ui>
+  <menubar name='MenuBar'>
+    <menu action='FileMenu'>
+      <menu action='FileNew'>
+        <menuitem action='FileNewStandard' />
+      </menu>
+      <separator />
+      <menuitem action='FileQuit' />
+    </menu>
+    <menu action='DataMenu'>
+      <menuitem action='DataDeduplicate' />
+    </menu>
+  </menubar>
+</ui>
+"""
+
+CSS = b"""
+* {
+    font: 10px arial, sans-serif;
+}
+GtkWindow {
+    background-color: #000;
+    background-size: 15px 15px;
+    border-style: solid;
+    border-width: 0 0 0 0;
+    border-color: #000000;
+    font: 10px arial, sans-serif;
+}
+
+GtkLabel {
+	font: 8px arial, sans-serif;
+	color: #FFF;
+}
+"""
+
 #******************************/GLOBALS*********************************
 
 #******************************FUNCTIONS********************************
@@ -365,26 +401,8 @@ def pc_main(*argv, **kwargs):
 
 #*********************************STYLE*********************************
 def gtk_style():
-	css = b"""
-* {
-    font: 15px arial, sans-serif;
-}
-GtkWindow {
-    background-color: #FFF;
-    background-size: 15px 15px;
-    border-style: solid;
-    border-width: 5px 0 2px 2px;
-    border-color: #FFF;
-    font: 15px arial, sans-serif;
-}
-
-GtkLabel {
-	font: 15px arial, sans-serif;
-	color: #FFF;
-}
-        """
 	style_provider = Gtk.CssProvider()
-	style_provider.load_from_data(css)
+	style_provider.load_from_data(CSS)
 
 	Gtk.StyleContext.add_provider_for_screen(
 		Gdk.Screen.get_default(),
@@ -392,7 +410,7 @@ GtkLabel {
 		Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 		
 #*********************************Classes*******************************
-    
+
 class hgt_window(Gtk.Window):
 	
 # Google Drive URL to diagram : https://drive.draw.io/#G0B6z1IIlV5HAPSWtrUTdjeW0tUU0
@@ -409,6 +427,21 @@ class hgt_window(Gtk.Window):
 			hgt_logger.debug("[*] HGTools GUI spawned")
 			self.set_icon_from_file(favicon)
 			
+			# Create Menu Action Group
+			action_group = Gtk.ActionGroup("menu_actions")
+			
+			# Enumerate File menu options
+			self.add_file_menu_actions(action_group)
+			# Enumerate Options menu options
+			self.add_option_menu_actions(action_group)
+
+			# Create ui manager and attach actions
+			uimanager = self.create_ui_manager()
+			uimanager.insert_action_group(action_group)
+
+			# Get menubar
+			menubar = uimanager.get_widget("/MenuBar")
+			
 			# Widget Enumeration
 			widgets = self.widget_config()
 			
@@ -419,7 +452,7 @@ class hgt_window(Gtk.Window):
 			grid.set_row_homogeneous(False)
 			grid.set_column_spacing(10)
 			grid.set_row_spacing(10)
-			self.box_config(grid, widgets)
+			self.box_config(menubar, grid, widgets)
 			self.add(grid)
 
 			self.set_position(Gtk.WindowPosition.CENTER)
@@ -428,6 +461,94 @@ class hgt_window(Gtk.Window):
 			hgt_logger.debug('[*] {:}'.format(e))
 			raise
 			Gtk.main_quit()
+			
+	# Actions
+	
+	def on_menu_file_csv_import(self, widget):
+		dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
+			Gtk.FileChooserAction.OPEN,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+		self.add_filters(dialog)
+
+		response = dialog.run()
+		if response == Gtk.ResponseType.OK:
+			print("Open clicked")
+			print("File selected: " + dialog.get_filename())
+		elif response == Gtk.ResponseType.CANCEL:
+			print("Cancel clicked")
+
+		dialog.destroy()
+
+	def add_filters(self, dialog):
+		filter_csv = Gtk.FileFilter()
+		filter_csv.set_name("CSV files")
+		filter_csv.add_mime_type("text/csv")
+		dialog.add_filter(filter_csv)
+
+		filter_any = Gtk.FileFilter()
+		filter_any.set_name("Any files")
+		filter_any.add_pattern("*")
+		dialog.add_filter(filter_any)
+
+	def add_file_menu_actions(self, action_group):
+		action_filemenu = Gtk.Action("FileMenu", " File |", None, None)
+		action_group.add_action(action_filemenu)
+
+		action_filenewmenu = Gtk.Action("FileNew", None, None, Gtk.STOCK_NEW)
+		action_group.add_action(action_filenewmenu)
+
+		action_new = Gtk.Action("FileNewStandard", "_New (CSV) Import",
+			"New (CSV) Import", Gtk.STOCK_NEW)
+		action_new.connect("activate", self.on_menu_file_csv_import)
+		action_group.add_action_with_accel(action_new, None)
+
+		action_filequit = Gtk.Action("FileQuit", None, None, Gtk.STOCK_QUIT)
+		action_filequit.connect("activate", self.on_menu_file_quit)
+		action_group.add_action(action_filequit)
+
+	def add_option_menu_actions(self, action_group):
+		action_group.add_actions([
+			("DataMenu", None, " Data |"),
+			("DataDeduplicate", None, "Deduplicate", None, None,
+				self.on_menu_deduplicate),
+		])
+		
+	def on_menu_deduplicate(self, widget):
+		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
+	
+	def create_ui_manager(self):
+		uimanager = Gtk.UIManager()
+		try:
+			# Throws exception if something went wrong
+			uimanager.add_ui_from_string(UI_INFO)
+
+			# Add the accelerator group to the toplevel window
+			accelgroup = uimanager.get_accel_group()
+			self.add_accel_group(accelgroup)
+			return uimanager
+			
+		except Exception as e:
+			hgt_logger.debug('[*] {:}'.format(e))
+			raise
+			Gtk.main_quit()
+
+	def on_menu_file_quit(self, widget):
+		hgt_logger.debug("[*] File > Quit Selected")
+		Gtk.main_quit()
+
+	def on_menu_others(self, widget):
+		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
+
+	def on_menu_choices_changed(self, widget, current):
+		hgt_logger.debug("[*] {} {}".format(current.get_name(), " was selected."))
+
+	def on_menu_choices_toggled(self, widget):
+		if widget.get_active():
+			hgt_logger.debug("[*] {} {}".format(widget.get_name(), " activated"))
+		else:
+			hgt_logger.debug("[*] {} {}".format(widget.get_name(), " deactivated"))
 			
 	# Signal Events
 
@@ -481,10 +602,10 @@ class hgt_window(Gtk.Window):
 
 	# Window Format
 
-	def box_config(self, grid, widgets):
+	def box_config(self, menubar, grid, widgets):
 		hgt_logger.debug('[*] Configuring Boxes')
 		
-		hgt_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hgt_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		
 		pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
@@ -492,6 +613,7 @@ class hgt_window(Gtk.Window):
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(pc_widgets)))
 		self.pc_box_build(pc_box, pc_widgets)
+		pc_box.set_homogeneous(False)
 
 		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
@@ -499,26 +621,32 @@ class hgt_window(Gtk.Window):
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
+		pc_box.set_homogeneous(False)
 		
-		hgt_top_box.pack_start(pc_box, True, True, 0)
+		
+		hgt_top_box.pack_start(pc_box, True, True, 2)
 		hgt_top_box.pack_start(sl_box, True, True, 0)
-		grid.add(hgt_top_box)
+		hgt_top_box.set_homogeneous(True)
+		grid.add(menubar)
+		grid.attach_next_to(hgt_top_box, menubar, Gtk.PositionType.BOTTOM, 1, 2)
 
-		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
 		for item in hgt_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(hgt_widgets) : {}'.format(len(hgt_widgets)))
 		self.hgt_box_build(hgt_box, hgt_widgets)
 		grid.attach_next_to(hgt_box, hgt_top_box, Gtk.PositionType.BOTTOM, 1, 2)
+		hgt_box.set_homogeneous(False)
 
-		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
 		for item in menu_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[:]))
 		hgt_logger.debug('\tlen(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
 		grid.attach_next_to(menu_box, hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		menu_box.set_homogeneous(False)
 		
 	def pc_box_build(self, pc_box, pc_widgets):
 		hgt_logger.debug('\tpc_box_build')
@@ -580,7 +708,7 @@ class hgt_window(Gtk.Window):
 		pc_button.set_tooltip_text(pc_widgets[7][2])
 		pc_button.connect(*pc_widgets[7][3])
 		
-		pc_box.pack_start(pc_label, True, True, 1)
+		pc_box.pack_start(pc_label, False, False, 1)
 		pc_box.pack_start(pc_chats_combo, True, True, 0)
 		pc_box.pack_start(pc_chatlist_treeview, True, True, 0)
 		pc_box.pack_start(pc_remove_button, True, True, 0)
