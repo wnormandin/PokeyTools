@@ -371,7 +371,7 @@ def gtk_style():
 }
 GtkWindow {
     background-color: #FFF;
-    background-size: 10px 10px;
+    background-size: 15px 15px;
     border-style: solid;
     border-width: 5px 0 2px 2px;
     border-color: #FFF;
@@ -392,16 +392,6 @@ GtkLabel {
 		Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 		
 #*********************************Classes*******************************
-
-class style:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
     
 class hgt_window(Gtk.Window):
 	
@@ -413,10 +403,7 @@ class hgt_window(Gtk.Window):
 	def __init__(self):
 		
 		try:
-			win_title = 'HG Tools | '
-			win_title += style.OKBLUE
-			win_title += 'Welcome, {}{}{}!'.format(ENV_USER) 
-			win_title += style.ENDC
+			win_title = 'HG Tools | Welcome, {}!'.format(ENV_USER) 
 			
 			Gtk.Window.__init__(self, title=win_title)
 			hgt_logger.debug("[*] HGTools GUI spawned")
@@ -430,8 +417,8 @@ class hgt_window(Gtk.Window):
 			grid.set_border_width(1)
 			grid.set_column_homogeneous(False)
 			grid.set_row_homogeneous(False)
-			grid.set_column_spacing(6)
-			grid.set_row_spacing(6)
+			grid.set_column_spacing(10)
+			grid.set_row_spacing(10)
 			self.box_config(grid, widgets)
 			self.add(grid)
 
@@ -439,6 +426,7 @@ class hgt_window(Gtk.Window):
 			
 		except Exception as e:
 			hgt_logger.debug('[*] {:}'.format(e))
+			raise
 			Gtk.main_quit()
 			
 	# Signal Events
@@ -689,8 +677,8 @@ class hgt_window(Gtk.Window):
 		menu_log_button.set_tooltip_text(menu_widgets[1][2])
 		menu_log_button.connect(*menu_widgets[1][3])
 		
-		menu_box.pack_start(menu_cl_button, True, True, 0)
-		menu_box.pack_start(menu_log_button, True, True, 0)
+		menu_box.pack_start(menu_cl_button, True, True, 1)
+		menu_box.pack_start(menu_log_button, True, True, 1)
 		
 	def widget_config(self):
 		hgt_logger.debug('[*] Configuring Widgets')
