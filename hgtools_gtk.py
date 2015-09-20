@@ -18,7 +18,7 @@ hgt_logger = setup_logger('hgtools_gtk.py', logging.DEBUG, LOG_PATH)
 	
 #*****************************END LOGGING*******************************
 
-def tools_main():
+def main():
 	
 	global favicon
 	
@@ -31,4 +31,4 @@ def tools_main():
 	Gtk.main()
 	
 if __name__ == '__main__':
-	tools_main()
+	main()

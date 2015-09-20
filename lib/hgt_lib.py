@@ -3,7 +3,7 @@ from gi.repository import GObject
 from gi.repository import Gtk, Gdk
 import sys, getopt, datetime, time, os
 import dbus, dbus.glib, dbus.decorators
-import logging
+import logging, getpass
 from os.path import expanduser
 
 #******************************GLOBALS**********************************
@@ -23,6 +23,7 @@ PURPLE_CONV_TYPE_IM=1
 # HGTools Functionality
 
 # GUI
+ENV_USER = getpass.getuser()
 
 #******************************/GLOBALS*********************************
 
@@ -366,57 +367,18 @@ def pc_main(*argv, **kwargs):
 def gtk_style():
 	css = b"""
 * {
-    transition-property: color, background-color, border-color, background-image, padding, border-width;
-    transition-duration: 0.5s;
     font: 15px arial, sans-serif;
 }
 GtkWindow {
-    background: linear-gradient(153deg, #151515, #151515 5px, transparent 5px) 0 0,
-                linear-gradient(333deg, #151515, #151515 5px, transparent 5px) 5px 5px,
-                linear-gradient(153deg, #222, #222 5px, transparent 5px) 0 5px,
-                linear-gradient(333deg, #222, #222 5px, transparent 5px) 5px 5px,
-                linear-gradient(90deg, #1b1b1b, #1b1b1b 10px, transparent 10px),
-                linear-gradient(#1d1d1d, #1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
-    background-color: #131313;
+    background-color: #FFF;
     background-size: 10px 10px;
     border-style: solid;
     border-width: 5px 0 2px 2px;
     border-color: #FFF;
     font: 15px arial, sans-serif;
 }
-.button {
-    color: black;
-    background-color: #bbb;
-    border-style: solid;
-    border-width: 2px 0 2px 2px;
-    border-color: #333;
-    box-shadow: 0 0 5px #333 inset;
-    padding: 12px 4px;
-    font: 15px arial, sans-serif;
-}
-.button:first-child {
-    border-radius: 2px 0 0 2px;
-    font: 15px arial, sans-serif;
-}
-.button:last-child {
-    border-radius: 0 2px 2px 0;
-    border-width: 2px;
-    font: 15px arial, sans-serif;
-}
-.button:hover {
-    background-color: #4870bc;
-    font: 15px arial, sans-serif;
-}
-.button *:hover {
-    color: white;
-    font: 15px arial, sans-serif;
-}
-.button:hover:active,
-.button:active {
-    background-color: #993401;
-    font: 15px arial, sans-serif;
-}
-.GtkLabel {
+
+GtkLabel {
 	font: 15px arial, sans-serif;
 	color: #FFF;
 }
@@ -430,16 +392,32 @@ GtkWindow {
 		Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 		
 #*********************************Classes*******************************
+
+class style:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    
 class hgt_window(Gtk.Window):
 	
 # Google Drive URL to diagram : https://drive.draw.io/#G0B6z1IIlV5HAPSWtrUTdjeW0tUU0
 
 	global favicon
+	global ENV_USER
 	
 	def __init__(self):
 		
 		try:
-			win_title = 'HG Tools'
+			win_title = 'HG Tools | '
+			win_title += style.OKBLUE
+			win_title += 'Welcome, {}{}{}!'.format(ENV_USER) 
+			win_title += style.ENDC
+			
 			Gtk.Window.__init__(self, title=win_title)
 			hgt_logger.debug("[*] HGTools GUI spawned")
 			self.set_icon_from_file(favicon)
