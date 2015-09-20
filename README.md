@@ -2,8 +2,8 @@
 
 #To Clone Repository :
 ##Run the following (in the folder where you desire the repository folder):
-###your-folder>$git clone https://github.com/wnormandin/hgtools_gtk.git
-###your-folder>$cd hgtools_gtk
+###>$git clone https://github.com/wnormandin/hgtools_gtk.git
+###>$cd hgtools_gtk
 ###hgtools_gtk>$ls
 
 ###You should see (barring any ls alias):
