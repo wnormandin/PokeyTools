@@ -372,13 +372,13 @@ def gtk_style():
 }
 GtkWindow {
     background: linear-gradient(153deg, #151515, #151515 5px, transparent 5px) 0 0,
-                linear-gradient(333deg, #151515, #151515 5px, transparent 5px) 10px 5px,
+                linear-gradient(333deg, #151515, #151515 5px, transparent 5px) 5px 5px,
                 linear-gradient(153deg, #222, #222 5px, transparent 5px) 0 5px,
-                linear-gradient(333deg, #222, #222 5px, transparent 5px) 10px 10px,
+                linear-gradient(333deg, #222, #222 5px, transparent 5px) 5px 5px,
                 linear-gradient(90deg, #1b1b1b, #1b1b1b 10px, transparent 10px),
                 linear-gradient(#1d1d1d, #1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
     background-color: #131313;
-    background-size: 20px 20px;
+    background-size: 10px 10px;
     border-style: solid;
     border-width: 5px 0 2px 2px;
     border-color: #FFF;
@@ -418,6 +418,7 @@ GtkWindow {
 }
 .GtkLabel {
 	font: 15px arial, sans-serif;
+	color: #FFF;
 }
         """
 	style_provider = Gtk.CssProvider()
@@ -449,7 +450,7 @@ class hgt_window(Gtk.Window):
 			# Grid/Box Constructor
 			grid = Gtk.Grid()
 			grid.set_border_width(1)
-			grid.set_column_homogeneous(True)
+			grid.set_column_homogeneous(False)
 			grid.set_row_homogeneous(False)
 			grid.set_column_spacing(6)
 			grid.set_row_spacing(6)
@@ -517,16 +518,16 @@ class hgt_window(Gtk.Window):
 	def box_config(self, grid, widgets):
 		hgt_logger.debug('[*] Configuring Boxes')
 		
-		hgt_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hgt_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		
-		pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+		pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
 		for item in pc_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(pc_widgets)))
 		self.pc_box_build(pc_box, pc_widgets)
 
-		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
 		for item in sl_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
@@ -537,7 +538,7 @@ class hgt_window(Gtk.Window):
 		hgt_top_box.pack_start(sl_box, True, True, 0)
 		grid.add(hgt_top_box)
 
-		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
 		for item in hgt_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
@@ -545,7 +546,7 @@ class hgt_window(Gtk.Window):
 		self.hgt_box_build(hgt_box, hgt_widgets)
 		grid.attach_next_to(hgt_box, hgt_top_box, Gtk.PositionType.BOTTOM, 1, 2)
 
-		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
 		for item in menu_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[:]))
@@ -557,7 +558,9 @@ class hgt_window(Gtk.Window):
 		hgt_logger.debug('\tpc_box_build')
 		
 		# pc_label
-		pc_label = Gtk.Label(pc_widgets[0][1])
+		pc_label = Gtk.Label()
+		pc_label.set_label(pc_widgets[0][1])
+		pc_label.show()
 		
 		# pc_chats_combo
 		pc_chats_combo_store = Gtk.ListStore(str)
@@ -611,7 +614,7 @@ class hgt_window(Gtk.Window):
 		pc_button.set_tooltip_text(pc_widgets[7][2])
 		pc_button.connect(*pc_widgets[7][3])
 		
-		pc_box.pack_start(pc_label, True, True, 0l)
+		pc_box.pack_start(pc_label, True, True, 1)
 		pc_box.pack_start(pc_chats_combo, True, True, 0)
 		pc_box.pack_start(pc_chatlist_treeview, True, True, 0)
 		pc_box.pack_start(pc_remove_button, True, True, 0)
@@ -623,7 +626,8 @@ class hgt_window(Gtk.Window):
 		hgt_logger.debug('\tsl_box_build')
 		
 		# sl_label
-		sl_label = Gtk.Label(sl_widgets[0][1])
+		sl_label = Gtk.Label()
+		sl_label.set_label(sl_widgets[0][1])
 		
 		# sl_depth_combo
 		sl_depth_combo_store = Gtk.ListStore(str)
@@ -670,7 +674,7 @@ class hgt_window(Gtk.Window):
 		sl_button.set_tooltip_text(sl_widgets[6][2])
 		sl_button.connect(*sl_widgets[6][3])
 		
-		sl_box.pack_start(sl_label, True, True, 0l)
+		sl_box.pack_start(sl_label, True, True, 1)
 		sl_box.pack_start(sl_depth_combo, True, True, 0)
 		sl_box.pack_start(sl_date_box, True, True, 0)
 		sl_box.pack_start(sl_keyword_box, True, True, 0)
@@ -692,7 +696,7 @@ class hgt_window(Gtk.Window):
 		hgt_button.connect(*hgt_widgets[1][3])
 		
 		hgt_box.pack_start(hgt_search_box, True, True, 0)
-		hgt_box.pack_start(hgt_button, True, True, 0)
+		hgt_box.pack_start(hgt_button, False, False, 0)
 		
 	def menu_box_build(self, menu_box, menu_widgets):
 		hgt_logger.debug('\tmenu_box_build')
