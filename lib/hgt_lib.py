@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from gi.repository import GObject
+from gi.repository import GObject, Pango
 from gi.repository import Gtk, Gdk
 import sys, getopt, datetime, time, os
 import dbus, dbus.glib, dbus.decorators
@@ -11,6 +11,7 @@ from os.path import expanduser
 # Logging
 # Default logging configuration settings
 # https://docs.python.org/2/library/logging.html#logger-objects
+LAST_RUN_PATH = './tmp/last_run.log'
 hgt_logger = logging.getLogger('hgtools_gtk.py')
 
 #Pass_Chats Functionality
@@ -24,6 +25,8 @@ PURPLE_CONV_TYPE_IM=1
 
 # GUI
 ENV_USER = getpass.getuser()
+CSS_PATH = './lib/hgt_win_style.css'
+UI_INFO_PATH = './lib/ui_info.xml'
 
 UI_INFO = """
 <ui>
@@ -41,26 +44,6 @@ UI_INFO = """
   </menubar>
 </ui>
 """
-
-CSS = b"""
-* {
-    font: 10px arial, sans-serif;
-}
-GtkWindow {
-    background-color: #000;
-    background-size: 15px 15px;
-    border-style: solid;
-    border-width: 0 0 0 0;
-    border-color: #000000;
-    font: 10px arial, sans-serif;
-}
-
-GtkLabel {
-	font: 8px arial, sans-serif;
-	color: #FFF;
-}
-"""
-
 #******************************/GLOBALS*********************************
 
 #******************************FUNCTIONS********************************
@@ -81,7 +64,7 @@ def setup_logger(name, level, file_loc):
 	file_handler.setFormatter(file_formatter)
 	logger.addHandler(file_handler)
 	
-	last_run = logging.FileHandler('./tmp/last_run.log', 'w')
+	last_run = logging.FileHandler(LAST_RUN_PATH, 'w')
 	last_run.setFormatter(file_formatter)
 	logger.addHandler(last_run)
 	
@@ -401,17 +384,143 @@ def pc_main(*argv, **kwargs):
 
 #*********************************STYLE*********************************
 def gtk_style():
+	
 	style_provider = Gtk.CssProvider()
-	style_provider.load_from_data(CSS)
+	css = open(CSS_PATH, 'rb')
+	css_data = css.read()
+	css.close()
+	style_provider.load_from_data(css_data)
 
 	Gtk.StyleContext.add_provider_for_screen(
 		Gdk.Screen.get_default(),
 		style_provider,
 		Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 		
+def ui_xml():
+	ui_info = open(UI_INFO_PATH, 'rb')
+	ui_info_data = ui_info.read()
+	ui_info.close
+	return ui_info_data
+
 #*********************************Classes*******************************
 
-class hgt_window(Gtk.Window):
+class InfoDialog(Gtk.Dialog):
+
+	def __init__(self, parent, ttl, msg):
+		Gtk.Dialog.__init__(self, ttl, parent, 0,
+			(Gtk.STOCK_OK, Gtk.ResponseType.OK))
+
+		self.set_default_size(150, 100)
+
+		label = Gtk.Label(msg)
+
+		box = self.get_content_area()
+		box.add(label)
+		self.show_all()
+
+class SearchDialog(Gtk.Dialog):
+
+	def __init__(self, parent):
+		Gtk.Dialog.__init__(self, "Search", parent,
+			Gtk.DialogFlags.MODAL, buttons=(
+			Gtk.STOCK_FIND, Gtk.ResponseType.OK,
+			Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+
+		box = self.get_content_area()
+
+		label = Gtk.Label("Search Term :")
+		box.add(label)
+
+		self.entry = Gtk.Entry()
+		box.add(self.entry)
+
+		self.show_all()
+
+
+class LogViewWindow(Gtk.Window):
+
+	def __init__(self):
+		Gtk.Window.__init__(self, title=LAST_RUN_PATH)
+		self.set_position(Gtk.WindowPosition.CENTER)
+
+		self.set_default_size(800, 500)
+
+		self.grid = Gtk.Grid()
+		self.add(self.grid)
+
+		self.create_textview()
+		self.create_toolbar()
+
+	def create_toolbar(self):
+		toolbar = Gtk.Toolbar()
+		self.grid.attach(toolbar, 0, 0, 3, 1)
+		
+		button_search = Gtk.ToolButton()
+		button_search.set_icon_name("search-symbolic")
+		
+		button_search.connect("clicked", self.on_search_clicked)
+		toolbar.insert(button_search, 0)
+		
+	def create_textview(self):
+		scrolledwindow = Gtk.ScrolledWindow()
+		scrolledwindow.set_hexpand(True)
+		scrolledwindow.set_vexpand(True)
+		self.grid.attach(scrolledwindow, 0, 1, 3, 1)
+		
+		self.textview = Gtk.TextView()
+		self.textbuffer = self.textview.get_buffer()
+		self.textbuffer.set_text(self.text_refresh())
+		scrolledwindow.add(self.textview)
+		
+		self.tag_found = self.textbuffer.create_tag("found",
+			background="gray",
+			weight=Pango.Weight.BOLD)
+		
+	def text_refresh(self):
+		with open(LAST_RUN_PATH, 'r') as log_file:
+			log_data = log_file.read()
+		log_file.close
+		return log_data
+
+	def on_select_all_clicked(self, widget):
+		self.signals.select_all(self.textview, True)
+		
+	def on_search_clicked(self, widget):
+		dialog = SearchDialog(self)
+		response = dialog.run()
+		
+		if response == Gtk.ResponseType.CANCEL:
+			hgt_logger.debug("[*] Search Window > Cancel clicked")
+			dialog.destroy()
+			
+		if response == Gtk.ResponseType.OK:
+			hgt_logger.debug("[*] Search Window > Find clicked")
+			cursor_mark = self.textbuffer.get_insert()
+			start = self.textbuffer.get_iter_at_mark(cursor_mark)
+			if start.get_offset() == self.textbuffer.get_char_count():
+				start = self.textbuffer.get_start_iter()
+				
+		if start:
+			search_term = dialog.entry.get_text()
+			hgt_logger.debug("[*] Search term : {}".format(search_term))
+			self.search_and_mark(search_term, start)
+		dialog.destroy()
+
+	def search_and_mark(self, text, start):
+		end = self.textbuffer.get_end_iter()
+		match = start.forward_search(text, 0, end)
+
+		if match != None:
+			match_start, match_end = match
+			self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
+			self.search_and_mark(text, match_end)
+		else:
+			hgt_logger.debug("[*] Not Found")
+			nf_win = InfoDialog(self, "Not Found", "The search term '{}' was not found".format(text))
+			response = nf_win.run()
+			nf_win.destroy()
+
+class MainWindow(Gtk.Window):
 	
 # Google Drive URL to diagram : https://drive.draw.io/#G0B6z1IIlV5HAPSWtrUTdjeW0tUU0
 
@@ -426,6 +535,9 @@ class hgt_window(Gtk.Window):
 			Gtk.Window.__init__(self, title=win_title)
 			hgt_logger.debug("[*] HGTools GUI spawned")
 			self.set_icon_from_file(favicon)
+			
+			# Set CSS-Equivalent ID
+			self.set_name("hgt_window")
 			
 			# Create Menu Action Group
 			action_group = Gtk.ActionGroup("menu_actions")
@@ -522,7 +634,7 @@ class hgt_window(Gtk.Window):
 		uimanager = Gtk.UIManager()
 		try:
 			# Throws exception if something went wrong
-			uimanager.add_ui_from_string(UI_INFO)
+			uimanager.add_ui_from_string(ui_xml())
 
 			# Add the accelerator group to the toplevel window
 			accelgroup = uimanager.get_accel_group()
@@ -562,7 +674,9 @@ class hgt_window(Gtk.Window):
 		
 	def sl_chatroom_combo_changed(self, widget):
 		# Chatroom Combo Changed
-		hgt_logger.debug("[*] sl_chatroom_combo changed")
+		text = widget.get_active_text()
+		if text != None:
+			hgt_logger.debug('[*] sl_chatroom_combo changed : {}'.format(text))
 		
 	def hgt_button_exec(self, widget):
 		# Execute hgtools search
@@ -576,6 +690,12 @@ class hgt_window(Gtk.Window):
 	def menu_log_button_exec(self, widget):
 		# Show the last_run log file
 		hgt_logger.debug("[*] log_button clicked")
+		log_win = LogViewWindow()
+		log_win.connect("delete-event", Gtk.main_quit)
+		hgt_logger.debug('[*] Showing LogViewWindow')
+		log_win.show_all()
+		hgt_logger.debug('[*] Entering Gtk.main()')
+		Gtk.main()
 		
 	def pc_add_button_exec(self, widget):
 		# Add a user to the pass_chats list
@@ -587,11 +707,15 @@ class hgt_window(Gtk.Window):
 		
 	def pc_chats_combo_changed(self, widget):
 		# Chat count combo changed
-		hgt_logger.debug("[*] chats_combo changed")
+		text = widget.get_active_text()
+		if text != None:
+			hgt_logger.debug('[*] pc_chats_combo changed : {}'.format(text))
 		
 	def sl_depth_combo_changed(self, widget):
 		# Search depth combo changed
-		hgt_logger.debug("[*] sl_depth_combo changed")
+		text = widget.get_active_text()
+		if text != None:
+			hgt_logger.debug('[*] sl_depth_combo changed : {}'.format(text))
 		
 	def pc_chatlist_selection_changed(self, selection):
 		# pc_chatlist_treeview changed
@@ -622,8 +746,7 @@ class hgt_window(Gtk.Window):
 		hgt_logger.debug('\tlen(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
 		pc_box.set_homogeneous(False)
-		
-		
+
 		hgt_top_box.pack_start(pc_box, True, True, 2)
 		hgt_top_box.pack_start(sl_box, True, True, 0)
 		hgt_top_box.set_homogeneous(True)

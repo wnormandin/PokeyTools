@@ -23,7 +23,7 @@ def main():
 	global favicon
 	
 	gtk_style()
-	win = hgt_window()
+	win = MainWindow()
 	win.connect("delete-event", Gtk.main_quit)
 	hgt_logger.debug('[*] Showing Window')
 	win.show_all()
