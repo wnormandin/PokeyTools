@@ -1,24 +1,24 @@
-#MainWindow {
-	font: 10px arial, sans-serif;
+GtkButton {
+    border-radius: 10px;
+    border-color: #050;
+    box-shadow: 0 0 5px #333 inset;
+    margin: 10px;
+    font: 10px arial, sans-serif;
 	background-color: #000;
 	border-style: solid;
 }
 
-#MainWindow GtkLabel {
-	font: 8px arial, sans-serif;
-	color: #FFF;
+GtkLabel {
+    margin: 10px;
+    font: 10px arial, sans-serif;
 }
 
-#MainWindow GtkButton {
-	background: #000;
-	border-radius: 10px;
-	border-color: #000;
-	box-shadow: 0 0 5px #333 inset;
-	margin: 10px;
-}
-
-#LogViewWindow {
-	font: 10px arial, sans-serif;
+GtkTooltip {
+	border-radius: 15px;
+    border-color: #050;
+    box-shadow: 0 0 5px #333 inset;
+    margin: 10px;
+    font: 10px arial, sans-serif;
 	background-color: #000;
 	border-style: solid;
 }

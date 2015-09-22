@@ -10,5 +10,8 @@
     <menu action='DataMenu'>
       <menuitem action='DataDeduplicate' />
     </menu>
+    <menu action='OptionMenu'>
+      <menuitem action='DebugMode' />
+    </menu>
   </menubar>
 </ui>

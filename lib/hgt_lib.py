@@ -21,6 +21,9 @@ PURPLE_CONV_TYPE_IM=1
 
 # Spark_Log Functionality
 
+MULTIPROC=True
+MAX_PROC=5
+
 # HGTools Functionality
 
 # GUI
@@ -28,22 +31,6 @@ ENV_USER = getpass.getuser()
 CSS_PATH = './lib/hgt_win_style.css'
 UI_INFO_PATH = './lib/ui_info.xml'
 
-UI_INFO = """
-<ui>
-  <menubar name='MenuBar'>
-    <menu action='FileMenu'>
-      <menu action='FileNew'>
-        <menuitem action='FileNewStandard' />
-      </menu>
-      <separator />
-      <menuitem action='FileQuit' />
-    </menu>
-    <menu action='DataMenu'>
-      <menuitem action='DataDeduplicate' />
-    </menu>
-  </menubar>
-</ui>
-"""
 #******************************/GLOBALS*********************************
 
 #******************************FUNCTIONS********************************
@@ -76,44 +63,101 @@ def setup_logger(name, level, file_loc):
 	
 	return logger
 
-# Used for printing messages stored in the library files
-def lib_out(e , msg):
-	# If Passed "LOGO" displays the script header
-	hgt_logger.debug('lib_out args : {} :: {}'.format(e, msg))
+#*********************spark_log functionality***************************
+
+def sl_main(**kwargs):
 	
-	lib_s = '{}{}'.format(expanduser('~'), _PATH)
+	# Arguments : (key - default - description)
+	#
+	#			date 	- None 	- Specific date (supercedes term)
+	#			term 	- 3 	- Search depth in months
+	#			room 	- None	- Search a specific chat room
+	#			user 	- None 	- Search for a specific user
+	#			keyword	- None	- Search for a keyword
+	#			
+	
+	spark_logger.debug('[*] Spark Log Search started')
+	
+	# Define Output Path
+	fpath = './.parsed/'
+	spark_logger.debug('\t Output path : {}'.format(fpath))
+	str_search = {}
+	
+	if kwargs is not None:
+		for key, value in kwargs.iteritems():
+			# Populate search arguments
+			str_search[key]=value
+			spark_logger.debug("\t Argument captured '{}' = {}".format(key, value))
 
-	print e
-	with open(lib_s, 'r') as f:
-		
-		for num, line in enumerate(f, 1):
-			hgt_logger.debug('\tlib_out image located at {}'.format(num))
-			if '<{}>'.format(msg) in line:
-				break
+		_lines = []
+		_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
 
-		# Continue from the first instance
-		for line in f:
+		# Filter by Absolute Date or Term
+		if str_search['date']!=None:
+			_files = sl_find_files(datetime.datetime.date(datetime.datetime.strptime(str_search['date'], '%Y-%m-%d')), str_search)
+			spark_logger.debug("\t Searching on {}".format(str_search['date']))
+		else:
+			_term = 3 if str_search['term'] == None else str_search['term']
+			_files = sl_find_files(1, str_search, _term)
+			spark_logger.debug("\t Searching the past {} months".format(str_search['term']))
 
-			# Break on the second instance
-			if '</{}>'.format(msg) in line:
-				break
+		# Check for MULTIPROC and process accordingly
+		spark_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
+		if not MULTIPROC:
+			for _file in _files:
+				_lines.append(sl_find_lines(str_search, _file))
+				spark_logger.debug('\t File searched : {}'.format(_file))
+		else:
+			i = 0
+			spark_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
+			while i in range(len(_files)):
+				j = len(_files)-i
+				this_min = min(MAX_PROC, j)
+				pool = Pool(processes=this_min)
+				chunk = _files[i:i+this_min]
+				results = [None for _ in range(this_min)]
+			
+				for k in range(this_min):
+					results[k] = pool.apply_async(find_lines, [str_search, chunk[k]])
+					
+				pool.close()
+				pool.join()
+				
+				for k in range (this_min):
+					_lines.extend(results[k].get())
+					
+				i += this_min
+				
+		spark_logger.debug('\t {} files searched'.format(len(_files)))
+		spark_logger.debug('\t {} lines found'.format(len(_lines)))
 
-			# Otherwise print the line
-			hgt_logger.info(line.strip("\r\n"))
+		open(_opath, 'w').close() # Empty File Contents
+		spark_logger.debug('\t {} reinitialized'.format(_opath))
+
+		# Write new file data
+		with open(_opath, 'w') as f:
+			spark_logger.debug('\t Writing {} lines'.format(len(_lines)))
+			
+			for l in _lines:
+				f.write(sl_clean_line(l))
+		f.close()
+		webbrowser.open(_opath, new=2)
 
 # Validates the argument format if date type
 def valid_date(s):
-	hgt_logger.debug('\tvalid_date args : {}'.format(s))
+	hgt_logger.debug('\t valid_date args : {}'.format(s))
 	
 	try:
 		return datetime.strptime(s, "%Y-%m-%d")
 	except ValueError:
 		hgt_logger.error("[*] Not a valid date: '{}'.".format(s))
-		sys.exit(3)
-        
+		ve_win = InfoDialog(self, "Invalid Date", "Not a valid date: '{}'.".format(s))
+		response = ve_win.run()
+		ve_win.destroy()
+
 # Strip excess characters
-def clean_line(l):
-	# hgt_logger.debug('clean_line args : %s' % l)
+def sl_clean_line(l):
+	hgt_logger.debug('\t Stripping : {}'.format(l))
 	
 	_l = str(l)
 	remove = ['[[', ']]', '[', ']']
@@ -123,21 +167,21 @@ def clean_line(l):
 # Search for files within the specified term
 # (Months or specific date)
 # Returns a list of files matching the criteria
-def find_files(d, str_search, t=3):
-	hgt_logger.debug('\tfind_files args : {} :: {}'.format(d, t))
+def sl_find_files(d, str_search, t=3):
+	hgt_logger.debug('\t sl_find_files args : {} :: {}'.format(d, t))
 
 	_dir = expanduser('~') + '/.purple/logs/jabber/'
-	hgt_logger.debug('\tPidgin log path : {}'.format(_dir))
+	hgt_logger.debug('\t Pidgin log path : {}'.format(_dir))
 
 	# Check if a date was passed
 	if type(d) is datetime.date:
-		hgt_logger.debug('\tSearching on date : {}'.format(d))
+		hgt_logger.debug('\t Searching on date : {}'.format(d))
 		exact_date = d
 
 	# If not a date, process monthly term passed
 	else:
 		begin_date = monthdelta(datetime.date.today(), int(t))
-		hgt_logger.debug('\tSearching for term : {}'.format(d))
+		hgt_logger.debug('\t Searching for term : {}'.format(d))
 		exact_date = 1
 
 	_files = []
@@ -148,48 +192,48 @@ def find_files(d, str_search, t=3):
 			
 			if exact_date != 1:
 				if datetime.date.fromtimestamp(os.path.getctime(_path)) == exact_date:
-					if filter_rooms(_path, str_search):
-						hgt_logger.debug('\tAdding {} to the list'.format(_path))
+					if sl_filter_rooms(_path, str_search):
+						hgt_logger.debug('\t Adding {} to the list'.format(_path))
 						_files.append(_path)
 						
 			else:
 				if datetime.date.fromtimestamp(os.path.getctime(_path)) > begin_date:
-					if filter_rooms(_path, str_search):
-						hgt_logger.debug('Adding {} to the list'.format(_path))
+					if sl_filter_rooms(_path, str_search):
+						hgt_logger.debug(' Adding {} to the list'.format(_path))
 						_files.append(_path)
 	
-	hgt_logger.debug('\tAdded {!s} files to the list'.format(len(_files)))
-	hgt_logger.debug('\tSorting files...')					
+	hgt_logger.debug('\t Added {!s} files to the list'.format(len(_files)))
+	hgt_logger.debug('\t Sorting files...')					
 	_files.sort(key=lambda x: os.path.getmtime(x))
 	return _files
 
 # Returns all lines matching the passed term
-def find_lines(str_search, _file):
-	hgt_logger.debug('\tfind_lines args : {} :: {}'.format(_file, str_search))
+def sl_find_lines(str_search, _file):
+	hgt_logger.debug('\t sl_find_lines pid({}) : {} :: {}'.format(os.getpid(), _file, str_search))
 	
 	_lines = []
 	look_for = ('keyword', 'user')
 	keys = [i for i in look_for if i in list(str_search.keys()) and str_search[i]!=None]
-	hgt_logger.debug('\tKeys found : {}'.format(keys))
+	hgt_logger.debug('\t Keys found : {}'.format(keys))
 	
 	with open(_file, 'r') as f:
 		for line in f:
 			if keys:
 				for key in keys:
-					hgt_logger.debug('\tSearching for : {}'.format(str_search[key]))
+					hgt_logger.debug('\t Searching for : {}'.format(str_search[key]))
 					if line.find(str_search[key])>0:
-						_lines.append('<br>' + clean_line(f.name) + '<br>')
+						_lines.append('<br>' + sl_clean_line(f.name) + '<br>')
 						for _line in f:
 							_lines.append(_line.rstrip())
 						break
 			else:
 				_lines.append(line.rstrip())
 	
-	hgt_logger.debug('\tAdded {0!s} lines to output'.format(len(_lines)))
+	hgt_logger.debug('\t Added {!s} lines to output'.format(len(_lines)))
 	return _lines
 
 # Filter paths for room or user as specified
-def filter_rooms(_path, str_search):
+def sl_filter_rooms(_path, str_search):
 	
 	check_for = ('room', 'user')
 	found = False
@@ -197,7 +241,7 @@ def filter_rooms(_path, str_search):
 	for key in list(str_search.keys()):
 		if key in check_for:
 			if (str_search[key] != None and _path.find(str_search[key]) > 0):
-				hgt_logger.debug("\tFound {0} in {1}".format(str_search[key], _path))
+				hgt_logger.debug("\t Found {0} in {1}".format(str_search[key], _path))
 				found = True
 				
 	return found
@@ -323,58 +367,30 @@ def pc_do_test(dbg):
 		hgt_logger.debug('\tWith : {!s} {}'.format(buddy_count,'Buddies'))
 		
 	except Exception as e:
+		if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
+			nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
+			response = nf_win.run()
+			nf_win.destroy()
 		hgt_logger.error('[*] Details - {:}'.format(*e))
-		
 	
-def pc_main(*argv, **kwargs):
+def pc_main(**kwargs):
 	
-	if argv is not None:
-		
-		if 'show' in argv:	
-			lines = pc_readlines()
-		
-			hgt_logger.debug('[*] pc_list.txt Contents :')
-			
-			for line in lines:
-				hgt_logger.debug('\t{}'.format(line))
-		
-		if 'add' in argv:
-			for name, value in kwargs.items():
-				if name=='add': pc_add(value)
-			
-		if 'remove' in argv:
-			slctn=-1
-			lines = pc_readlines()
-			
-			for idx, val in enumerate(lines):
-				print str((idx+1)) + ". " + val
-			
-			while slctn not in range(0, len(lines)+1):
-				slctn = input("Choose a line to remove : ")
-			
-			slctn -= 1
-			
-			with open(PASS_LIST, "w") as passlist:
-				for idx, val in enumerate(lines):
-					if idx!=slctn:
-						passlist.write(val + "\n")
-			
-			passlist.close()
+	if kwargs is not None:
 		
 		# Build the list of buddies to send to	
-		if 'list' in argv:
+		if 'list' in kwargs:
 			lines = [line.strip() for line in open(PASS_LIST)]
 			with open(PASS_LIST, "r") as passlist:
 				lines = [line.strip() for line in passlist]
 			passlist.close()
 		
 		# Add a specified buddy to the list	
-		if 'buddy' in argv:
+		if 'buddy' in kwargs:
 			for name, value in kwargs.items():
 				if name=='buddy': lines.append(value)
 		
 		# Send the message to the list of buddies
-		if ('buddy' in argv or 'list' in argv):
+		if ('buddy' in kwargs or 'list' in kwargs):
 			for name, value in kwargs.items():
 				if name=='chats': chat_count=value
 			for name, value in kwargs.items():
@@ -405,12 +421,15 @@ def ui_xml():
 #*********************************Classes*******************************
 
 class InfoDialog(Gtk.Dialog):
+	
+	global favicon
 
 	def __init__(self, parent, ttl, msg):
 		Gtk.Dialog.__init__(self, ttl, parent, 0,
 			(Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
 		self.set_default_size(150, 100)
+		self.set_icon_from_file(favicon)
 
 		label = Gtk.Label(msg)
 
@@ -419,6 +438,8 @@ class InfoDialog(Gtk.Dialog):
 		self.show_all()
 
 class SearchDialog(Gtk.Dialog):
+	
+	global favicon
 
 	def __init__(self, parent):
 		Gtk.Dialog.__init__(self, "Search", parent,
@@ -426,6 +447,7 @@ class SearchDialog(Gtk.Dialog):
 			Gtk.STOCK_FIND, Gtk.ResponseType.OK,
 			Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
 
+		self.set_icon_from_file(favicon)
 		box = self.get_content_area()
 
 		label = Gtk.Label("Search Term :")
@@ -438,10 +460,13 @@ class SearchDialog(Gtk.Dialog):
 
 
 class LogViewWindow(Gtk.Window):
-
+	
+	global favicon
+	
 	def __init__(self):
 		Gtk.Window.__init__(self, title=LAST_RUN_PATH)
 		self.set_position(Gtk.WindowPosition.CENTER)
+		self.set_icon_from_file(favicon)
 
 		self.set_default_size(800, 500)
 
@@ -456,7 +481,8 @@ class LogViewWindow(Gtk.Window):
 		self.grid.attach(toolbar, 0, 0, 3, 1)
 		
 		button_search = Gtk.ToolButton()
-		button_search.set_icon_name("search-symbolic")
+		icon_name = "system-search-symbolic"
+		button_search.set_icon_name(icon_name)
 		
 		button_search.connect("clicked", self.on_search_clicked)
 		toolbar.insert(button_search, 0)
@@ -481,28 +507,23 @@ class LogViewWindow(Gtk.Window):
 			log_data = log_file.read()
 		log_file.close
 		return log_data
-
-	def on_select_all_clicked(self, widget):
-		self.signals.select_all(self.textview, True)
 		
 	def on_search_clicked(self, widget):
 		dialog = SearchDialog(self)
 		response = dialog.run()
 		
 		if response == Gtk.ResponseType.CANCEL:
-			hgt_logger.debug("[*] Search Window > Cancel clicked")
+			hgt_logger.debug("[*] SearchDialog > Cancel clicked")
 			dialog.destroy()
 			
 		if response == Gtk.ResponseType.OK:
-			hgt_logger.debug("[*] Search Window > Find clicked")
+			hgt_logger.debug("[*] SearchDialog > Find clicked")
 			cursor_mark = self.textbuffer.get_insert()
 			start = self.textbuffer.get_iter_at_mark(cursor_mark)
 			if start.get_offset() == self.textbuffer.get_char_count():
 				start = self.textbuffer.get_start_iter()
-				
-		if start:
 			search_term = dialog.entry.get_text()
-			hgt_logger.debug("[*] Search term : {}".format(search_term))
+			hgt_logger.debug("\t Search term : {}".format(search_term))
 			self.search_and_mark(search_term, start)
 		dialog.destroy()
 
@@ -514,11 +535,6 @@ class LogViewWindow(Gtk.Window):
 			match_start, match_end = match
 			self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
 			self.search_and_mark(text, match_end)
-		else:
-			hgt_logger.debug("[*] Not Found")
-			nf_win = InfoDialog(self, "Not Found", "The search term '{}' was not found".format(text))
-			response = nf_win.run()
-			nf_win.destroy()
 
 class MainWindow(Gtk.Window):
 	
@@ -532,24 +548,28 @@ class MainWindow(Gtk.Window):
 		try:
 			win_title = 'HG Tools | Welcome, {}!'.format(ENV_USER) 
 			
+			# Create dict for signal storage
+			self.selected = {}
+			
 			Gtk.Window.__init__(self, title=win_title)
 			hgt_logger.debug("[*] HGTools GUI spawned")
 			self.set_icon_from_file(favicon)
+			self.pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 			
 			# Set CSS-Equivalent ID
 			self.set_name("hgt_window")
 			
 			# Create Menu Action Group
-			action_group = Gtk.ActionGroup("menu_actions")
+			self.action_group = Gtk.ActionGroup("menu_actions")
 			
-			# Enumerate File menu options
-			self.add_file_menu_actions(action_group)
-			# Enumerate Options menu options
-			self.add_option_menu_actions(action_group)
+			# Enumerate menu options
+			self.add_file_menu_actions(self.action_group)
+			self.add_data_menu_actions(self.action_group)
+			self.add_option_menu_actions(self.action_group)
 
 			# Create ui manager and attach actions
 			uimanager = self.create_ui_manager()
-			uimanager.insert_action_group(action_group)
+			uimanager.insert_action_group(self.action_group)
 
 			# Get menubar
 			menubar = uimanager.get_widget("/MenuBar")
@@ -570,13 +590,16 @@ class MainWindow(Gtk.Window):
 			self.set_position(Gtk.WindowPosition.CENTER)
 			
 		except Exception as e:
-			hgt_logger.debug('[*] {:}'.format(e))
-			raise
-			Gtk.main_quit()
+			if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
+				nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
+				response = nf_win.run()
+				nf_win.destroy()
+			hgt_logger.error('[*] Details - {:}'.format(*e))
 			
 	# Actions
 	
 	def on_menu_file_csv_import(self, widget):
+		hgt_logger.debug("[*] FileDialog Spawned!")
 		dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
 			Gtk.FileChooserAction.OPEN,
 			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -586,10 +609,10 @@ class MainWindow(Gtk.Window):
 
 		response = dialog.run()
 		if response == Gtk.ResponseType.OK:
-			print("Open clicked")
-			print("File selected: " + dialog.get_filename())
+			hgt_logger.debug("\t FileDialog > Open clicked")
+			hgt_logger.debug("\t File selected: {}".format(dialog.get_filename()))
 		elif response == Gtk.ResponseType.CANCEL:
-			print("Cancel clicked")
+			hgt_logger.debug("\t FileDialog > Cancel clicked")
 
 		dialog.destroy()
 
@@ -620,13 +643,30 @@ class MainWindow(Gtk.Window):
 		action_filequit.connect("activate", self.on_menu_file_quit)
 		action_group.add_action(action_filequit)
 
-	def add_option_menu_actions(self, action_group):
+	def add_data_menu_actions(self, action_group):
 		action_group.add_actions([
 			("DataMenu", None, " Data |"),
 			("DataDeduplicate", None, "Deduplicate", None, None,
 				self.on_menu_deduplicate),
 		])
 		
+	def add_option_menu_actions(self, action_group):
+		action_group.add_actions([
+			("OptionMenu", None, " Options |"),])
+		action_group.add_toggle_actions([
+			("DebugMode", None, "Debug Logging", None, 
+			"Turn on/off verbose logging", self.on_debugmode),])
+
+	def on_debugmode(self, widget):
+		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
+		if widget.get_active():
+			hgt_logger.debug("\t Debug Logging OFF")
+			hgt_logger.setLevel(logging.WARNING)
+
+		else:
+			hgt_logger.setLevel(logging.DEBUG)
+			hgt_logger.debug("\t Debug Logging ON")
+
 	def on_menu_deduplicate(self, widget):
 		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
 	
@@ -642,9 +682,12 @@ class MainWindow(Gtk.Window):
 			return uimanager
 			
 		except Exception as e:
-			hgt_logger.debug('[*] {:}'.format(e))
-			raise
-			Gtk.main_quit()
+			if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
+				nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
+				response = nf_win.run()
+				nf_win.destroy()
+				raise
+			hgt_logger.error('[*] Details - {:}'.format(*e))
 
 	def on_menu_file_quit(self, widget):
 		hgt_logger.debug("[*] File > Quit Selected")
@@ -666,25 +709,31 @@ class MainWindow(Gtk.Window):
 
 	def pc_button_exec(self, widget):
 		# Execute pass_chats
-		hgt_logger.debug("[*] pc_button clicked")
+		hgt_logger.debug("[*] MainWindow > Broadcast button clicked")
+		if self.selected['chatcount']!='# of Chats':
+			pc_main(list=True, chats=self.selected['chatcount'])
+		else:
+			nf_win = InfoDialog(self, "Error", 'Select a chat count')
+			response = nf_win.run()
+			nf_win.destroy()
 
 	def sl_button_exec(self, widget):
 		# Execute spark_logs
-		hgt_logger.debug("[*] sl_button clicked")
+		hgt_logger.debug("[*] MainWindow > Log Search button clicked")
 		
-	def sl_chatroom_combo_changed(self, widget):
+	def sl_chatroom_combo_changed(self, combo):
 		# Chatroom Combo Changed
-		text = widget.get_active_text()
-		if text != None:
-			hgt_logger.debug('[*] sl_chatroom_combo changed : {}'.format(text))
-		
-	def hgt_button_exec(self, widget):
-		# Execute hgtools search
-		hgt_logger.debug("[*] hgt_button clicked")
-		
+		hgt_logger.debug("[*] MainWindow > Chatroom combo changed")
+		tree_iter = combo.get_active_iter()
+		if tree_iter != None:
+			model = combo.get_model()
+			name = model[tree_iter][0]
+			hgt_logger.debug("\t Selected Chatroom = {}".format(name))
+		self.selected['chatroom']=name
+
 	def menu_cl_button_exec(self, widget):
 		# Close the window
-		hgt_logger.debug("[*] cl_button clicked")
+		hgt_logger.debug("[*] MainWindow > Close button clicked")
 		Gtk.main_quit()
 		
 	def menu_log_button_exec(self, widget):
@@ -700,44 +749,66 @@ class MainWindow(Gtk.Window):
 	def pc_add_button_exec(self, widget):
 		# Add a user to the pass_chats list
 		hgt_logger.debug("[*] add_button clicked")
+		user_ldap = self.selected['pc_ldap_box']
+		pc_addline(user_ldap)
+		self.pc_ldap_box.set_text('Added!')
+		time.sleep(1)
+		self.pc_ldap_box.set_text('User LDAP')
+		self.pc_list_refresh(widget)
+		
 		
 	def pc_remove_button_exec(self, widget):
 		# Remove a user from the pass_chats list
 		hgt_logger.debug("[*] remove_button clicked")
+		slctn = self.selected['user_selected']
+		lines = pc_readlines()
+		with open(PASS_LIST, "w") as passlist:
+			for idx, val in enumerate(lines):
+				if val!=slctn:
+					passlist.write(val + "\n")
+		passlist.close()
+		self.pc_list_refresh(widget)
 		
-	def pc_chats_combo_changed(self, widget):
+	def pc_chats_combo_changed(self, combo):
 		# Chat count combo changed
-		text = widget.get_active_text()
-		if text != None:
-			hgt_logger.debug('[*] pc_chats_combo changed : {}'.format(text))
+		hgt_logger.debug("[*] MainWindow > Chat Count combo changed")
+		tree_iter = combo.get_active_iter()
+		if tree_iter != None:
+			model = combo.get_model()
+			name = model[tree_iter][0]
+			hgt_logger.debug("\t Selected Chat Count = {}".format(name))
+		self.selected['chatcount']=name
 		
-	def sl_depth_combo_changed(self, widget):
+	def sl_depth_combo_changed(self, combo):
 		# Search depth combo changed
-		text = widget.get_active_text()
-		if text != None:
-			hgt_logger.debug('[*] sl_depth_combo changed : {}'.format(text))
+		hgt_logger.debug("[*] MainWindow > Month Count combo changed")
+		tree_iter = combo.get_active_iter()
+		if tree_iter != None:
+			model = combo.get_model()
+			name = model[tree_iter][0]
+			hgt_logger.debug("\t Selected Term  = {} months".format(name))
 		
 	def pc_chatlist_selection_changed(self, selection):
 		# pc_chatlist_treeview changed
 		model, treeiter = selection.get_selected()
 		if treeiter != None:
 			sel = model[treeiter][0]
-		hgt_logger.debug("[*] pc_chatlist_selection changed to {}".format(sel))
+			hgt_logger.debug("[*] MainWindow > Your List > Selection changed to {}".format(sel))
+			self.selected['user_selected']=sel
 
 	# Window Format
 
 	def box_config(self, menubar, grid, widgets):
 		hgt_logger.debug('[*] Configuring Boxes')
 		
-		hgt_top_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
-		
-		pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-		pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
-		for item in pc_widgets:
+		hgt_top_grid = Gtk.Grid()
+
+		self.pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
+		for item in self.pc_widgets:
 			hgt_logger.debug('\t\t{}'.format(item[0]))
-		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(pc_widgets)))
-		self.pc_box_build(pc_box, pc_widgets)
-		pc_box.set_homogeneous(False)
+		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(self.pc_widgets)))
+		self.pc_box_build(self.pc_box, self.pc_widgets)
+		self.pc_box.set_homogeneous(False)
 
 		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
@@ -745,13 +816,16 @@ class MainWindow(Gtk.Window):
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
-		pc_box.set_homogeneous(False)
+		sl_box.set_homogeneous(False)
 
-		hgt_top_box.pack_start(pc_box, True, True, 2)
-		hgt_top_box.pack_start(sl_box, True, True, 0)
-		hgt_top_box.set_homogeneous(True)
+		hgt_top_grid.add(self.pc_box)
+		hgt_top_grid.attach_next_to(sl_box, self.pc_box, Gtk.PositionType.RIGHT, 1, 1)
+		hgt_top_grid.set_column_homogeneous(True)
+		hgt_top_grid.set_row_homogeneous(False)
+		hgt_top_grid.set_column_spacing(10)
+		hgt_top_grid.set_row_spacing(25)
 		grid.add(menubar)
-		grid.attach_next_to(hgt_top_box, menubar, Gtk.PositionType.BOTTOM, 1, 2)
+		grid.attach_next_to(hgt_top_grid, menubar, Gtk.PositionType.BOTTOM, 1, 2)
 
 		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
@@ -759,7 +833,7 @@ class MainWindow(Gtk.Window):
 			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(hgt_widgets) : {}'.format(len(hgt_widgets)))
 		self.hgt_box_build(hgt_box, hgt_widgets)
-		grid.attach_next_to(hgt_box, hgt_top_box, Gtk.PositionType.BOTTOM, 1, 2)
+		grid.attach_next_to(hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
 		hgt_box.set_homogeneous(False)
 
 		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
@@ -775,69 +849,72 @@ class MainWindow(Gtk.Window):
 		hgt_logger.debug('\tpc_box_build')
 		
 		# pc_label
-		pc_label = Gtk.Label()
-		pc_label.set_label(pc_widgets[0][1])
-		pc_label.show()
+		self.pc_label = Gtk.Label()
+		self.pc_label.set_label(pc_widgets[0][1])
+		self.pc_label.show()
 		
 		# pc_chats_combo
-		pc_chats_combo_store = Gtk.ListStore(str)
+		self.pc_chats_combo_store = Gtk.ListStore(str)
 		for item in pc_widgets[1][1]:
-			pc_chats_combo_store.append(['{!s}'.format(item)])	
-		pc_chats_combo = Gtk.ComboBox.new_with_model(pc_chats_combo_store)
-		pc_chats_combo.set_tooltip_text(pc_widgets[1][2])
-		pc_chats_combo.connect(*pc_widgets[1][3])
-		renderer_text = Gtk.CellRendererText()
-		pc_chats_combo.pack_start(renderer_text, True)
-		pc_chats_combo.add_attribute(renderer_text, "text", 0)
-		pc_chats_combo.set_active(0)
+			self.pc_chats_combo_store.append(['{!s}'.format(item)])	
+		self.pc_chats_combo = Gtk.ComboBox.new_with_model(self.pc_chats_combo_store)
+		self.pc_chats_combo.set_tooltip_text(pc_widgets[1][2])
+		self.pc_chats_combo.connect(*pc_widgets[1][3])
+		self.renderer_text = Gtk.CellRendererText()
+		self.pc_chats_combo.pack_start(self.renderer_text, True)
+		self.pc_chats_combo.add_attribute(self.renderer_text, "text", 0)
+		self.pc_chats_combo.set_active(0)
 		
 		# pc_chatlist_store
-		pc_chatlist_store = Gtk.ListStore(str)
+		self.pc_chatlist_store = Gtk.ListStore(str)
 		for item in pc_widgets[2][1]:
-			pc_chatlist_store.append([item])
-		pc_chatlist_treeview = Gtk.TreeView(pc_chatlist_store)
-		renderer = Gtk.CellRendererText()
-		column = Gtk.TreeViewColumn("Your List", renderer, text=0)
-		column.set_sort_column_id(0)
-		pc_chatlist_treeview.append_column(column)
-		select = pc_chatlist_treeview.get_selection()
-		select.connect("changed", self.pc_chatlist_selection_changed)
+			self.pc_chatlist_store.append([item])
+		self.pc_chatlist_treeview = Gtk.TreeView(self.pc_chatlist_store)
+		self.renderer = Gtk.CellRendererText()
+		self.column = Gtk.TreeViewColumn("Your List", self.renderer, text=0)
+		self.column.set_sort_column_id(0)
+		self.pc_chatlist_treeview.append_column(self.column)
+		self.select = self.pc_chatlist_treeview.get_selection()
+		self.select.connect("changed", self.pc_chatlist_selection_changed)
 		
 		# pc_remove_button
-		pc_remove_button = Gtk.Button.new_with_label(pc_widgets[3][1])
-		pc_remove_button.set_tooltip_text(pc_widgets[3][2])
-		pc_remove_button.connect(*pc_widgets[3][3])
+		self.pc_remove_button = Gtk.Button.new_with_label(pc_widgets[3][1])
+		self.pc_remove_button.set_tooltip_text(pc_widgets[3][2])
+		self.pc_remove_button.connect(*pc_widgets[3][3])
 		
 		# pc_ldap_box
-		pc_ldap_box = Gtk.Entry()
-		pc_ldap_box.set_text(pc_widgets[4][1])
-		pc_ldap_box.set_tooltip_text(pc_widgets[4][2])
+		self.pc_ldap_box = Gtk.Entry()
+		self.pc_ldap_box.set_text(pc_widgets[4][1])
+		self.pc_ldap_box.set_tooltip_text(pc_widgets[4][2])
+		self.pc_ldap_box.connect("changed", self.pc_ldap_callback, self.pc_ldap_box)
 		
 		# pc_add_button
-		pc_add_button =  Gtk.Button.new_with_label(pc_widgets[5][1])
-		pc_add_button.set_tooltip_text(pc_widgets[5][2])
-		pc_add_button.connect(*pc_widgets[5][3])
+		self.pc_add_button =  Gtk.Button.new_with_label(pc_widgets[5][1])
+		self.pc_add_button.set_tooltip_text(pc_widgets[5][2])
+		self.pc_add_button.connect(*pc_widgets[5][3])
 		
 		# pc_subbox
-		pc_subbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-		pc_subbox.pack_start(pc_ldap_box, True, True, 0)
-		pc_subbox.pack_start(pc_add_button, True, True, 0)
-		
-		# pc_alert_label
-		pc_alert_label = pc_label = Gtk.Label(pc_widgets[6][1])
+		self.pc_subbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+		self.pc_subbox.pack_start(self.pc_ldap_box, True, True, 1)
+		self.pc_subbox.pack_start(self.pc_add_button, True, True, 1)
 		
 		# pc_button
-		pc_button =  Gtk.Button.new_with_label(pc_widgets[7][1])
-		pc_button.set_tooltip_text(pc_widgets[7][2])
-		pc_button.connect(*pc_widgets[7][3])
+		self.pc_button =  Gtk.Button.new_with_label(pc_widgets[6][1])
+		self.pc_button.set_tooltip_text(pc_widgets[6][2])
+		self.pc_button.connect(*pc_widgets[6][3])
 		
-		pc_box.pack_start(pc_label, False, False, 1)
-		pc_box.pack_start(pc_chats_combo, True, True, 0)
-		pc_box.pack_start(pc_chatlist_treeview, True, True, 0)
-		pc_box.pack_start(pc_remove_button, True, True, 0)
-		pc_box.pack_start(pc_subbox, True, True, 0)
-		pc_box.pack_start(pc_alert_label, True, True, 0)
-		pc_box.pack_start(pc_button, True, True, 0)
+		self.pc_box.pack_start(self.pc_label, True, True, 1)
+		self.pc_box.pack_start(self.pc_chats_combo, True, True, 1)
+		self.pc_box.pack_start(self.pc_chatlist_treeview, True, True, 1)
+		self.pc_box.pack_start(self.pc_remove_button, True, True, 1)
+		self.pc_box.pack_start(self.pc_subbox, True, True, 1)
+		self.pc_box.pack_start(self.pc_button, True, True, 1)
+		
+	def pc_list_refresh(self, widget):
+		store = Gtk.ListStore(str)
+		for item in pc_readlines():
+			store.append([item])
+		self.pc_chatlist_treeview.set_model(store)
 		
 	def sl_box_build(self, sl_box, sl_widgets):
 		hgt_logger.debug('\tsl_box_build')
@@ -863,11 +940,13 @@ class MainWindow(Gtk.Window):
 		sl_date_box = Gtk.Entry()
 		sl_date_box.set_text(sl_widgets[2][1])
 		sl_date_box.set_tooltip_text(sl_widgets[2][2])
+		sl_date_box.connect("changed", self.sl_date_callback, sl_date_box)
 		
 		# sl_keyword_box
 		sl_keyword_box = Gtk.Entry()
 		sl_keyword_box.set_text(sl_widgets[3][1])
 		sl_keyword_box.set_tooltip_text(sl_widgets[3][2])
+		sl_keyword_box.connect('changed', self.sl_keyword_callback, sl_keyword_box)
 		
 		# sl_chatroom_combo
 		sl_chatroom_combo_store = Gtk.ListStore(str)
@@ -885,6 +964,7 @@ class MainWindow(Gtk.Window):
 		sl_user_box = Gtk.Entry()
 		sl_user_box.set_text(sl_widgets[5][1])
 		sl_user_box.set_tooltip_text(sl_widgets[5][2])
+		sl_user_box.connect('changed', self.sl_user_callback, sl_user_box)
 		
 		# sl_button
 		sl_button =  Gtk.Button.new_with_label(sl_widgets[6][1])
@@ -892,12 +972,12 @@ class MainWindow(Gtk.Window):
 		sl_button.connect(*sl_widgets[6][3])
 		
 		sl_box.pack_start(sl_label, True, True, 1)
-		sl_box.pack_start(sl_depth_combo, True, True, 0)
-		sl_box.pack_start(sl_date_box, True, True, 0)
-		sl_box.pack_start(sl_keyword_box, True, True, 0)
-		sl_box.pack_start(sl_chatroom_combo, True, True, 0)
-		sl_box.pack_start(sl_user_box, True, True, 0)
-		sl_box.pack_start(sl_button, True, True, 0)
+		sl_box.pack_start(sl_depth_combo, True, True, 1)
+		sl_box.pack_start(sl_date_box, True, True, 1)
+		sl_box.pack_start(sl_keyword_box, True, True, 1)
+		sl_box.pack_start(sl_chatroom_combo, True, True, 1)
+		sl_box.pack_start(sl_user_box, True, True, 1)
+		sl_box.pack_start(sl_button, True, True, 1)
 		
 	def hgt_box_build(self, hgt_box, hgt_widgets):
 		hgt_logger.debug('\thgt_box_build')
@@ -906,6 +986,7 @@ class MainWindow(Gtk.Window):
 		hgt_search_box = Gtk.Entry()
 		hgt_search_box.set_text(hgt_widgets[0][1])
 		hgt_search_box.set_tooltip_text(hgt_widgets[0][2])
+		hgt_search_box.connect("changed", self.hgt_enter_callback, hgt_search_box)
 		
 		# hgt_button
 		hgt_button =  Gtk.Button.new_with_label(hgt_widgets[1][1])
@@ -915,8 +996,33 @@ class MainWindow(Gtk.Window):
 		hgt_box.pack_start(hgt_search_box, True, True, 0)
 		hgt_box.pack_start(hgt_button, False, False, 0)
 		
+	def hgt_enter_callback(self, widget, entry):
+		entry_text = entry.get_text()
+		self.selected['hgt_search_term']=entry_text
+		hgt_logger.debug('\t hgt_search_term = {}'.format(entry_text))
+		
+	def sl_date_callback(self, widget, entry):
+		entry_text = entry.get_text()
+		self.selected['sl_date_box']=entry_text
+		hgt_logger.debug('\t {} = {}'.format('sl_date_box', entry_text))
+		
+	def sl_keyword_callback(self, widget, entry):
+		entry_text = entry.get_text()
+		self.selected['sl_keyword_box']=entry_text
+		hgt_logger.debug('\t {} = {}'.format('sl_keyword_box', entry_text))
+		
+	def pc_ldap_callback(self, widget, entry):
+		entry_text = entry.get_text()
+		self.selected['pc_ldap_box']=entry_text
+		hgt_logger.debug('\t {} = {}'.format('pc_ldap_box', entry_text))
+		
+	def sl_user_callback(self, widget, entry):
+		entry_text = entry.get_text()
+		self.selected['sl_user_box']=entry_text
+		hgt_logger.debug('\t {} = {}'.format('sl_user_box', entry_text))
+		
 	def menu_box_build(self, menu_box, menu_widgets):
-		hgt_logger.debug('\tmenu_box_build')
+		hgt_logger.debug('\t menu_box_build')
 		
 		# menu_cl_button
 		menu_cl_button =  Gtk.Button.new_with_label(menu_widgets[0][1])
@@ -933,11 +1039,13 @@ class MainWindow(Gtk.Window):
 		
 	def widget_config(self):
 		hgt_logger.debug('[*] Configuring Widgets')
+		
 		# Button 	=	(name, label, tooltip, signal)
 		# Combo	Box	=	(name, values (default 1st), tooltip, signal)
 		# Label		=	(name, label)
 		# TreeView	=	(name, ListStore Values, tooltip)
 		# Entry Box	=	(name, default, tooltip)
+		
 		hgt_widget=[]
 		self.pc_section_widgets(hgt_widget)
 		self.sl_section_widgets(hgt_widget)
@@ -978,9 +1086,6 @@ class MainWindow(Gtk.Window):
 		hgt_widget.append(('pc_add_button', 'Add',
 							'Adds a user to your pass_chats list', 
 							["clicked", self.pc_add_button_exec]))
-							
-		# pc_alert_label (For status alerts)
-		hgt_widget.append(('pc_alert_label', ''))
 		
 		# pc_button widget (Action Button)
 		hgt_widget.append(('pc_button', 'Broadcast',
@@ -1019,7 +1124,7 @@ class MainWindow(Gtk.Window):
 							["changed", self.sl_chatroom_combo_changed]))
 							
 		# sl_user_box (Entry Box)
-		hgt_widget.append(('sl_user_box', 'User (LDAP)',
+		hgt_widget.append(('sl_user_box', 'User LDAP',
 							'Specify user to search'))
 							
 		# sl_button widget (Action Button)
@@ -1036,7 +1141,7 @@ class MainWindow(Gtk.Window):
 							'Specify a search term'))
 							
 		# hgt_button (Action Button)
-		hgt_widget.append(('hgt_button', 'Phrase Search',
+		hgt_widget.append(('hgt_button', 'Predefine Search',
 							'Searches for HGTools with text matching\nthe search term',
 							["clicked", self.hgt_button_exec]))
 
@@ -1055,3 +1160,15 @@ class MainWindow(Gtk.Window):
 							["clicked", self.menu_log_button_exec]))
 		
 		return hgt_widget
+		
+	def hgt_button_exec(self, widget):
+	# Execute hgtools search
+		hgt_logger.debug("[*] MainWindow > Phrase Search clicked")
+
+		if 'hgt_search_term' in self.selected:
+				hgt_logger.debug("\t Search Term : {}".format(self.selected['hgt_search_term']))
+		else:
+			hgt_logger.debug("\t No Term Specified")
+			nf_win = InfoDialog(self, "No Term Specified", "Please enter a valid search term")
+			response = nf_win.run()
+			nf_win.destroy()
