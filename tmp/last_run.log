@@ -1,67 +1,71 @@
-2015-09-21 20:10:05,776 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-21 20:10:05,781 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> 	Read 3 lines
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-21 20:10:05,782 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-21 20:10:05,783 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-21 20:10:05,783 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-21 20:10:05,783 | DEBUG | hgt_lib >> 		pc_label
-2015-09-21 20:10:05,783 | DEBUG | hgt_lib >> 		pc_chats_combo
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 		pc_chatlist_treeview
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 		pc_remove_button
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 		pc_ldap_box
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 		pc_add_button
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 		pc_button
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
-2015-09-21 20:10:05,784 | DEBUG | hgt_lib >> 	pc_box_build
-2015-09-21 20:10:05,789 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-21 20:10:05,789 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-21 20:10:05,799 | DEBUG | hgt_lib >> 		sl_label
-2015-09-21 20:10:05,799 | DEBUG | hgt_lib >> 		sl_depth_combo
-2015-09-21 20:10:05,799 | DEBUG | hgt_lib >> 		sl_date_box
-2015-09-21 20:10:05,799 | DEBUG | hgt_lib >> 		sl_keyword_box
-2015-09-21 20:10:05,799 | DEBUG | hgt_lib >> 		sl_chatroom_combo
-2015-09-21 20:10:05,800 | DEBUG | hgt_lib >> 		sl_user_box
-2015-09-21 20:10:05,800 | DEBUG | hgt_lib >> 		sl_button
-2015-09-21 20:10:05,800 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
-2015-09-21 20:10:05,800 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-21 20:10:05,803 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-21 20:10:05,803 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-21 20:10:05,808 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-21 20:10:05,808 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-21 20:10:05,809 | DEBUG | hgt_lib >> 		hgt_search_box
-2015-09-21 20:10:05,809 | DEBUG | hgt_lib >> 		hgt_button
-2015-09-21 20:10:05,810 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
-2015-09-21 20:10:05,810 | DEBUG | hgt_lib >> 	hgt_box_build
-2015-09-21 20:10:05,810 | DEBUG | hgt_lib >> 		('menu_cl_button', 'Close Window', 'Closes this window', ['clicked', <bound method MainWindow.menu_cl_button_exec of <MainWindow object at 0x7f38b840e500 (lib+hgt_lib+MainWindow at 0x130a230)>>])
-2015-09-21 20:10:05,811 | DEBUG | hgt_lib >> 		('menu_log_button', 'View Logs', 'Displays the file last_run.log', ['clicked', <bound method MainWindow.menu_log_button_exec of <MainWindow object at 0x7f38b840e500 (lib+hgt_lib+MainWindow at 0x130a230)>>])
-2015-09-21 20:10:05,811 | DEBUG | hgt_lib >> 	len(menu_widgets) : 2
-2015-09-21 20:10:05,811 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-21 20:10:05,812 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-21 20:10:05,859 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-21 20:10:07,469 | DEBUG | hgt_lib >> [*] log_button clicked
-2015-09-21 20:10:07,477 | DEBUG | hgt_lib >> [*] Showing LogViewWindow
-2015-09-21 20:10:07,495 | DEBUG | hgt_lib >> [*] Entering Gtk.main()
-2015-09-21 20:10:13,925 | DEBUG | hgt_lib >> [*] SearchDialog > Find clicked
-2015-09-21 20:10:13,926 | DEBUG | hgt_lib >> 	 Search term : DEBUG
-2015-09-21 20:10:30,830 | DEBUG | hgt_lib >> [*] SearchDialog > Find clicked
-2015-09-21 20:10:30,830 | DEBUG | hgt_lib >> 	 Search term : DEBUG
-2015-09-21 20:11:35,558 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-21 20:11:35,558 | DEBUG | hgt_lib >> 	 Selected Chat Count = 4
-2015-09-21 20:11:36,318 | DEBUG | hgt_lib >> [*] MainWindow > Your List > Selection changed to hwinkler
-2015-09-21 20:11:39,324 | DEBUG | hgt_lib >> 	 pc_ldap_box = User LDA
-2015-09-21 20:11:39,643 | DEBUG | hgt_lib >> 	 pc_ldap_box = User LD
-2015-09-21 20:11:39,867 | DEBUG | hgt_lib >> 	 pc_ldap_box = User L
-2015-09-21 20:11:40,044 | DEBUG | hgt_lib >> 	 pc_ldap_box = User 
-2015-09-21 20:11:40,204 | DEBUG | hgt_lib >> 	 pc_ldap_box = User
-2015-09-21 20:11:40,436 | DEBUG | hgt_lib >> 	 pc_ldap_box = Use
-2015-09-21 20:11:40,635 | DEBUG | hgt_lib >> 	 pc_ldap_box = Us
-2015-09-21 20:11:40,812 | DEBUG | hgt_lib >> 	 pc_ldap_box = U
-2015-09-21 20:11:40,988 | DEBUG | hgt_lib >> 	 pc_ldap_box = 
-2015-09-21 20:11:42,925 | DEBUG | hgt_lib >> [*] MainWindow > Broadcast button clicked
-2015-09-21 20:11:42,926 | DEBUG | hgt_lib >> [*] Testing dBus connection
-2015-09-21 20:13:31,693 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-21 23:39:31,356 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-21 23:39:31,375 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-21 23:39:31,375 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-21 23:39:31,375 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 	Read 3 lines
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-21 23:39:31,378 | DEBUG | hgt_lib >> 		pc_label
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 		pc_chats_combo
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 		pc_chatlist_treeview
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 		pc_remove_button
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 		pc_ldap_box
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 		pc_add_button
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 		pc_button
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
+2015-09-21 23:39:31,379 | DEBUG | hgt_lib >> 	pc_box_build
+2015-09-21 23:39:31,381 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-21 23:39:31,381 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_label
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_depth_combo
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_date_box
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_keyword_box
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_chatroom_combo
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_user_box
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 		sl_button
+2015-09-21 23:39:31,599 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
+2015-09-21 23:39:31,600 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-21 23:39:31,600 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-21 23:39:31,601 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-21 23:39:31,601 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-21 23:39:31,601 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-21 23:39:31,602 | DEBUG | hgt_lib >> 		hgt_search_box
+2015-09-21 23:39:31,602 | DEBUG | hgt_lib >> 		hgt_button
+2015-09-21 23:39:31,602 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
+2015-09-21 23:39:31,602 | DEBUG | hgt_lib >> 	hgt_box_build
+2015-09-21 23:39:31,603 | DEBUG | hgt_lib >> 		('menu_cl_button', 'Close Window', 'Closes this window', ['clicked', <bound method MainWindow.menu_cl_button_exec of <MainWindow object at 0xb58145a4 (lib+hgt_lib+MainWindow at 0x912c160)>>])
+2015-09-21 23:39:31,603 | DEBUG | hgt_lib >> 		('menu_log_button', 'View Logs', 'Displays the file last_run.log', ['clicked', <bound method MainWindow.menu_log_button_exec of <MainWindow object at 0xb58145a4 (lib+hgt_lib+MainWindow at 0x912c160)>>])
+2015-09-21 23:39:31,603 | DEBUG | hgt_lib >> 	len(menu_widgets) : 2
+2015-09-21 23:39:31,603 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-21 23:39:31,603 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-21 23:39:32,133 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-21 23:39:35,582 | DEBUG | hgt_lib >> [*] Menu item DebugMode  was selected
+2015-09-21 23:39:35,582 | DEBUG | hgt_lib >> 	 Debug Logging ON
+2015-09-21 23:39:41,446 | DEBUG | hgt_lib >> [*] Menu item DebugMode  was selected
+2015-09-21 23:39:41,447 | DEBUG | hgt_lib >> 	 Debug Logging OFF
+2015-09-21 23:39:47,590 | DEBUG | hgt_lib >> 	 Debug Logging ON
+2015-09-21 23:39:48,893 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-21 23:39:48,893 | DEBUG | hgt_lib >> 	 Selected Term  = 4 months
+2015-09-21 23:39:50,596 | DEBUG | hgt_lib >> [*] MainWindow > Broadcast button clicked
+2015-09-21 23:39:50,601 | DEBUG | hgt_lib >> [*] Testing dBus connection
+2015-09-21 23:39:50,602 | DEBUG | hgt_lib >> [*] Finding Pidgin Accounts
+2015-09-21 23:39:50,611 | DEBUG | hgt_lib >> 	Pidgin Acct : 2052
+2015-09-21 23:39:50,611 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : hermes
+2015-09-21 23:39:51,121 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : towlie
+2015-09-21 23:39:51,606 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : hwinkler
+2015-09-21 23:40:01,300 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
+2015-09-21 23:40:01,301 | DEBUG | hgt_lib >> 	 No Term Specified
+2015-09-21 23:40:06,093 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-21 23:40:06,094 | DEBUG | hgt_lib >> 	 Selected Chatroom = jdi
+2015-09-21 23:40:23,980 | DEBUG | hgt_lib >> [*] log_button clicked
+2015-09-21 23:40:23,990 | DEBUG | hgt_lib >> [*] Showing LogViewWindow
+2015-09-21 23:40:24,006 | DEBUG | hgt_lib >> [*] Entering Gtk.main()
+2015-09-21 23:40:38,901 | DEBUG | hgt_lib >> [*] SearchDialog > Find clicked
+2015-09-21 23:40:38,902 | DEBUG | hgt_lib >> 	 Search term : Showing
+2015-09-21 23:40:53,854 | DEBUG | hgt_lib >> [*] FileDialog Spawned!
+2015-09-21 23:40:59,612 | DEBUG | hgt_lib >> 	 FileDialog > Cancel clicked
+2015-09-22 00:27:12,580 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

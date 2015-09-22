@@ -660,12 +660,11 @@ class MainWindow(Gtk.Window):
 	def on_debugmode(self, widget):
 		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
 		if widget.get_active():
-			hgt_logger.debug("\t Debug Logging OFF")
-			hgt_logger.setLevel(logging.WARNING)
-
-		else:
 			hgt_logger.setLevel(logging.DEBUG)
 			hgt_logger.debug("\t Debug Logging ON")
+		else:
+			hgt_logger.debug("\t Debug Logging OFF")
+			hgt_logger.setLevel(logging.WARNING)
 
 	def on_menu_deduplicate(self, widget):
 		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
