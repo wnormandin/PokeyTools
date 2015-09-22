@@ -3,8 +3,10 @@ from gi.repository import GObject, Pango
 from gi.repository import Gtk, Gdk
 import sys, getopt, datetime, time, os
 import dbus, dbus.glib, dbus.decorators
-import logging, getpass
+import logging, getpass, webbrowser
 from os.path import expanduser
+from multiprocessing import Pool
+import xml.etree.ElementTree as ET
 
 #******************************GLOBALS**********************************
 
@@ -65,51 +67,35 @@ def setup_logger(name, level, file_loc):
 
 #*********************spark_log functionality***************************
 
-def sl_main(**kwargs):
+def sl_main(date, term, keyword, user, room):
+		
 	
-	# Arguments : (key - default - description)
-	#
-	#			date 	- None 	- Specific date (supercedes term)
-	#			term 	- 3 	- Search depth in months
-	#			room 	- None	- Search a specific chat room
-	#			user 	- None 	- Search for a specific user
-	#			keyword	- None	- Search for a keyword
-	#			
-	
-	spark_logger.debug('[*] Spark Log Search started')
+	hgt_logger.debug('[*] Spark Log Search started')
 	
 	# Define Output Path
 	fpath = './.parsed/'
-	spark_logger.debug('\t Output path : {}'.format(fpath))
-	str_search = {}
-	
-	if kwargs is not None:
-		for key, value in kwargs.iteritems():
-			# Populate search arguments
-			str_search[key]=value
-			spark_logger.debug("\t Argument captured '{}' = {}".format(key, value))
+	hgt_logger.debug('\t Output path : {}'.format(fpath))
 
 		_lines = []
 		_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
 
 		# Filter by Absolute Date or Term
-		if str_search['date']!=None:
+		if 'date' in str_search:
 			_files = sl_find_files(datetime.datetime.date(datetime.datetime.strptime(str_search['date'], '%Y-%m-%d')), str_search)
-			spark_logger.debug("\t Searching on {}".format(str_search['date']))
+			hgt_logger.debug("\t Searching on {}".format(str_search['date']))
 		else:
-			_term = 3 if str_search['term'] == None else str_search['term']
-			_files = sl_find_files(1, str_search, _term)
-			spark_logger.debug("\t Searching the past {} months".format(str_search['term']))
+			_files = sl_find_files(1, str_search, str_search['term'])
+			hgt_logger.debug("\t Searching the past {} months".format(str_search['term']))
 
 		# Check for MULTIPROC and process accordingly
-		spark_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
+		hgt_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
 		if not MULTIPROC:
 			for _file in _files:
 				_lines.append(sl_find_lines(str_search, _file))
-				spark_logger.debug('\t File searched : {}'.format(_file))
+				hgt_logger.debug('\t File searched : {}'.format(_file))
 		else:
 			i = 0
-			spark_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
+			hgt_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
 			while i in range(len(_files)):
 				j = len(_files)-i
 				this_min = min(MAX_PROC, j)
@@ -118,7 +104,7 @@ def sl_main(**kwargs):
 				results = [None for _ in range(this_min)]
 			
 				for k in range(this_min):
-					results[k] = pool.apply_async(find_lines, [str_search, chunk[k]])
+					results[k] = pool.apply_async(sl_find_lines, [str_search, chunk[k]])
 					
 				pool.close()
 				pool.join()
@@ -128,15 +114,15 @@ def sl_main(**kwargs):
 					
 				i += this_min
 				
-		spark_logger.debug('\t {} files searched'.format(len(_files)))
-		spark_logger.debug('\t {} lines found'.format(len(_lines)))
+		hgt_logger.debug('\t {} files searched'.format(len(_files)))
+		hgt_logger.debug('\t {} lines found'.format(len(_lines)))
 
 		open(_opath, 'w').close() # Empty File Contents
-		spark_logger.debug('\t {} reinitialized'.format(_opath))
+		hgt_logger.debug('\t {} reinitialized'.format(_opath))
 
 		# Write new file data
 		with open(_opath, 'w') as f:
-			spark_logger.debug('\t Writing {} lines'.format(len(_lines)))
+			hgt_logger.debug('\t Writing {} lines'.format(len(_lines)))
 			
 			for l in _lines:
 				f.write(sl_clean_line(l))
@@ -157,12 +143,9 @@ def valid_date(s):
 
 # Strip excess characters
 def sl_clean_line(l):
-	hgt_logger.debug('\t Stripping : {}'.format(l))
-	
-	_l = str(l)
-	remove = ['[[', ']]', '[', ']']
-	_l.translate(None, ''.join(remove))
-	return _l
+	tree = ET.fromstring(str(l))
+	notags = ET.tostring(tree, encoding='utf8', method='text')
+	return notags
 
 # Search for files within the specified term
 # (Months or specific date)
@@ -180,8 +163,11 @@ def sl_find_files(d, str_search, t=3):
 
 	# If not a date, process monthly term passed
 	else:
+		if t == '# of Months':
+			t=3
+			str_search['term']=t
 		begin_date = monthdelta(datetime.date.today(), int(t))
-		hgt_logger.debug('\t Searching for term : {}'.format(d))
+		hgt_logger.debug('\t Searching for term : {}'.format(t))
 		exact_date = 1
 
 	_files = []
@@ -193,13 +179,10 @@ def sl_find_files(d, str_search, t=3):
 			if exact_date != 1:
 				if datetime.date.fromtimestamp(os.path.getctime(_path)) == exact_date:
 					if sl_filter_rooms(_path, str_search):
-						hgt_logger.debug('\t Adding {} to the list'.format(_path))
-						_files.append(_path)
-						
+						_files.append(_path)	
 			else:
 				if datetime.date.fromtimestamp(os.path.getctime(_path)) > begin_date:
 					if sl_filter_rooms(_path, str_search):
-						hgt_logger.debug(' Adding {} to the list'.format(_path))
 						_files.append(_path)
 	
 	hgt_logger.debug('\t Added {!s} files to the list'.format(len(_files)))
@@ -209,18 +192,16 @@ def sl_find_files(d, str_search, t=3):
 
 # Returns all lines matching the passed term
 def sl_find_lines(str_search, _file):
-	hgt_logger.debug('\t sl_find_lines pid({}) : {} :: {}'.format(os.getpid(), _file, str_search))
+	hgt_logger.debug('\t sl_find_lines pid({})'.format(os.getpid()))
 	
 	_lines = []
 	look_for = ('keyword', 'user')
-	keys = [i for i in look_for if i in list(str_search.keys()) and str_search[i]!=None]
-	hgt_logger.debug('\t Keys found : {}'.format(keys))
+	keys = [i for i in look_for if i in list(str_search.keys())]
 	
 	with open(_file, 'r') as f:
 		for line in f:
 			if keys:
 				for key in keys:
-					hgt_logger.debug('\t Searching for : {}'.format(str_search[key]))
 					if line.find(str_search[key])>0:
 						_lines.append('<br>' + sl_clean_line(f.name) + '<br>')
 						for _line in f:
@@ -228,22 +209,34 @@ def sl_find_lines(str_search, _file):
 						break
 			else:
 				_lines.append(line.rstrip())
-	
-	hgt_logger.debug('\t Added {!s} lines to output'.format(len(_lines)))
+	if len(_lines)>0:
+		hgt_logger.debug('\t Added {!s} lines to output'.format(len(_lines)))
 	return _lines
 
 # Filter paths for room or user as specified
 def sl_filter_rooms(_path, str_search):
 	
-	check_for = ('room', 'user')
 	found = False
 	
-	for key in list(str_search.keys()):
-		if key in check_for:
-			if (str_search[key] != None and _path.find(str_search[key]) > 0):
-				hgt_logger.debug("\t Found {0} in {1}".format(str_search[key], _path))
+	if (str_search['room']=='Chat Room' and str_search['user']=='User LDAP'):
+		found = True
+	else:
+		if (str_search['user']=='User LDAP' and str_search['room']!='Chat Room'):
+			if (_path.find(str_search['room']) > 0):
+				hgt_logger.debug("\t Found {0} in {1}".format(str_search['room'], _path))
 				found = True
-				
+		elif (str_search['user']!='User LDAP' and str_search['room']=='Chat Room'):
+			if (_path.find(str_search['user']) > 0):
+				hgt_logger.debug("\t Found {0} in {1}".format(str_search['user'], _path))
+				found = True
+		elif (str_search['room']!='Chat Room' and str_search['user']!='User LDAP'):
+			if (_path.find(str_search['user']) > 0 ):
+				hgt_logger.debug("\t Found {0} in {1}".format(str_search['user'], _path))
+				found = True
+			if (_path.find(str_search['room']) > 0):
+				hgt_logger.debug("\t Found {0} in {1}".format(str_search['room'], _path))
+				found = True
+			
 	return found
 		
 # Calculate the date to return
@@ -335,7 +328,7 @@ def pc_pass_req(chats, lines):
 def pc_build_msg(opt):
 	msg = "\nCurrently I have : " + opt + " chats to pass.\nPlease reply if you can assist!\n"
 	msg = msg + "\n\t[*] This has been an automated chat pass request."
-	gt_logger.debug('\tMessage :\t{}'.format(msg))
+	hgt_logger.debug('\tMessage :\t{}'.format(msg))
 	return msg
 
 def pc_do_test(dbg):
@@ -499,7 +492,7 @@ class LogViewWindow(Gtk.Window):
 		scrolledwindow.add(self.textview)
 		
 		self.tag_found = self.textbuffer.create_tag("found",
-			background="gray",
+			background="yellow",
 			weight=Pango.Weight.BOLD)
 		
 	def text_refresh(self):
@@ -719,6 +712,22 @@ class MainWindow(Gtk.Window):
 	def sl_button_exec(self, widget):
 		# Execute spark_logs
 		hgt_logger.debug("[*] MainWindow > Log Search button clicked")
+		if 'term' in self.selected:
+			if self.selected['term']=='# of Months':
+				self.selected['term']='3'
+		if 'user' not in self.selected:
+			self.selected['user']='User LDAP'
+		if 'room' not in self.selected:
+			self.selected['room']='Chat Room'
+		sl_main(**self.selected)
+		
+			# Arguments : (key - default - description)
+	#
+	#			date 	- None 	- Specific date (supercedes term)
+	#			term 	- 3 	- Search depth in months
+	#			room 	- None	- Search a specific chat room
+	#			user 	- None 	- Search for a specific user
+	#			keyword	- None	- Search for a keyword
 		
 	def sl_chatroom_combo_changed(self, combo):
 		# Chatroom Combo Changed
@@ -728,7 +737,7 @@ class MainWindow(Gtk.Window):
 			model = combo.get_model()
 			name = model[tree_iter][0]
 			hgt_logger.debug("\t Selected Chatroom = {}".format(name))
-		self.selected['chatroom']=name
+		self.selected['room']=name
 
 	def menu_cl_button_exec(self, widget):
 		# Close the window
@@ -786,6 +795,7 @@ class MainWindow(Gtk.Window):
 			model = combo.get_model()
 			name = model[tree_iter][0]
 			hgt_logger.debug("\t Selected Term  = {} months".format(name))
+			self.selected['term']=name
 		
 	def pc_chatlist_selection_changed(self, selection):
 		# pc_chatlist_treeview changed
@@ -1002,13 +1012,16 @@ class MainWindow(Gtk.Window):
 		
 	def sl_date_callback(self, widget, entry):
 		entry_text = entry.get_text()
-		self.selected['sl_date_box']=entry_text
-		hgt_logger.debug('\t {} = {}'.format('sl_date_box', entry_text))
+		if entry_text != 'Date':
+			if valid_date(entry_text):
+				self.selected['date']=entry_text
+				hgt_logger.debug('\t {} = {}'.format('date', entry_text))
 		
 	def sl_keyword_callback(self, widget, entry):
 		entry_text = entry.get_text()
-		self.selected['sl_keyword_box']=entry_text
-		hgt_logger.debug('\t {} = {}'.format('sl_keyword_box', entry_text))
+		if entry_text !='Keyword(s)':
+			self.selected['keyword']=entry_text
+			hgt_logger.debug('\t {} = {}'.format('keyword', entry_text))
 		
 	def pc_ldap_callback(self, widget, entry):
 		entry_text = entry.get_text()
@@ -1017,8 +1030,8 @@ class MainWindow(Gtk.Window):
 		
 	def sl_user_callback(self, widget, entry):
 		entry_text = entry.get_text()
-		self.selected['sl_user_box']=entry_text
-		hgt_logger.debug('\t {} = {}'.format('sl_user_box', entry_text))
+		self.selected['user']=entry_text
+		hgt_logger.debug('\t {} = {}'.format('user', entry_text))
 		
 	def menu_box_build(self, menu_box, menu_widgets):
 		hgt_logger.debug('\t menu_box_build')
