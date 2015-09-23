@@ -6,7 +6,10 @@ import dbus, dbus.glib, dbus.decorators
 import logging, getpass, webbrowser
 from os.path import expanduser
 from multiprocessing import Pool
-import xml.etree.ElementTree as ET
+from HTMLParser import HTMLParser
+import re, csv, locale, random, inspect
+import subprocess
+
 
 #******************************GLOBALS**********************************
 
@@ -27,6 +30,7 @@ MULTIPROC=False
 MAX_PROC=2
 
 # HGTools Functionality
+USER_SELECTION=0
 
 # GUI
 ENV_USER = getpass.getuser()
@@ -94,7 +98,7 @@ def sl_main(date, term, keyword, user, room):
 	if not MULTIPROC:
 		for _file in _files:
 			_lines.append(sl_find_lines(keyword, user, _file))
-			hgt_logger.debug('\t File searched : {}'.format(_file))
+			hgt_logger.debug('\t File searched : {}'.format(os.path.basename(_file)))
 	else:
 		i = 0
 		hgt_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
@@ -125,9 +129,15 @@ def sl_main(date, term, keyword, user, room):
 	# Write new file data
 	with open(_opath, 'w') as f:
 		hgt_logger.debug('\t Writing {} lines'.format(len(_lines)))
+		f.write('<!DOCTYPE html>')
+		f.write('<html>')
 		
 		for l in _lines:
-			f.write(sl_clean_line(l))
+			if isinstance(l, (list, tuple)):
+				for ln in l:
+					f.write(ln)
+			else:
+				f.write(l)
 	f.close()
 	webbrowser.open(_opath, new=2)
 
@@ -145,10 +155,16 @@ def valid_date(s):
 
 # Strip excess characters
 def sl_clean_line(l):
-	tree = ET.fromstring(str(l))
-	notags = ET.tostring(tree, encoding='utf8', method='text')
-	return notags
-
+	s = MLStripper()
+	s.feed(str(l))
+	
+	cleaned = '{}<br>'.format(s.get_data())
+	for ch in ['[', ']']:
+		if ch in cleaned:
+			cleaned = cleaned.replace(ch, '')
+			
+	return cleaned
+	
 # Search for files within the specified term
 # (Months or specific date)
 # Returns a list of files matching the criteria
@@ -200,9 +216,13 @@ def sl_find_lines(keyword, user, _file):
 	with open(_file, 'r') as f:
 		for line in f:
 			if (line.find(keyword)>0 or line.find(user)>0):
-				_lines.append('<br>' + sl_clean_line(f.name) + '<br>')
+				_lines.append('<br><b><font color="blue">{}</font></b><br>'.format(sl_clean_line(f.name)))
 				for _line in f:
-					_lines.append(_line.rstrip())
+					if isinstance(_line, (list, tuple)):
+						for l in _line:
+							lines.append('<br>{}'.format(sl_clean_line(l)))
+					else:
+						_lines.append('<br>{}'.format(sl_clean_line(_line.rstrip())))
 				break
 	f.close()
 	
@@ -220,10 +240,10 @@ def sl_filter_rooms(_path, room, user):
 		found = True
 	else:
 		if (_path.find(user) > 0 ):
-			hgt_logger.debug("\t Found {0} in {1}".format(user, _path))
+			hgt_logger.debug("\t Found {0} in {1}".format(user, os.path.basename(_path)))
 			found = True
 		if (_path.find(room) > 0):
-			hgt_logger.debug("\t Found {0} in {1}".format(room, _path))
+			hgt_logger.debug("\t Found {0} in {1}".format(room, os.path.basename(_path)))
 			found = True
 			
 	return found
@@ -380,6 +400,136 @@ def pc_main(**kwargs):
 		
 #******************************/PASS_CHATS******************************
 
+#********************************HGTOOLS********************************
+
+#	Function takes str_sql, connects to the database, and returns 
+#	the passed query results.
+def hgt_query(str_sql, qtype):
+	
+	start = time.clock()
+	user='wnrmndn_remote'
+	password='^kb?i8kLByDL!'
+	database='wnrmndn_hgtools'
+	host='hgtools.normandindev.net'
+	
+	cmd=['mysql', '-h', host, '-u', user, '-p%s'%password, '-D', 
+		database, '-Bse', str_sql]
+		
+	proc=subprocess.Popen(cmd,stdout=subprocess.PIPE)
+	retval=hgt_parse(proc.communicate()[0], qtype)
+	hgt_logger.debug('\t Database query took %s seconds' % (time.clock()-start))
+	
+	return retval
+	
+#	Function splits returned query output into a two-dimensional list
+#	and passes it to the Gtk.window for user selection
+def hgtools_buildlist(dinput, store):
+
+	hgt_logger.debug('\t Populating Gtk.ListStore...')
+	
+	hgt_loadstore(dinput, store)	
+	doutput=hgtools_getchoice(store)
+	
+	return doutput
+
+#	Function imports the specified infile, then writes the records
+#	to the hgtools database if possible
+def hgt_imports(infile):
+	
+	hgt_logger.info('[*] Beginning import routine')
+
+	row_count=0
+
+	hgt_logger.info('\t Importing file : {}'.format(infile))
+			
+	with open(infile, 'rb') as csvfile:
+		file_read = csv.reader(csvfile, delimiter=',', quotechar="'")
+		
+		rows = []
+		for row in file_read:
+			
+			hgt_logger.debug(row)
+			rows.append(row)
+		
+		validate_import(file_read, csvfile)
+		
+		dups = hgt_dedupe(rows).sort(reverse=True)
+		
+		# Delete the duplicates from the list to be uploaded
+		hgt_logger.debug('Input Array Row Count : %s' % len(rows))
+		for j in set(dups):
+			hgt_logger.debug('\t Removed row in import : %s' % rows[int(j)])
+			hgt_logger.debug('\t Import : %s - Input row %s' % (rows[int(j)], j))
+			rows.remove(rows[int(j)])
+					
+		# Execute the append queries			
+		for row in rows:
+			hgt_logger.debug(str(row))
+				
+			hgt_query(hgt_qbuild('import', row), 'import')
+			
+			row_count += 1
+	
+	hgt_logger.info('\t Closing File...')
+	csvfile.close()	
+
+def validate_import(rows, csvfile):
+	
+	hgt_logger.info('\t Validating import format...')
+	
+	for row in rows:
+		if (len(row)!=3 or row[0]==''):
+			hgt_logger.error('\t **Check your file format : http://hgtools.normandindev.net/imports.php')
+			csvfile.close()
+			rows = []
+
+#	Checks the list of records to be added and returns a list of
+#	deduplicated values (chosen by the user)
+def hgt_dedupe(rows):
+	
+	str_sql='SELECT DISTINCT hgt_text FROM hgtools ORDER BY hgt_idx ASC;'
+	db_rec=trim_invalid(hgt_query(str_sql, 'dedupe'))
+	rows = trim_invalid(rows[1])
+	
+	hgt_logger.info('[*] Running De-Duplication')
+	hgt_logger.debug('\t Database records : {}'.format(len(db_rec)))
+	hgt_logger.debug('\t Import records : {}'.format(len(rows)))
+	hgt_logger.debug('\t Comparisons : {}'.format(len(db_rec)*len(rows)))
+	
+	dedupe_list, stats = dd_match(rows, db_rec, 0.0)
+	
+	hgt_logger.info('\t Dedupe Run Complete')
+	hgt_logger.debug('\t Dedupe took {} seconds'.format(stats[2]))
+	hgt_logger.debug('\t Dedupe List Length : {}'.format(len(dedupe_list)))
+	hgt_logger.debug('\t Successful Comparisons : {}'.format(stats[0]))
+	hgt_logger.debug('\t Potential Duplicates : {}'.format(stats[1]))
+		
+	store = Gtk.ListStore('gboolean', int, str, int, str, str, str)
+	hgt_loadstore(dedupe_list, store)
+	dups=hgtools_dd_choose(store, stats)
+	
+	hgt_logger.debug('\t Identified duplicates : {}'.format(len(dups)))
+	return dups
+	
+def trim_invalid(rows):
+	out_rows = []
+	for row in rows:
+		if len(row)>1:
+			out_rows.append(row)
+	return out_rows
+
+def hgt_loadstore(dinput, store):
+	
+	for i in range(0, len(dinput)):
+		try:
+			store.append(dinput[i].split("\t"))
+		except AttributeError:		
+			store.append(list(dinput[i]))
+		except ValueError:
+			store.append(str(list(dinput[i])))
+
+#********************************/HGTOOLS*******************************
+
 #*********************************STYLE*********************************
 def gtk_style():
 	
@@ -402,6 +552,149 @@ def ui_xml():
 
 #*********************************Classes*******************************
 
+# Class to allow users to select from a list of potential matches, 
+# matches with a score above the match_thresh will be auto-selected.
+			
+class DedupeSelectionWindow(Gtk.Window):
+	
+	def __init__(self, liststore, stats):
+	
+		Gtk.Window.__init__(self, title="HGTools Deduplication Window")
+		hgt_logger.debug("HGTools Deduplication Window")
+		hgt_logger.debug("Building grid")
+		# Set Window/Grid attributes
+		self.set_border_width(10)
+		self.grid = Gtk.Grid()
+		self.grid.set_column_homogeneous(True)
+		self.grid.set_row_homogeneous(True)
+		self.add(self.grid)
+		self.selected=[]
+		self.set_default_size(700, 400)
+		self.connect("destroy", self.on_destroy)
+		
+		# Set the liststore of data for this object
+		self.liststore = liststore
+		self.treeview = Gtk.TreeView.new_with_model(self.liststore)
+		
+		hgt_logger.debug("Attaching columns")
+		# Set Checkbox Column
+		renderer_checkbox = Gtk.CellRendererToggle()
+		renderer_checkbox.connect("toggled", self.on_toggle, self.liststore)
+		
+		# Create checkbox column and attach to element 0 in the
+		# list store.
+		column_checkbox = Gtk.TreeViewColumn("Match?", 
+											renderer_checkbox, active=0)
+		column_checkbox.set_sort_column_id(0)
+		self.treeview.append_column(column_checkbox)
+											
+		# Set column headers
+		for i, column_title in enumerate(["Import Row", "Import Text",
+										"Match Row (DB)", "Matched Text",
+										"Score", "Time(s)"]):
+			renderer = Gtk.CellRendererText()
+			renderer.props.wrap_width=400
+
+			column = Gtk.TreeViewColumn(column_title, renderer, text=i+1)
+			column.set_sort_column_id(i+1)
+			self.treeview.append_column(column)
+		
+		# Fill Button list	
+		self.buttons=list()
+		for button_text in ["Cancel Import", "Done"]:
+			button = Gtk.Button(button_text)
+			self.buttons.append(button)
+			button.connect("clicked", self.on_selection_button_clicked)
+		
+		self.scrollable_treelist = Gtk.ScrolledWindow()
+		self.scrollable_treelist.set_vexpand(True)
+		
+		
+		# Set up stat labels
+		comparisons = Gtk.Label("Comparisons : " + stats[0] + '\t')
+		potentials = Gtk.Label("Potential Matches : " + stats[1] + '\t')
+		runtime = Gtk.Label("Test Run Time : " + stats[2])
+		
+		self.comparisons_label = comparisons
+		self.potentials_label = potentials
+		self.runtime_label = runtime
+		
+		# Attach treeview
+		self.grid.attach(self.scrollable_treelist, 0, 1, 10, 10)
+		self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, 
+								Gtk.PositionType.BOTTOM, 1, 1)
+		
+		hgt_logger.debug("Attaching buttons")
+		# Attach Buttons	
+		for i, button in enumerate(self.buttons[1:]):
+			self.grid.attach_next_to(button, self.buttons[i], 
+								Gtk.PositionType.RIGHT, 1, 1)
+								
+		hgt_logger.debug("Attaching labels")						
+		# Attach Labels
+		self.grid.attach(self.comparisons_label, 0, 0, 1, 1)
+		self.grid.attach_next_to(self.potentials_label, self.comparisons_label, 
+								Gtk.PositionType.RIGHT, 1, 1)
+		self.grid.attach_next_to(self.runtime_label, self.potentials_label, 
+								Gtk.PositionType.RIGHT, 1, 1)
+		
+		# Check the boxes above the match threshold
+		for i in range(len(liststore)):
+			if liststore[i][0]==True:
+				self.selected.append(liststore[i][3])
+		
+		hgt_logger.debug("Showing window")
+		# Add the treelist in a scrollable window, center and show					
+		self.scrollable_treelist.add(self.treeview)
+		self.set_position(Gtk.WindowPosition.CENTER)
+		self.show_all()
+	
+	# Set button click events	
+	def on_selection_button_clicked(self, widget):
+		
+		button_selection = widget.get_label()
+		hgt_logger.debug("Button clicked : %s" % button_selection)
+		
+		if button_selection=="Cancel Import":
+			while Gtk.events_pending():
+				Gtk.main_iteration()
+			Gtk.main_quit()
+			sys.exit(3)
+			
+		if button_selection=="Done":
+			Gtk.main_quit()
+				
+	def on_toggle(self, cell, path, model, *ignore):
+		if path is not None:
+			it = model.get_iter(path)
+			model[it][0] = not model[it][0]
+			
+			if model[it][0]:
+				if model[it][1] not in self.selected:
+					self.selected.append(model[it][1])
+					hgt_logger.debug("Selected : %s" % model[it][1])
+			else:
+				if model[it][1] in self.selected:
+					self.selected.remove(model[it][1])
+					hgt_logger.debug("Deselected : %s" % model[it][1])
+			
+	def delete_event(self, widget, event, data=None):
+		hgt_logger.debug("Window deleted")
+		Gtk.main_quit()
+		
+	def on_destroy(self, widget):
+		hgt_logger.debug("Window destroyed")
+		Gtk.main_quit()
+
+class MLStripper(HTMLParser):
+	def __init__(self):
+		self.reset()
+		self.fed = []
+	def handle_data(self, d):
+		self.fed.append(d)
+	def get_data(self):
+		return ''.join(self.fed)
+		
 class InfoDialog(Gtk.Dialog):
 	
 	global favicon
@@ -647,10 +940,10 @@ class MainWindow(Gtk.Window):
 			("MultiProc", None, "Multiprocessing", None, 
 			"Turn on/off multiprocessing", self.on_multiproc, True), ])
 		action_group.add_radio_actions([
-            ("Choice3", None, "3", None, None, 1),
-            ("Choice4", None, "4", None, None, 2),
-            ("Choice5", None, "5", None, None, 3)
-        ], 1, self.on_maxprocs_changed)
+			("Choice3", None, "3 Max", None, None, 1),
+			("Choice4", None, "4 Max", None, None, 2),
+			("Choice5", None, "5 Max", None, None, 3)
+			], 1, self.on_maxprocs_changed)
 
 	def on_debugmode(self, widget):
 		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
@@ -662,12 +955,12 @@ class MainWindow(Gtk.Window):
 			hgt_logger.setLevel(logging.WARNING)
 			
 	def on_maxprocs_changed(self, widget, current):
-		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()))
+		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()[-1]))
 		global MAX_PROC
 		MAX_PROC = int(current.get_name()[-1])
 			
 	def on_multiproc(self, widget):
-		gt_logger.debug("\t Multiprocessing set to : {}".format(widget.get_active()))
+		hgt_logger.debug("\t Multiprocessing set to : {}".format(widget.get_active()))
 		global MULTIPROC
 		MULTIPROC = widget.get_active()
 
@@ -715,7 +1008,7 @@ class MainWindow(Gtk.Window):
 		# Execute pass_chats
 		hgt_logger.debug("[*] MainWindow > Broadcast button clicked")
 		if self.selected['chats']!='# of Chats':
-			pc_main(list=True, chats=self.selected['chatcount'])
+			pc_main(list=True, chats=self.selected['chats'])
 		else:
 			nf_win = InfoDialog(self, "Error", 'Select a chat count')
 			response = nf_win.run()
@@ -804,7 +1097,7 @@ class MainWindow(Gtk.Window):
 			model = combo.get_model()
 			name = model[tree_iter][0]
 			hgt_logger.debug("\t Selected Chat Count = {}".format(name))
-		self.selected['chatcount']=name
+		self.selected['chats']=name
 		
 	def sl_depth_combo_changed(self, combo):
 		# Search depth combo changed
@@ -832,16 +1125,12 @@ class MainWindow(Gtk.Window):
 		hgt_top_grid = Gtk.Grid()
 
 		self.pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
-		for item in self.pc_widgets:
-			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(self.pc_widgets)))
 		self.pc_box_build(self.pc_box, self.pc_widgets)
 		self.pc_box.set_homogeneous(False)
 
 		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
-		for item in sl_widgets:
-			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
 		sl_box.set_homogeneous(False)
@@ -857,8 +1146,6 @@ class MainWindow(Gtk.Window):
 
 		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
-		for item in hgt_widgets:
-			hgt_logger.debug('\t\t{}'.format(item[0]))
 		hgt_logger.debug('\tlen(hgt_widgets) : {}'.format(len(hgt_widgets)))
 		self.hgt_box_build(hgt_box, hgt_widgets)
 		grid.attach_next_to(hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
@@ -866,8 +1153,6 @@ class MainWindow(Gtk.Window):
 
 		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
-		for item in menu_widgets:
-			hgt_logger.debug('\t\t{}'.format(item[:]))
 		hgt_logger.debug('\tlen(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
 		grid.attach_next_to(menu_box, hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
@@ -1195,9 +1480,15 @@ class MainWindow(Gtk.Window):
 		hgt_logger.debug("[*] MainWindow > Phrase Search clicked")
 
 		if 'hgt_search_term' in self.selected:
-				hgt_logger.debug("\t Search Term : {}".format(self.selected['hgt_search_term']))
+			search_term = self.selected['hgt_search_term']
+			hgt_logger.debug("\t Search Term : {}".format(search_term))
+			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}% OR hgt_code like "%{}%";'.format(search_term)
+			outp=hgt_query(str_sql, 'phrases')
+			hgt_logger.debug("\t Returned : {}".format(outp))
 		else:
 			hgt_logger.debug("\t No Term Specified")
 			nf_win = InfoDialog(self, "No Term Specified", "Please enter a valid search term")
 			response = nf_win.run()
 			nf_win.destroy()
+			
+

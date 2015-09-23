@@ -14,10 +14,9 @@
       <menuitem action='DebugMode' />
       <separator />
       <menuitem action='MultiProc' />
-      <menu action='MaxProcs' />
-        <menuitem action='Choice3' />
-        <menuitem action='Choice4' />
-        <menuitem action='Choice5' />
+      <menuitem action='Choice3' />
+      <menuitem action='Choice4' />
+      <menuitem action='Choice5' />
       </menu>
   </menubar>
 </ui>

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from lib.hgt_lib import *
+#from lib.dedupe import *
 from gi.repository import Gtk
 
 #*******************************LOGGING*********************************
