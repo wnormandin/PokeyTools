@@ -23,8 +23,8 @@ PURPLE_CONV_TYPE_IM=1
 
 # Spark_Log Functionality
 
-MULTIPROC=True
-MAX_PROC=5
+MULTIPROC=False
+MAX_PROC=2
 
 # HGTools Functionality
 
@@ -71,6 +71,8 @@ def sl_main(date, term, keyword, user, room):
 		
 	
 	hgt_logger.debug('[*] Spark Log Search started')
+	hgt_logger.debug('\t date : {} | term : {} | keyword : {} |'.format(date, term, keyword))
+	hgt_logger.debug('\t user : {} | room : {} |'.format(user, room))
 	
 	# Define Output Path
 	fpath = './.parsed/'
@@ -80,18 +82,18 @@ def sl_main(date, term, keyword, user, room):
 	_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
 
 	# Filter by Absolute Date or Term
-	if 'date' in str_search:
-		_files = sl_find_files(datetime.datetime.date(datetime.datetime.strptime(str_search['date'], '%Y-%m-%d')), str_search)
-		hgt_logger.debug("\t Searching on {}".format(str_search['date']))
+	if date != 'Date':
+		_files = sl_find_files(datetime.datetime.date(room, user, datetime.datetime.strptime(date, '%Y-%m-%d')))
+		hgt_logger.debug("\t Searching on {}".format(date))
 	else:
-		_files = sl_find_files(1, str_search, str_search['term'])
-		hgt_logger.debug("\t Searching the past {} months".format(str_search['term']))
+		_files = sl_find_files(room, user, 1, term)
+		hgt_logger.debug("\t Searching the past {} months".format(term))
 
 	# Check for MULTIPROC and process accordingly
 	hgt_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
 	if not MULTIPROC:
 		for _file in _files:
-			_lines.append(sl_find_lines(str_search, _file))
+			_lines.append(sl_find_lines(keyword, user, _file))
 			hgt_logger.debug('\t File searched : {}'.format(_file))
 	else:
 		i = 0
@@ -104,7 +106,7 @@ def sl_main(date, term, keyword, user, room):
 			results = [None for _ in range(this_min)]
 		
 			for k in range(this_min):
-				results[k] = pool.apply_async(sl_find_lines, [str_search, chunk[k]])
+				results[k] = pool.apply_async(sl_find_lines, [keyword, user, chunk[k]])
 				
 			pool.close()
 			pool.join()
@@ -150,7 +152,7 @@ def sl_clean_line(l):
 # Search for files within the specified term
 # (Months or specific date)
 # Returns a list of files matching the criteria
-def sl_find_files(d, str_search, t=3):
+def sl_find_files(room, user, d, t=3):
 	hgt_logger.debug('\t sl_find_files args : {} :: {}'.format(d, t))
 
 	_dir = expanduser('~') + '/.purple/logs/jabber/'
@@ -165,7 +167,6 @@ def sl_find_files(d, str_search, t=3):
 	else:
 		if t == '# of Months':
 			t=3
-			str_search['term']=t
 		begin_date = monthdelta(datetime.date.today(), int(t))
 		hgt_logger.debug('\t Searching for term : {}'.format(t))
 		exact_date = 1
@@ -178,11 +179,11 @@ def sl_find_files(d, str_search, t=3):
 			
 			if exact_date != 1:
 				if datetime.date.fromtimestamp(os.path.getctime(_path)) == exact_date:
-					if sl_filter_rooms(_path, str_search):
+					if sl_filter_rooms(_path, room, user):
 						_files.append(_path)	
 			else:
 				if datetime.date.fromtimestamp(os.path.getctime(_path)) > begin_date:
-					if sl_filter_rooms(_path, str_search):
+					if sl_filter_rooms(_path, room, user):
 						_files.append(_path)
 	
 	hgt_logger.debug('\t Added {!s} files to the list'.format(len(_files)))
@@ -191,51 +192,39 @@ def sl_find_files(d, str_search, t=3):
 	return _files
 
 # Returns all lines matching the passed term
-def sl_find_lines(str_search, _file):
-	hgt_logger.debug('\t sl_find_lines pid({})'.format(os.getpid()))
+def sl_find_lines(keyword, user, _file):
+	#hgt_logger.debug('\t sl_find_lines pid({})'.format(os.getpid()))
 	
 	_lines = []
-	look_for = ('keyword', 'user')
-	keys = [i for i in look_for if i in list(str_search.keys())]
 	
 	with open(_file, 'r') as f:
 		for line in f:
-			if keys:
-				for key in keys:
-					if line.find(str_search[key])>0:
-						_lines.append('<br>' + sl_clean_line(f.name) + '<br>')
-						for _line in f:
-							_lines.append(_line.rstrip())
-						break
-			else:
-				_lines.append(line.rstrip())
+			if (line.find(keyword)>0 or line.find(user)>0):
+				_lines.append('<br>' + sl_clean_line(f.name) + '<br>')
+				for _line in f:
+					_lines.append(_line.rstrip())
+				break
+	f.close()
+	
 	if len(_lines)>0:
-		hgt_logger.debug('\t Added {!s} lines to output'.format(len(_lines)))
+		hgt_logger.debug('\t Added {} lines to output'.format(len(_lines)))
+		
 	return _lines
 
 # Filter paths for room or user as specified
-def sl_filter_rooms(_path, str_search):
+def sl_filter_rooms(_path, room, user):
 	
 	found = False
 	
-	if (str_search['room']=='Chat Room' and str_search['user']=='User LDAP'):
+	if ((room=='Chat Room'or room==None) and (user=='User LDAP' or user==None)):
 		found = True
 	else:
-		if (str_search['user']=='User LDAP' and str_search['room']!='Chat Room'):
-			if (_path.find(str_search['room']) > 0):
-				hgt_logger.debug("\t Found {0} in {1}".format(str_search['room'], _path))
-				found = True
-		elif (str_search['user']!='User LDAP' and str_search['room']=='Chat Room'):
-			if (_path.find(str_search['user']) > 0):
-				hgt_logger.debug("\t Found {0} in {1}".format(str_search['user'], _path))
-				found = True
-		elif (str_search['room']!='Chat Room' and str_search['user']!='User LDAP'):
-			if (_path.find(str_search['user']) > 0 ):
-				hgt_logger.debug("\t Found {0} in {1}".format(str_search['user'], _path))
-				found = True
-			if (_path.find(str_search['room']) > 0):
-				hgt_logger.debug("\t Found {0} in {1}".format(str_search['room'], _path))
-				found = True
+		if (_path.find(user) > 0 ):
+			hgt_logger.debug("\t Found {0} in {1}".format(user, _path))
+			found = True
+		if (_path.find(room) > 0):
+			hgt_logger.debug("\t Found {0} in {1}".format(room, _path))
+			found = True
 			
 	return found
 		
@@ -535,17 +524,19 @@ class MainWindow(Gtk.Window):
 
 	global favicon
 	global ENV_USER
+	global MAX_PROC
+	global MULTIPROC
 	
 	def __init__(self):
 		
 		try:
 			win_title = 'HG Tools | Welcome, {}!'.format(ENV_USER) 
-			
+			hgt_logger.setLevel(logging.DEBUG)
 			# Create dict for signal storage
 			self.selected = {}
 			
 			Gtk.Window.__init__(self, title=win_title)
-			hgt_logger.debug("[*] HGTools GUI spawned")
+			
 			self.set_icon_from_file(favicon)
 			self.pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 			
@@ -582,12 +573,15 @@ class MainWindow(Gtk.Window):
 
 			self.set_position(Gtk.WindowPosition.CENTER)
 			
+			hgt_logger.debug("[*] HGTools GUI spawned")
+			
 		except Exception as e:
-			if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
-				nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
-				response = nf_win.run()
-				nf_win.destroy()
-			hgt_logger.error('[*] Details - {:}'.format(*e))
+			raise
+			#if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
+			#	nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
+			#	response = nf_win.run()
+			#	nf_win.destroy()
+			#hgt_logger.error('[*] Details - {:}'.format(*e))
 			
 	# Actions
 	
@@ -645,10 +639,18 @@ class MainWindow(Gtk.Window):
 		
 	def add_option_menu_actions(self, action_group):
 		action_group.add_actions([
-			("OptionMenu", None, " Options |"),])
+			("OptionMenu", None, " Options |"),
+			("MaxProcs", None, "Max Procs >"), ])
 		action_group.add_toggle_actions([
 			("DebugMode", None, "Debug Logging", None, 
-			"Turn on/off verbose logging", self.on_debugmode),])
+			"Turn on/off verbose logging", self.on_debugmode, True),
+			("MultiProc", None, "Multiprocessing", None, 
+			"Turn on/off multiprocessing", self.on_multiproc, True), ])
+		action_group.add_radio_actions([
+            ("Choice3", None, "3", None, None, 1),
+            ("Choice4", None, "4", None, None, 2),
+            ("Choice5", None, "5", None, None, 3)
+        ], 1, self.on_maxprocs_changed)
 
 	def on_debugmode(self, widget):
 		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
@@ -658,6 +660,16 @@ class MainWindow(Gtk.Window):
 		else:
 			hgt_logger.debug("\t Debug Logging OFF")
 			hgt_logger.setLevel(logging.WARNING)
+			
+	def on_maxprocs_changed(self, widget, current):
+		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()))
+		global MAX_PROC
+		MAX_PROC = int(current.get_name()[-1])
+			
+	def on_multiproc(self, widget):
+		gt_logger.debug("\t Multiprocessing set to : {}".format(widget.get_active()))
+		global MULTIPROC
+		MULTIPROC = widget.get_active()
 
 	def on_menu_deduplicate(self, widget):
 		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
@@ -702,7 +714,7 @@ class MainWindow(Gtk.Window):
 	def pc_button_exec(self, widget):
 		# Execute pass_chats
 		hgt_logger.debug("[*] MainWindow > Broadcast button clicked")
-		if self.selected['chatcount']!='# of Chats':
+		if self.selected['chats']!='# of Chats':
 			pc_main(list=True, chats=self.selected['chatcount'])
 		else:
 			nf_win = InfoDialog(self, "Error", 'Select a chat count')
@@ -719,7 +731,14 @@ class MainWindow(Gtk.Window):
 			self.selected['user']='User LDAP'
 		if 'room' not in self.selected:
 			self.selected['room']='Chat Room'
-		sl_main(**self.selected)
+		if 'date' not in self.selected:
+			self.selected['date']='Date'
+		if 'keyword' not in self.selected:
+			self.selected['keyword']='Keyword(s)'
+			
+		keys_to_select = ('user', 'room', 'date', 'keyword', 'term')
+		sl_vars = dict((k, self.selected[k]) for k in keys_to_select)			
+		sl_main(**sl_vars)
 		
 			# Arguments : (key - default - description)
 	#
@@ -1012,10 +1031,8 @@ class MainWindow(Gtk.Window):
 		
 	def sl_date_callback(self, widget, entry):
 		entry_text = entry.get_text()
-		if entry_text != 'Date':
-			if valid_date(entry_text):
-				self.selected['date']=entry_text
-				hgt_logger.debug('\t {} = {}'.format('date', entry_text))
+		self.selected['date']=entry_text
+		hgt_logger.debug('\t {} = {}'.format('date', entry_text))
 		
 	def sl_keyword_callback(self, widget, entry):
 		entry_text = entry.get_text()
