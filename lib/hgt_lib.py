@@ -76,58 +76,58 @@ def sl_main(date, term, keyword, user, room):
 	fpath = './.parsed/'
 	hgt_logger.debug('\t Output path : {}'.format(fpath))
 
-		_lines = []
-		_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
+	_lines = []
+	_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
 
-		# Filter by Absolute Date or Term
-		if 'date' in str_search:
-			_files = sl_find_files(datetime.datetime.date(datetime.datetime.strptime(str_search['date'], '%Y-%m-%d')), str_search)
-			hgt_logger.debug("\t Searching on {}".format(str_search['date']))
-		else:
-			_files = sl_find_files(1, str_search, str_search['term'])
-			hgt_logger.debug("\t Searching the past {} months".format(str_search['term']))
+	# Filter by Absolute Date or Term
+	if 'date' in str_search:
+		_files = sl_find_files(datetime.datetime.date(datetime.datetime.strptime(str_search['date'], '%Y-%m-%d')), str_search)
+		hgt_logger.debug("\t Searching on {}".format(str_search['date']))
+	else:
+		_files = sl_find_files(1, str_search, str_search['term'])
+		hgt_logger.debug("\t Searching the past {} months".format(str_search['term']))
 
-		# Check for MULTIPROC and process accordingly
-		hgt_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
-		if not MULTIPROC:
-			for _file in _files:
-				_lines.append(sl_find_lines(str_search, _file))
-				hgt_logger.debug('\t File searched : {}'.format(_file))
-		else:
-			i = 0
-			hgt_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
-			while i in range(len(_files)):
-				j = len(_files)-i
-				this_min = min(MAX_PROC, j)
-				pool = Pool(processes=this_min)
-				chunk = _files[i:i+this_min]
-				results = [None for _ in range(this_min)]
-			
-				for k in range(this_min):
-					results[k] = pool.apply_async(sl_find_lines, [str_search, chunk[k]])
-					
-				pool.close()
-				pool.join()
+	# Check for MULTIPROC and process accordingly
+	hgt_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
+	if not MULTIPROC:
+		for _file in _files:
+			_lines.append(sl_find_lines(str_search, _file))
+			hgt_logger.debug('\t File searched : {}'.format(_file))
+	else:
+		i = 0
+		hgt_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
+		while i in range(len(_files)):
+			j = len(_files)-i
+			this_min = min(MAX_PROC, j)
+			pool = Pool(processes=this_min)
+			chunk = _files[i:i+this_min]
+			results = [None for _ in range(this_min)]
+		
+			for k in range(this_min):
+				results[k] = pool.apply_async(sl_find_lines, [str_search, chunk[k]])
 				
-				for k in range (this_min):
-					_lines.extend(results[k].get())
-					
-				i += this_min
-				
-		hgt_logger.debug('\t {} files searched'.format(len(_files)))
-		hgt_logger.debug('\t {} lines found'.format(len(_lines)))
-
-		open(_opath, 'w').close() # Empty File Contents
-		hgt_logger.debug('\t {} reinitialized'.format(_opath))
-
-		# Write new file data
-		with open(_opath, 'w') as f:
-			hgt_logger.debug('\t Writing {} lines'.format(len(_lines)))
+			pool.close()
+			pool.join()
 			
-			for l in _lines:
-				f.write(sl_clean_line(l))
-		f.close()
-		webbrowser.open(_opath, new=2)
+			for k in range (this_min):
+				_lines.extend(results[k].get())
+				
+			i += this_min
+			
+	hgt_logger.debug('\t {} files searched'.format(len(_files)))
+	hgt_logger.debug('\t {} lines found'.format(len(_lines)))
+
+	open(_opath, 'w').close() # Empty File Contents
+	hgt_logger.debug('\t {} reinitialized'.format(_opath))
+
+	# Write new file data
+	with open(_opath, 'w') as f:
+		hgt_logger.debug('\t Writing {} lines'.format(len(_lines)))
+		
+		for l in _lines:
+			f.write(sl_clean_line(l))
+	f.close()
+	webbrowser.open(_opath, new=2)
 
 # Validates the argument format if date type
 def valid_date(s):
