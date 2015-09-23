@@ -416,7 +416,7 @@ def hgt_query(str_sql, qtype):
 		database, '-Bse', str_sql]
 		
 	proc=subprocess.Popen(cmd,stdout=subprocess.PIPE)
-	retval=hgt_parse(proc.communicate()[0], qtype)
+	retval=proc.communicate()[0]
 	hgt_logger.debug('\t Database query took %s seconds' % (time.clock()-start))
 	
 	return retval
@@ -1482,7 +1482,7 @@ class MainWindow(Gtk.Window):
 		if 'hgt_search_term' in self.selected:
 			search_term = self.selected['hgt_search_term']
 			hgt_logger.debug("\t Search Term : {}".format(search_term))
-			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}% OR hgt_code like "%{}%";'.format(search_term)
+			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}%" OR hgt_code like "%{}%";'.format(search_term, search_term)
 			outp=hgt_query(str_sql, 'phrases')
 			hgt_logger.debug("\t Returned : {}".format(outp))
 		else:
