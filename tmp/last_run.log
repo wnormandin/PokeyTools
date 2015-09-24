@@ -1,90 +1,24 @@
-2015-09-23 06:38:34,226 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-23 06:38:34,226 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-23 06:38:34,226 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-23 06:38:34,229 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-23 06:38:34,229 | DEBUG | hgt_lib >> 	Read 5 lines
-2015-09-23 06:38:34,229 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-23 06:38:34,229 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-23 06:38:34,230 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-23 06:38:34,230 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-23 06:38:34,230 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-23 06:38:34,230 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
-2015-09-23 06:38:34,230 | DEBUG | hgt_lib >> 	pc_box_build
-2015-09-23 06:38:34,232 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-23 06:38:34,232 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-23 06:38:34,456 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
-2015-09-23 06:38:34,456 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-23 06:38:34,457 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-23 06:38:34,457 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-23 06:38:34,458 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-23 06:38:34,458 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-23 06:38:34,458 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
-2015-09-23 06:38:34,458 | DEBUG | hgt_lib >> 	hgt_box_build
-2015-09-23 06:38:34,459 | DEBUG | hgt_lib >> 	len(menu_widgets) : 2
-2015-09-23 06:38:34,459 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-23 06:38:34,459 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-23 06:38:34,459 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-23 06:38:34,998 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-23 06:38:36,989 | DEBUG | hgt_lib >> 	 hgt_search_term = 
-2015-09-23 06:38:36,989 | DEBUG | hgt_lib >> 	 hgt_search_term = t
-2015-09-23 06:38:37,125 | DEBUG | hgt_lib >> 	 hgt_search_term = te
-2015-09-23 06:38:37,309 | DEBUG | hgt_lib >> 	 hgt_search_term = tes
-2015-09-23 06:38:37,485 | DEBUG | hgt_lib >> 	 hgt_search_term = test
-2015-09-23 06:38:38,245 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-23 06:38:38,245 | DEBUG | hgt_lib >> 	 Search Term : test
-2015-09-23 06:38:38,378 | DEBUG | hgt_lib >> Return list length : 127
-2015-09-23 06:38:38,378 | DEBUG | hgt_lib >> hgt_parse opt : phrases
-2015-09-23 06:38:38,378 | DEBUG | hgt_lib >> Populating Gtk.ListStore...
-2015-09-23 06:38:38,384 | DEBUG | hgt_lib >> [*] HGTools selection window spawned
-2015-09-23 06:38:38,384 | DEBUG | hgt_lib >> 	 Building grid
-2015-09-23 06:38:38,401 | DEBUG | hgt_lib >> 	 Selection changed : tester
-2015-09-23 06:38:38,401 | DEBUG | hgt_lib >> [*] Showing SearchResultWindow
-2015-09-23 06:38:38,401 | DEBUG | hgt_lib >> [*] Entering Gtk.main()
-2015-09-23 06:38:38,989 | DEBUG | hgt_lib >> 	 Selection changed : testing
-2015-09-23 06:38:39,693 | DEBUG | hgt_lib >> 	 Button clicked > Select
-2015-09-23 06:39:11,268 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-23 06:39:11,270 | DEBUG | hgt_lib >> 	 Search Term : test
-2015-09-23 06:39:11,396 | DEBUG | hgt_lib >> Return list length : 127
-2015-09-23 06:39:11,396 | DEBUG | hgt_lib >> hgt_parse opt : phrases
-2015-09-23 06:39:11,396 | DEBUG | hgt_lib >> Populating Gtk.ListStore...
-2015-09-23 06:39:11,402 | DEBUG | hgt_lib >> [*] HGTools selection window spawned
-2015-09-23 06:39:11,402 | DEBUG | hgt_lib >> 	 Building grid
-2015-09-23 06:39:11,427 | DEBUG | hgt_lib >> 	 Selection changed : tester
-2015-09-23 06:39:11,428 | DEBUG | hgt_lib >> [*] Showing SearchResultWindow
-2015-09-23 06:39:11,428 | DEBUG | hgt_lib >> [*] Entering Gtk.main()
-2015-09-23 06:39:12,391 | DEBUG | hgt_lib >> 	 Selection changed : testy
-2015-09-23 06:39:13,452 | DEBUG | hgt_lib >> 	 Button clicked > Select
-2015-09-23 06:39:18,581 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-23 06:39:18,581 | DEBUG | hgt_lib >> 	 Search Term : test
-2015-09-23 06:39:18,715 | DEBUG | hgt_lib >> Return list length : 127
-2015-09-23 06:39:18,716 | DEBUG | hgt_lib >> hgt_parse opt : phrases
-2015-09-23 06:39:18,716 | DEBUG | hgt_lib >> Populating Gtk.ListStore...
-2015-09-23 06:39:18,722 | DEBUG | hgt_lib >> [*] HGTools selection window spawned
-2015-09-23 06:39:18,722 | DEBUG | hgt_lib >> 	 Building grid
-2015-09-23 06:39:18,737 | DEBUG | hgt_lib >> 	 Selection changed : tester
-2015-09-23 06:39:18,738 | DEBUG | hgt_lib >> [*] Showing SearchResultWindow
-2015-09-23 06:39:18,738 | DEBUG | hgt_lib >> [*] Entering Gtk.main()
-2015-09-23 06:39:20,895 | DEBUG | hgt_lib >> SearchResultWindow return : 0
-2015-09-23 06:39:21,027 | DEBUG | hgt_lib >> Return list length : 0
-2015-09-23 06:39:21,028 | DEBUG | hgt_lib >> hgt_parse opt : tool
-2015-09-23 06:39:21,028 | WARNING | hgt_lib >> Query returned zero rows
-2015-09-23 06:39:21,028 | DEBUG | hgt_lib >> hgt_query took 0.001447 seconds
-2015-09-23 06:39:21,028 | DEBUG | hgt_lib >> hgt_query took 0.098604 seconds
-2015-09-23 06:39:21,028 | DEBUG | hgt_lib >> 	 Returned : None
-2015-09-23 06:41:16,716 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
-2015-09-23 06:41:16,717 | DEBUG | hgt_lib >> SearchResultWindow return : 0
-2015-09-23 06:41:16,871 | DEBUG | hgt_lib >> Return list length : 0
-2015-09-23 06:41:16,871 | DEBUG | hgt_lib >> hgt_parse opt : tool
-2015-09-23 06:41:16,871 | WARNING | hgt_lib >> Query returned zero rows
-2015-09-23 06:41:16,871 | DEBUG | hgt_lib >> hgt_query took 0.001489 seconds
-2015-09-23 06:41:16,871 | DEBUG | hgt_lib >> hgt_query took 0.42693 seconds
-2015-09-23 06:41:16,871 | DEBUG | hgt_lib >> 	 Returned : None
-2015-09-23 06:41:20,636 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
-2015-09-23 06:41:20,638 | DEBUG | hgt_lib >> SearchResultWindow return : 0
-2015-09-23 06:41:20,800 | DEBUG | hgt_lib >> Return list length : 0
-2015-09-23 06:41:20,800 | DEBUG | hgt_lib >> hgt_parse opt : tool
-2015-09-23 06:41:20,800 | WARNING | hgt_lib >> Query returned zero rows
-2015-09-23 06:41:20,800 | DEBUG | hgt_lib >> hgt_query took 0.002772 seconds
-2015-09-23 06:41:20,800 | DEBUG | hgt_lib >> hgt_query took 0.629704 seconds
-2015-09-23 06:41:20,800 | DEBUG | hgt_lib >> 	 Returned : None
-2015-09-23 06:41:22,100 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-24 08:43:43,691 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-24 08:43:43,691 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-24 08:43:43,691 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-24 08:43:43,693 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-24 08:43:43,693 | DEBUG | hgt_lib >> 	Read 2 lines
+2015-09-24 08:43:43,693 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-24 08:43:43,693 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-24 08:43:43,693 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-24 08:43:43,693 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-24 08:43:43,694 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-24 08:43:43,694 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
+2015-09-24 08:43:43,694 | DEBUG | hgt_lib >> 	pc_box_build
+2015-09-24 08:43:43,696 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-24 08:43:43,696 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-24 08:43:43,920 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
+2015-09-24 08:43:43,920 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-24 08:43:43,921 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-24 08:43:43,921 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-24 08:43:43,922 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-24 08:43:43,922 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-24 08:43:43,922 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
+2015-09-24 08:43:43,923 | DEBUG | hgt_lib >> 	hgt_box_build
+2015-09-24 08:43:43,923 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-24 08:43:43,924 | DEBUG | hgt_lib >> 	 2

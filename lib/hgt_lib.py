@@ -9,7 +9,9 @@ from multiprocessing import Pool
 from HTMLParser import HTMLParser
 import re, csv, locale, random, inspect
 import subprocess
-
+import urllib2
+import urllib
+from subprocess import Popen, PIPE
 
 #******************************GLOBALS**********************************
 
@@ -68,11 +70,52 @@ def setup_logger(name, level, file_loc):
 		logger.addHandler(cons_handler)
 	
 	return logger
+	
+#************************hgfix functionality****************************
+def hgfix_do_encode(post_arguments):
+
+	# Encode It Properly
+	uri = urllib.urlencode(post_arguments)
+	uri = uri.encode('utf-8') # data should be bytes
+	
+	return urllib2.Request('http://hgfix.net/paste/api/create', uri)
+	
+def hgfix_do_post(request):
+
+	# Make a POST Request
+	response = urllib2.urlopen(request)
+	
+	# Read the Response
+	paste_url = response.read().decode("utf-8").rstrip()  
+	match = re.search(r"http://hgfix.net/paste/view/(.+)", paste_url)
+	paste_url = "http://hgfix.net/paste/view/raw/" + match.group(1)
+	
+	return paste_url
+	
+def hgfix_do_paste(value, destination=False):
+	
+	if not destination:
+		pass
+
+	elif destination == 'clipboard':
+		clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+		clip.set_text(value, -1)
+		
+	elif destination == 'mouse':
+		p = Popen(['xsel', '-po'], stdin=PIPE)
+		p.communicate()
+		
+def hgfix_main(txt, destination):
+
+	hgfix_do_paste("Loading -- Try again in a moment")
+	# Pair Up the URI Query String
+	post_arguments = {'text' : txt, 'private': '', 'expires': '30', 'lang': 'text'}
+	ret_url = hgfix_do_post(hgfix_do_encode(post_arguments))
+	hgfix_do_paste(ret_url, destination)
 
 #*********************spark_log functionality***************************
 
 def sl_main(date, term, keyword, user, room):
-		
 	
 	hgt_logger.debug('[*] Spark Log Search started')
 	hgt_logger.debug('\t date : {} | term : {} | keyword : {} |'.format(date, term, keyword))
@@ -416,7 +459,7 @@ def hgt_query(str_sql, qtype):
 		database, '-Bse', str_sql]
 		
 	proc=subprocess.Popen(cmd,stdout=subprocess.PIPE)
-	retval=hgt_parse(proc.communicate()[0], qtype)
+	retval=proc.communicate()[0]
 	hgt_logger.debug('\t Database query took %s seconds' % (time.clock()-start))
 	
 	return retval
@@ -819,6 +862,7 @@ class MainWindow(Gtk.Window):
 	global ENV_USER
 	global MAX_PROC
 	global MULTIPROC
+	global USER_SELECTION
 	
 	def __init__(self):
 		
@@ -1150,13 +1194,35 @@ class MainWindow(Gtk.Window):
 		self.hgt_box_build(hgt_box, hgt_widgets)
 		grid.attach_next_to(hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
 		hgt_box.set_homogeneous(False)
-
+		
+		hgt_opt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+		self.hgt_opt_box_build(hgt_opt_box)
+		hgt_opt_box.set_homogeneous(False)
+		grid.attach_next_to(hgt_opt_box, hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		
+		hgt_opt2_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+		self.hgt_opt2_box_build(hgt_opt2_box)
+		hgt_opt2_box.set_homogeneous(False)
+		grid.attach_next_to(hgt_opt2_box, hgt_opt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		
 		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
-		hgt_logger.debug('\tlen(menu_widgets) : {}'.format(len(menu_widgets)))
+		hgt_logger.debug('\t len(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
-		grid.attach_next_to(menu_box, hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		grid.attach_next_to(menu_box, hgt_opt_box, Gtk.PositionType.BOTTOM, 1, 2)
 		menu_box.set_homogeneous(False)
+		
+	def on_hgt_restype_toggled(self, radio, name):
+		
+		if radio.get_active():
+			hgt_logger.debug('\t {}'.format(name))
+			self.selected['hgt_rtype']=name
+		
+	def on_hgt_dest_toggled(self, radio, name):
+		
+		if radio.get_active():
+			hgt_logger.debug('\t {}'.format(name))
+			self.selected['hgt_dest']=name
 		
 	def pc_box_build(self, pc_box, pc_widgets):
 		hgt_logger.debug('\tpc_box_build')
@@ -1291,6 +1357,44 @@ class MainWindow(Gtk.Window):
 		sl_box.pack_start(sl_chatroom_combo, True, True, 1)
 		sl_box.pack_start(sl_user_box, True, True, 1)
 		sl_box.pack_start(sl_button, True, True, 1)
+		
+	def hgt_opt_box_build(self, hgt_opt_box):
+		hgt_logger.debug('\t hgt_opt_box')
+		
+		# hgt_opt_label
+		hgt_opt_label = Gtk.Label()
+		hgt_opt_label.set_label('Send Result to :')
+		
+		# hgt_dest_radio
+		hgt_dest_radio1 = Gtk.RadioButton.new_with_label_from_widget(None, "XSel(Mouse)")
+		hgt_dest_radio1.connect("toggled", self.on_hgt_dest_toggled, "1")
+		hgt_dest_radio2 = Gtk.RadioButton.new_from_widget(hgt_dest_radio1)
+		hgt_dest_radio2.set_label("Clipboard")
+		hgt_dest_radio2.connect("toggled", self.on_hgt_dest_toggled, "2")
+		hgt_dest_radio2.set_active(True)
+		
+		hgt_opt_box.pack_start(hgt_opt_label, False, False, 0)
+		hgt_opt_box.pack_start(hgt_dest_radio1, False, False, 0)
+		hgt_opt_box.pack_start(hgt_dest_radio2, False, False, 0)
+		
+	def hgt_opt2_box_build(self, hgt_opt2_box):
+		hgt_logger.debug('\t hgt_opt_box')
+		
+		# hgt_opt_label
+		hgt_opt_label = Gtk.Label()
+		hgt_opt_label.set_label('Paste result as :')
+		
+		# hgt_dest_radio
+		hgt_dest_radio1 = Gtk.RadioButton.new_with_label_from_widget(None, "HGFix URL")
+		hgt_dest_radio1.connect("toggled", self.on_hgt_dest_toggled, "1")
+		hgt_dest_radio2 = Gtk.RadioButton.new_from_widget(hgt_dest_radio1)
+		hgt_dest_radio2.set_label("Text")
+		hgt_dest_radio2.connect("toggled", self.on_hgt_restype_toggled, "2")
+		hgt_dest_radio2.set_active(True)
+		
+		hgt_opt2_box.pack_start(hgt_opt_label, False, False, 0)
+		hgt_opt2_box.pack_start(hgt_dest_radio1, False, False, 0)
+		hgt_opt2_box.pack_start(hgt_dest_radio2, False, False, 0)
 		
 	def hgt_box_build(self, hgt_box, hgt_widgets):
 		hgt_logger.debug('\thgt_box_build')
@@ -1482,13 +1586,89 @@ class MainWindow(Gtk.Window):
 		if 'hgt_search_term' in self.selected:
 			search_term = self.selected['hgt_search_term']
 			hgt_logger.debug("\t Search Term : {}".format(search_term))
-			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}% OR hgt_code like "%{}%";'.format(search_term)
+			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
+			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
+			str_sql += 'WHERE (hgt_text like "%{}%" OR hgt_code like "%{}%") GROUP BY hgt_code;'.format(search_term, search_term)
 			outp=hgt_query(str_sql, 'phrases')
-			hgt_logger.debug("\t Returned : {}".format(outp))
+			
+			# hgt_logger.debug("\t {}".format(outp))
+			store = Gtk.ListStore(str, str, str)
+			
+			for line in outp.split('\n'):
+				listed = line.split('\t')
+				if listed != ['']:
+					# hgt_logger.debug(listed)
+					store.append(listed)
+				
+			if len(store)>0:
+				search_win = SearchResultDialog(self, store)
+				response = search_win.run()
+				if response == Gtk.ResponseType.OK:
+					hgt_logger.debug("\t Selected : {}".format(USER_SELECTION))
+				search_win.destroy()
+				try:
+					if self.selected['hgt_dest'] == '2':
+						dest = 'clipboard'
+					else:
+						dest = 'mouse'
+				except Exception as e:
+					raise
+				
+				if self.selected['hgt_dest'] == '2':
+					dest = 'clipboard'
+				else:
+					dest = 'mouse'
+				hgt_logger.debug("\t Response : {} > {}".format(USER_SELECTION, dest))
+				
+				hgfix_main(USER_SELECTION, dest)
+				
+			else:
+				hgt_logger.debug("\t Term not found!")
+				nf_win = InfoDialog(self, "Not Found", "No results for the specified search term!")
+				response = nf_win.run()
+				nf_win.destroy()
+			
 		else:
 			hgt_logger.debug("\t No Term Specified")
 			nf_win = InfoDialog(self, "No Term Specified", "Please enter a valid search term")
 			response = nf_win.run()
 			nf_win.destroy()
 			
+class SearchResultDialog(Gtk.Dialog):
+	
+	global USER_SELECTION
+	
+	def __init__(self, parent, store):
+		Gtk.Dialog.__init__(self, "Select a record", parent, 0,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OK, Gtk.ResponseType.OK))
+			 
+		tree = Gtk.TreeView(store)
+		renderer = Gtk.CellRendererText()
+		renderer.props.wrap_width = 500
 
+		col1 = Gtk.TreeViewColumn('Abbreviation', renderer, text=0) 
+		
+		col2 = Gtk.TreeViewColumn('Text', renderer, text=1)
+		col2.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
+		
+		col3 = Gtk.TreeViewColumn('Description', renderer, text=2)
+			
+		for item in [col1, col2, col3]:
+			tree.append_column(item)
+			
+		select = tree.get_selection()
+		select.connect("changed", self.search_selection_changed)
+		
+		box = self.get_content_area()
+
+		box.add(tree)
+		self.show_all()
+		
+	def search_selection_changed(self, selection):
+		global USER_SELECTION
+		model, treeiter = selection.get_selected()
+		if treeiter != None:
+			USER_SELECTION = model[treeiter][1]
+			hgt_logger.debug("\t Search window selection changed : {}".format(USER_SELECTION))
+		
