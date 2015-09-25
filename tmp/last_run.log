@@ -1,37 +1,45 @@
-2015-09-24 23:09:29,044 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-24 23:09:29,044 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-24 23:09:29,044 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-24 23:09:29,047 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-24 23:09:29,047 | DEBUG | hgt_lib >> 	Read 2 lines
-2015-09-24 23:09:29,047 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-24 23:09:29,047 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-24 23:09:29,047 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-24 23:09:29,047 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-24 23:09:29,048 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-24 23:09:29,048 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
-2015-09-24 23:09:29,048 | DEBUG | hgt_lib >> 	pc_box_build
-2015-09-24 23:09:29,050 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-24 23:09:29,050 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-24 23:09:29,278 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
-2015-09-24 23:09:29,279 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-24 23:09:29,280 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-24 23:09:29,280 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-24 23:09:29,281 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-24 23:09:29,281 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-24 23:09:29,281 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
-2015-09-24 23:09:29,281 | DEBUG | hgt_lib >> 	hgt_box_build
-2015-09-24 23:09:29,282 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-24 23:09:29,283 | DEBUG | hgt_lib >> 	 2
-2015-09-24 23:09:29,283 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-24 23:09:29,283 | DEBUG | hgt_lib >> 	 2
-2015-09-24 23:09:29,283 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
-2015-09-24 23:09:29,283 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-24 23:09:29,284 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-24 23:09:29,284 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-24 23:09:29,835 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-24 23:09:32,716 | DEBUG | hgt_lib >> 	 1
-2015-09-24 23:09:33,428 | DEBUG | hgt_lib >> 	 1
-2015-09-24 23:09:34,228 | DEBUG | hgt_lib >> 	 2
-2015-09-24 23:09:34,813 | DEBUG | hgt_lib >> 	 2
-2015-09-24 23:09:37,420 | DEBUG | hgt_lib >> 	 1
-2015-09-24 23:09:46,380 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-25 00:09:48,685 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-25 00:09:48,685 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-25 00:09:48,685 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-25 00:09:48,688 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-25 00:09:48,688 | DEBUG | hgt_lib >> 	Read 2 lines
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
+2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	pc_box_build
+2015-09-25 00:09:48,692 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-25 00:09:48,692 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-25 00:09:48,924 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
+2015-09-25 00:09:48,924 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-25 00:09:48,925 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-25 00:09:48,926 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-25 00:09:48,926 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-25 00:09:48,926 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-25 00:09:48,927 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
+2015-09-25 00:09:48,927 | DEBUG | hgt_lib >> 	hgt_box_build
+2015-09-25 00:09:48,927 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-25 00:09:48,928 | DEBUG | hgt_lib >> 	 2
+2015-09-25 00:09:48,928 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> 	 2
+2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
+2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-25 00:09:48,929 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-25 00:09:49,463 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-25 00:09:51,251 | DEBUG | hgt_lib >> 	 1
+2015-09-25 00:09:52,763 | DEBUG | hgt_lib >> 	 hgt_search_term = 
+2015-09-25 00:09:52,763 | DEBUG | hgt_lib >> 	 hgt_search_term = t
+2015-09-25 00:09:53,739 | DEBUG | hgt_lib >> 	 hgt_search_term = te
+2015-09-25 00:09:53,899 | DEBUG | hgt_lib >> 	 hgt_search_term = tes
+2015-09-25 00:09:54,035 | DEBUG | hgt_lib >> 	 hgt_search_term = test
+2015-09-25 00:09:55,467 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
+2015-09-25 00:09:55,467 | DEBUG | hgt_lib >> 	 Search Term : test
+2015-09-25 00:09:55,596 | DEBUG | hgt_lib >> 	 Database query took 0.000785 seconds
+2015-09-25 00:09:55,610 | DEBUG | hgt_lib >> 	 Search window selection changed : current_time=$(date "+%Y.%m.%d-%H.%M.%S") ; dir=`pwd` ; if [ -f latest.tar.gz ] ; then mv latest.tar.gz latest$current_time.tar.gz ; fi ; if [ -d wordpress ] ; then mv wordpress wordpress$current_time.bak ; fi ; wget no-check-certificate https://wordpress.org/latest.tar.gz ; tar -xzf latest.tar.gz ; rm -rf wordpress/wp-content/ wordpress/wp-config.php ; if [ -d wpbackup ] ; then mv wpbackup wpbackup$current_time.bak ; fi ; mkdir ./wpbackup ; mv wp-* wpbackup/ ; mv index.php wpbackup/ ; mv wpbackup/wp-config.php wpbackup/wp-content ./ ; mv wordpress/* ./ ; rm -rf latest.tar.gz wordpress/ ; echo "All WordPress files in $dir have been moved to $dir/wpbackup/" ; echo "$dir/wp-config.php and $dir/wp-content are originals. If you need these replaced, do it manually." ;
+2015-09-25 00:09:56,723 | DEBUG | hgt_lib >> 	 Search window selection changed :  Another testing tester testing test
+2015-09-25 00:09:57,563 | DEBUG | hgt_lib >> 	 Selected :  Another testing tester testing test
+2015-09-25 00:09:57,905 | DEBUG | hgt_lib >> 	 Response : HGFix URL -  Another testing tester testing test > mouse
+2015-09-25 00:10:09,195 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

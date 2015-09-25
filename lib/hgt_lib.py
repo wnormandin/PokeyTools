@@ -102,8 +102,8 @@ def hgfix_do_paste(value, destination=False):
 		clip.set_text(value, -1)
 		
 	elif destination == 'mouse':
-		p = Popen(['xsel', '-po'], stdin=PIPE)
-		p.communicate()
+		p = Popen(['xsel', '-p'], stdin=PIPE)
+		p.communicate(value)
 		
 def hgfix_main(txt, destination):
 
@@ -1385,10 +1385,10 @@ class MainWindow(Gtk.Window):
 		hgt_opt_label.set_label('Paste result as :')
 		
 		# hgt_dest_radio
-		hgt_dest_radio1 = Gtk.RadioButton.new_with_label_from_widget(None, "HGFix URL")
+		hgt_dest_radio1 = Gtk.RadioButton.new_with_label_from_widget(None, "Text")
 		hgt_dest_radio1.connect("toggled", self.on_hgt_dest_toggled, "1")
 		hgt_dest_radio2 = Gtk.RadioButton.new_from_widget(hgt_dest_radio1)
-		hgt_dest_radio2.set_label("Text")
+		hgt_dest_radio2.set_label("HGFix URL")
 		hgt_dest_radio2.connect("toggled", self.on_hgt_restype_toggled, "2")
 		hgt_dest_radio2.set_active(True)
 		
@@ -1413,10 +1413,12 @@ class MainWindow(Gtk.Window):
 		hgt_box.pack_start(hgt_search_box, True, True, 0)
 		hgt_box.pack_start(hgt_button, False, False, 0)
 		
-	def hgt_enter_callback(self, widget, entry):
-		entry_text = entry.get_text()
-		self.selected['hgt_search_term']=entry_text
-		hgt_logger.debug('\t hgt_search_term = {}'.format(entry_text))
+	def hgt_enter_callback(self, widget, entry=''):
+		if entry.get_text() != None:
+			self.selected['hgt_search_term']=entry.get_text()
+		else:
+			self.selected['hgt_search_term']=''
+		hgt_logger.debug('\t hgt_search_term = {}'.format(self.selected['hgt_search_term']))
 		
 	def sl_date_callback(self, widget, entry):
 		entry_text = entry.get_text()
@@ -1589,7 +1591,6 @@ class MainWindow(Gtk.Window):
 			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
 			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
 			str_sql += 'WHERE (hgt_text like "%{}%" OR hgt_code like "%{}%") GROUP BY hgt_code;'.format(search_term, search_term)
-			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}%" OR hgt_code like "%{}%";'.format(search_term, search_term)
 			outp=hgt_query(str_sql, 'phrases')
 			
 			# hgt_logger.debug("\t {}".format(outp))
@@ -1612,16 +1613,18 @@ class MainWindow(Gtk.Window):
 						dest = 'clipboard'
 					else:
 						dest = 'mouse'
+						
+					if self.selected['hgt_rtype'] == '1':
+						src = 'Text'
+						hgfix_do_paste(USER_SELECTION, dest)
+					else:
+						src = 'HGFix URL'
+						hgfix_main(USER_SELECTION, dest)
+						
 				except Exception as e:
 					raise
-				
-				if self.selected['hgt_dest'] == '2':
-					dest = 'clipboard'
-				else:
-					dest = 'mouse'
-				hgt_logger.debug("\t Response : {} > {}".format(USER_SELECTION, dest))
-				
-				hgfix_main(USER_SELECTION, dest)
+					
+				hgt_logger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
 				
 			else:
 				hgt_logger.debug("\t Term not found!")
