@@ -9,6 +9,7 @@
     </menu>
     <menu action='DataMenu'>
       <menuitem action='DataDeduplicate' />
+      <menuitem action='CloneAHKLib' />
     </menu>
     <menu action='OptionMenu'>
       <menuitem action='DebugMode' />

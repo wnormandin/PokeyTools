@@ -70,6 +70,92 @@ def setup_logger(name, level, file_loc):
 		logger.addHandler(cons_handler)
 	
 	return logger
+
+#************************User Functions*********************************
+# Functions to grant admin permissions to some users
+
+#************************/User Functions********************************
+
+#************************AHK import function****************************
+#	Path to autokey.json : ~/.config/autokey
+# 
+#	Location in file :
+#	"folders": [
+#       "/home/wnormandin/dev/scripts/AHKs",
+#        "/home/wnormandin/dev/scripts/AHKs/Scripts",
+#        "/home/wnormandin/dev/scripts/AHKs/Tickets"
+#    ]
+#
+
+def iahk_import_ahk():
+	
+	hgt_logger.debug('[*] Importing User AHKs')
+
+	conf_path = '{}/.config/autokey/autokey.json'.format(expanduser('~'))
+	ahk_paths = []
+	read = False
+	
+	try:
+		ahk_paths = iahk_read_paths(conf_path)
+		ahk_paths = iahk_strip_dups(ahk_paths)
+		file_list = iahk_file_list(ahk_paths)
+		iahk_send_sql(file_list)
+						
+	except Exception as e:
+		hgt_logger.error("[*] import_ahk error : {}".format(*e))
+		raise
+		
+def iahk_send_sql(file_list):
+	hgt_logger.debug('\t Writing to DB...')
+	for item in file_list:
+		with open('{}/{}'.format(item[0], item[1])) as this_file:
+			item[2] = this_file.read()
+			item[1].strip('.txt')
+			hgt_logger.debug('\t {} written'.format(item[1]))
+			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group) '
+			str_sql += 'VALUES ({},{}, {});'.format(item[2][:4].strip(' '), item[2], 'UPL')
+			hgt_logger.debug('\t SQL : {}'.format(str_sql)
+			# hgt_query(str_sql)
+			this_file.close()
+		
+def iahk_read_paths(path):
+	hgt_logger.debug('\t Locating AHK paths...')
+	paths = []
+	read = False
+	# Read paths to autokey files
+	with open(path) as j:
+		for line in j.read().splitlines():
+			if (read and ']' in line):
+				break
+			elif read:
+				paths.append(line.strip(' ''\"\n'))
+			if '"folders": [' in line:
+				read = True
+	j.close()
+	return paths
+
+# Parse out duplicated paths
+def iahk_strip_dups(paths):
+	hgt_logger.debug('\t Removing duplicated (nested) paths')
+	dups = paths
+	for i in range(len(dups)):
+			for item in paths:
+				if (dups[i] in item and dups[i] != item):
+					paths.remove(item)
+	return paths
+
+# Add File Path and File Name to the outFile list
+def iahk_file_list(paths):
+	hgt_logger.debug('\t Locating AHK .txt files')
+	olist = []
+	for path in paths:
+		for root, dirs, files in os.walk(path):
+			for _file in files:
+				if ".txt" in _file:
+					olist.append([path, _file, ''])
+	return olist
+	
+#************************/AHK import function***************************
 	
 #************************hgfix functionality****************************
 def hgfix_do_encode(post_arguments):
@@ -130,7 +216,7 @@ def sl_main(date, term, keyword, user, room):
 
 	# Filter by Absolute Date or Term
 	if date != 'Date':
-		_files = sl_find_files(datetime.datetime.date(room, user, datetime.datetime.strptime(date, '%Y-%m-%d')))
+		_files = sl_find_files(room, user, datetime.datetime.strptime(date, '%Y-%m-%d').date())
 		hgt_logger.debug("\t Searching on {}".format(date))
 	else:
 		_files = sl_find_files(room, user, 1, term)
@@ -168,21 +254,28 @@ def sl_main(date, term, keyword, user, room):
 
 	open(_opath, 'w').close() # Empty File Contents
 	hgt_logger.debug('\t {} reinitialized'.format(_opath))
-
-	# Write new file data
-	with open(_opath, 'w') as f:
-		hgt_logger.debug('\t Writing {} lines'.format(len(_lines)))
-		f.write('<!DOCTYPE html>')
-		f.write('<html>')
+	
+	if len(_lines) > 0:
+		# Write new file data
+		with open(_opath, 'w') as f:
+			hgt_logger.debug('\t Writing {} lines'.format(len(_lines)))
+			f.write('<!DOCTYPE html>')
+			f.write('<html>')
+			
+			for l in _lines:
+				if isinstance(l, (list, tuple)):
+					for ln in l:
+						f.write(ln)
+				else:
+					f.write(l)
+		f.close()
+		webbrowser.open(_opath, new=2)
 		
-		for l in _lines:
-			if isinstance(l, (list, tuple)):
-				for ln in l:
-					f.write(ln)
-			else:
-				f.write(l)
-	f.close()
-	webbrowser.open(_opath, new=2)
+	else:
+		hgt_logger.info("[*] No Results Found")
+		nr_win = InfoDialog(None, "No Results", "Query returned no results")
+		response = nr_win.run()
+		nr_win.destroy()
 
 # Validates the argument format if date type
 def valid_date(s):
@@ -192,7 +285,7 @@ def valid_date(s):
 		return datetime.strptime(s, "%Y-%m-%d")
 	except ValueError:
 		hgt_logger.error("[*] Not a valid date: '{}'.".format(s))
-		ve_win = InfoDialog(self, "Invalid Date", "Not a valid date: '{}'.".format(s))
+		ve_win = InfoDialog(None, "Invalid Date", "Not a valid date: '{}'.".format(s))
 		response = ve_win.run()
 		ve_win.destroy()
 
@@ -447,7 +540,7 @@ def pc_main(**kwargs):
 
 #	Function takes str_sql, connects to the database, and returns 
 #	the passed query results.
-def hgt_query(str_sql, qtype):
+def hgt_query(str_sql, qtype=''):
 	
 	start = time.clock()
 	user='wnrmndn_remote'
@@ -972,6 +1065,8 @@ class MainWindow(Gtk.Window):
 			("DataMenu", None, " Data |"),
 			("DataDeduplicate", None, "Deduplicate", None, None,
 				self.on_menu_deduplicate),
+			("CloneAHKLib", None, "Add AHK library to database", None, None,
+				self.on_clone_ahks)
 		])
 		
 	def add_option_menu_actions(self, action_group):
@@ -998,8 +1093,19 @@ class MainWindow(Gtk.Window):
 			hgt_logger.debug("\t Debug Logging OFF")
 			hgt_logger.setLevel(logging.WARNING)
 			
+	def on_clone_ahks(self, menuitem):
+		hgt_logger.debug('[*] Cloning user autokeys')
+		
+		# Prompt with mass upload warning
+		nf_win = InfoDialog(self, "Notice", 'Notice, this will involve the mass upload of a large amount of data.')
+		response = nf_win.run()
+		nf_win.destroy()
+		if response == Gtk.ResponseType.OK:
+			iahk_import_ahk()
+			
 	def on_maxprocs_changed(self, widget, current):
 		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()[-1]))
+		global MAX_PROC
 		global MAX_PROC
 		MAX_PROC = int(current.get_name()[-1])
 			
@@ -1132,7 +1238,6 @@ class MainWindow(Gtk.Window):
 		user_ldap = self.selected['pc_ldap_box']
 		pc_addline(user_ldap)
 		self.pc_ldap_box.set_text('Added!')
-		time.sleep(1)
 		self.pc_ldap_box.set_text('User LDAP')
 		self.pc_list_refresh(widget)
 		
@@ -1140,14 +1245,21 @@ class MainWindow(Gtk.Window):
 	def pc_remove_button_exec(self, widget):
 		# Remove a user from the pass_chats list
 		hgt_logger.debug("[*] remove_button clicked")
-		slctn = self.selected['user_selected']
-		lines = pc_readlines()
-		with open(PASS_LIST, "w") as passlist:
-			for idx, val in enumerate(lines):
-				if val!=slctn:
-					passlist.write(val + "\n")
-		passlist.close()
-		self.pc_list_refresh(widget)
+		
+		if 'user_selected' in self.selected:
+			slctn = self.selected['user_selected']
+			lines = pc_readlines()
+			with open(PASS_LIST, "w") as passlist:
+				for idx, val in enumerate(lines):
+					if val!=slctn:
+						passlist.write(val + "\n")
+			passlist.close()
+			self.pc_list_refresh(widget)
+		else:
+			hgt_logger.debug("\t No user specified!")
+			nf_win = InfoDialog(self, "No user specified", "Please specify a user to remove!")
+			response = nf_win.run()
+			nf_win.destroy()
 		
 	def pc_chats_combo_changed(self, combo):
 		# Chat count combo changed
