@@ -1209,7 +1209,7 @@ class MainWindow(Gtk.Window):
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
 		hgt_logger.debug('\t len(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
-		grid.attach_next_to(menu_box, hgt_opt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		grid.attach_next_to(menu_box, hgt_opt2_box, Gtk.PositionType.BOTTOM, 1, 2)
 		menu_box.set_homogeneous(False)
 		
 	def on_hgt_restype_toggled(self, radio, name):
@@ -1586,13 +1586,10 @@ class MainWindow(Gtk.Window):
 		if 'hgt_search_term' in self.selected:
 			search_term = self.selected['hgt_search_term']
 			hgt_logger.debug("\t Search Term : {}".format(search_term))
-<<<<<<< HEAD
 			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
 			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
 			str_sql += 'WHERE (hgt_text like "%{}%" OR hgt_code like "%{}%") GROUP BY hgt_code;'.format(search_term, search_term)
-=======
 			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}%" OR hgt_code like "%{}%";'.format(search_term, search_term)
->>>>>>> 7a8935287bfe56faf51546517938a52dd54d3b20
 			outp=hgt_query(str_sql, 'phrases')
 			
 			# hgt_logger.debug("\t {}".format(outp))
