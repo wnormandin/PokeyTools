@@ -1,45 +1,191 @@
-2015-09-25 00:09:48,685 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-25 00:09:48,685 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-25 00:09:48,685 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-25 00:09:48,688 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-25 00:09:48,688 | DEBUG | hgt_lib >> 	Read 2 lines
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
-2015-09-25 00:09:48,689 | DEBUG | hgt_lib >> 	pc_box_build
-2015-09-25 00:09:48,692 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-25 00:09:48,692 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-25 00:09:48,924 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
-2015-09-25 00:09:48,924 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-25 00:09:48,925 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-25 00:09:48,926 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-25 00:09:48,926 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-25 00:09:48,926 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-25 00:09:48,927 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
-2015-09-25 00:09:48,927 | DEBUG | hgt_lib >> 	hgt_box_build
-2015-09-25 00:09:48,927 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-25 00:09:48,928 | DEBUG | hgt_lib >> 	 2
-2015-09-25 00:09:48,928 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> 	 2
-2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
-2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-25 00:09:48,929 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-25 00:09:48,929 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-25 00:09:49,463 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-25 00:09:51,251 | DEBUG | hgt_lib >> 	 1
-2015-09-25 00:09:52,763 | DEBUG | hgt_lib >> 	 hgt_search_term = 
-2015-09-25 00:09:52,763 | DEBUG | hgt_lib >> 	 hgt_search_term = t
-2015-09-25 00:09:53,739 | DEBUG | hgt_lib >> 	 hgt_search_term = te
-2015-09-25 00:09:53,899 | DEBUG | hgt_lib >> 	 hgt_search_term = tes
-2015-09-25 00:09:54,035 | DEBUG | hgt_lib >> 	 hgt_search_term = test
-2015-09-25 00:09:55,467 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-25 00:09:55,467 | DEBUG | hgt_lib >> 	 Search Term : test
-2015-09-25 00:09:55,596 | DEBUG | hgt_lib >> 	 Database query took 0.000785 seconds
-2015-09-25 00:09:55,610 | DEBUG | hgt_lib >> 	 Search window selection changed : current_time=$(date "+%Y.%m.%d-%H.%M.%S") ; dir=`pwd` ; if [ -f latest.tar.gz ] ; then mv latest.tar.gz latest$current_time.tar.gz ; fi ; if [ -d wordpress ] ; then mv wordpress wordpress$current_time.bak ; fi ; wget no-check-certificate https://wordpress.org/latest.tar.gz ; tar -xzf latest.tar.gz ; rm -rf wordpress/wp-content/ wordpress/wp-config.php ; if [ -d wpbackup ] ; then mv wpbackup wpbackup$current_time.bak ; fi ; mkdir ./wpbackup ; mv wp-* wpbackup/ ; mv index.php wpbackup/ ; mv wpbackup/wp-config.php wpbackup/wp-content ./ ; mv wordpress/* ./ ; rm -rf latest.tar.gz wordpress/ ; echo "All WordPress files in $dir have been moved to $dir/wpbackup/" ; echo "$dir/wp-config.php and $dir/wp-content are originals. If you need these replaced, do it manually." ;
-2015-09-25 00:09:56,723 | DEBUG | hgt_lib >> 	 Search window selection changed :  Another testing tester testing test
-2015-09-25 00:09:57,563 | DEBUG | hgt_lib >> 	 Selected :  Another testing tester testing test
-2015-09-25 00:09:57,905 | DEBUG | hgt_lib >> 	 Response : HGFix URL -  Another testing tester testing test > mouse
-2015-09-25 00:10:09,195 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-25 03:25:44,345 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-25 03:25:44,345 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-25 03:25:44,345 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-25 03:25:44,348 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	Read 2 lines
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
+2015-09-25 03:25:44,349 | DEBUG | hgt_lib >> 	pc_box_build
+2015-09-25 03:25:44,351 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-25 03:25:44,352 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-25 03:25:44,587 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
+2015-09-25 03:25:44,587 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-25 03:25:44,588 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-25 03:25:44,589 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-25 03:25:44,589 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-25 03:25:44,590 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-25 03:25:44,590 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
+2015-09-25 03:25:44,590 | DEBUG | hgt_lib >> 	hgt_box_build
+2015-09-25 03:25:44,591 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-25 03:25:44,591 | DEBUG | hgt_lib >> 	 2
+2015-09-25 03:25:44,592 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-25 03:25:44,592 | DEBUG | hgt_lib >> 	 2
+2015-09-25 03:25:44,592 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
+2015-09-25 03:25:44,592 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-25 03:25:44,592 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-25 03:25:44,593 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-25 03:25:45,125 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-25 03:25:54,811 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-25 03:25:54,812 | DEBUG | hgt_lib >> 	 Selected Chat Count = 5
+2015-09-25 03:25:56,883 | DEBUG | hgt_lib >> [*] MainWindow > Broadcast button clicked
+2015-09-25 03:25:56,892 | DEBUG | hgt_lib >> [*] Testing dBus connection
+2015-09-25 03:25:56,894 | DEBUG | hgt_lib >> [*] Finding Pidgin Accounts
+2015-09-25 03:25:56,912 | DEBUG | hgt_lib >> 	Pidgin Acct : 2147
+2015-09-25 03:25:56,912 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : dcole
+2015-09-25 03:25:56,980 | DEBUG | hgt_lib >> 	Buddy Found!
+2015-09-25 03:25:56,980 | DEBUG | hgt_lib >> [*] Attempting to message user :dcole@openfire.houston.hostgator.com
+2015-09-25 03:25:56,980 | DEBUG | hgt_lib >> 	Message :	
+Currently I have : 5 chats to pass.
+Please reply if you can assist!
+
+	[*] This has been an automated chat pass request.
+2015-09-25 03:25:56,984 | DEBUG | hgt_lib >> 	Message Sent to dcole@openfire.houston.hostgator.com
+2015-09-25 03:25:56,984 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : mbrennan
+2015-09-25 03:27:12,667 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-25 03:27:12,668 | DEBUG | hgt_lib >> 	 Selected Term  = 1 months
+2015-09-25 03:27:14,642 | DEBUG | hgt_lib >> [*] MainWindow > Log Search button clicked
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> [*] Spark Log Search started
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> 	 date : Date | term : 1 | keyword : Keyword(s) |
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> 	 user : dcole | room : Chat Room |
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> 	 Output path : ./.parsed/
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> 	 sl_find_files args : 1 :: 1
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> 	 Pidgin log path : /home/wnormandin/.purple/logs/jabber/
+2015-09-25 03:27:14,643 | DEBUG | hgt_lib >> 	 Searching for term : 1
+2015-09-25 03:27:15,488 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-18.233323-0500CDT.html
+2015-09-25 03:27:15,488 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-28.011144-0500CDT.html
+2015-09-25 03:27:15,488 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-10.232406-0500CDT.html
+2015-09-25 03:27:15,488 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.030449-0500CDT.html
+2015-09-25 03:27:15,488 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.042005-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.024237-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-29.060345-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-29.062158-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-29.031835-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-26.063117-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-03.020324-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-28.233639-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-13.043737-0500CDT.html
+2015-09-25 03:27:15,489 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-13.054928-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-24.001332-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-17.070052-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-09.235222-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-26.025817-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-13.233838-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-22.063146-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-04.002642-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-22.000928-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.053229-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-22.074125-0500CDT.html
+2015-09-25 03:27:15,490 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-26.070759-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.012101-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-06.034109-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-22.234037-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-05.013513-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-12.001308-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-29.022747-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-27.063203-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-02.004335-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-24.225942-0500CDT.html
+2015-09-25 03:27:15,491 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-03.035542-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-03.030327-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-26.033622-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-02.064102-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-07.233359-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-28.051801-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-23.040010-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-04.052627-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-26.000654-0500CDT.html
+2015-09-25 03:27:15,492 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-12.074342-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-22.054326-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-04.234130-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-17.061237-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-12.032807-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-17.233104-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-01.234055-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-14.014242-0500CDT.html
+2015-09-25 03:27:15,493 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-02.075205-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-19.235207-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-29.022510-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.022830-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-26.234610-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.001525-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-21.074742-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-12.010508-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-27.034737-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-08-28.023829-0500CDT.html
+2015-09-25 03:27:15,494 | DEBUG | hgt_lib >> 	 Found dcole in 2015-09-02.234546-0500CDT.html
+2015-09-25 03:27:17,871 | DEBUG | hgt_lib >> 	 Added 62 files to the list
+2015-09-25 03:27:17,872 | DEBUG | hgt_lib >> 	 Sorting files...
+2015-09-25 03:27:17,872 | DEBUG | hgt_lib >> 	 Searching the past 1 months
+2015-09-25 03:27:17,872 | DEBUG | hgt_lib >> 	 MULTIPROC = True
+2015-09-25 03:27:17,872 | DEBUG | hgt_lib >> 	 Parent (this) process : 2614
+2015-09-25 03:27:18,087 | DEBUG | hgt_lib >> 	 Added 9 lines to output
+2015-09-25 03:27:18,088 | DEBUG | hgt_lib >> 	 Added 24 lines to output
+2015-09-25 03:27:18,189 | DEBUG | hgt_lib >> 	 Added 5 lines to output
+2015-09-25 03:27:18,198 | DEBUG | hgt_lib >> 	 Added 94 lines to output
+2015-09-25 03:27:18,295 | DEBUG | hgt_lib >> 	 Added 3 lines to output
+2015-09-25 03:27:18,295 | DEBUG | hgt_lib >> 	 Added 5 lines to output
+2015-09-25 03:27:18,407 | DEBUG | hgt_lib >> 	 Added 6 lines to output
+2015-09-25 03:27:18,407 | DEBUG | hgt_lib >> 	 Added 7 lines to output
+2015-09-25 03:27:18,539 | DEBUG | hgt_lib >> 	 Added 60 lines to output
+2015-09-25 03:27:18,544 | DEBUG | hgt_lib >> 	 Added 70 lines to output
+2015-09-25 03:27:18,629 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:18,638 | DEBUG | hgt_lib >> 	 Added 106 lines to output
+2015-09-25 03:27:18,737 | DEBUG | hgt_lib >> 	 Added 6 lines to output
+2015-09-25 03:27:18,738 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:18,844 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:18,844 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:18,953 | DEBUG | hgt_lib >> 	 Added 3 lines to output
+2015-09-25 03:27:18,953 | DEBUG | hgt_lib >> 	 Added 14 lines to output
+2015-09-25 03:27:19,059 | DEBUG | hgt_lib >> 	 Added 2 lines to output
+2015-09-25 03:27:19,060 | DEBUG | hgt_lib >> 	 Added 10 lines to output
+2015-09-25 03:27:19,167 | DEBUG | hgt_lib >> 	 Added 3 lines to output
+2015-09-25 03:27:19,170 | DEBUG | hgt_lib >> 	 Added 8 lines to output
+2015-09-25 03:27:19,275 | DEBUG | hgt_lib >> 	 Added 6 lines to output
+2015-09-25 03:27:19,275 | DEBUG | hgt_lib >> 	 Added 9 lines to output
+2015-09-25 03:27:19,383 | DEBUG | hgt_lib >> 	 Added 6 lines to output
+2015-09-25 03:27:19,385 | DEBUG | hgt_lib >> 	 Added 12 lines to output
+2015-09-25 03:27:19,492 | DEBUG | hgt_lib >> 	 Added 15 lines to output
+2015-09-25 03:27:19,493 | DEBUG | hgt_lib >> 	 Added 18 lines to output
+2015-09-25 03:27:19,601 | DEBUG | hgt_lib >> 	 Added 2 lines to output
+2015-09-25 03:27:19,602 | DEBUG | hgt_lib >> 	 Added 16 lines to output
+2015-09-25 03:27:19,708 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:19,708 | DEBUG | hgt_lib >> 	 Added 3 lines to output
+2015-09-25 03:27:19,816 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:19,816 | DEBUG | hgt_lib >> 	 Added 10 lines to output
+2015-09-25 03:27:19,926 | DEBUG | hgt_lib >> 	 Added 4 lines to output
+2015-09-25 03:27:19,926 | DEBUG | hgt_lib >> 	 Added 6 lines to output
+2015-09-25 03:27:20,032 | DEBUG | hgt_lib >> 	 Added 8 lines to output
+2015-09-25 03:27:20,033 | DEBUG | hgt_lib >> 	 Added 5 lines to output
+2015-09-25 03:27:20,141 | DEBUG | hgt_lib >> 	 Added 5 lines to output
+2015-09-25 03:27:20,142 | DEBUG | hgt_lib >> 	 Added 9 lines to output
+2015-09-25 03:27:20,253 | DEBUG | hgt_lib >> 	 Added 29 lines to output
+2015-09-25 03:27:20,254 | DEBUG | hgt_lib >> 	 Added 19 lines to output
+2015-09-25 03:27:20,357 | DEBUG | hgt_lib >> 	 Added 12 lines to output
+2015-09-25 03:27:20,357 | DEBUG | hgt_lib >> 	 Added 15 lines to output
+2015-09-25 03:27:20,467 | DEBUG | hgt_lib >> 	 Added 10 lines to output
+2015-09-25 03:27:20,467 | DEBUG | hgt_lib >> 	 Added 18 lines to output
+2015-09-25 03:27:20,579 | DEBUG | hgt_lib >> 	 Added 7 lines to output
+2015-09-25 03:27:20,581 | DEBUG | hgt_lib >> 	 Added 17 lines to output
+2015-09-25 03:27:20,703 | DEBUG | hgt_lib >> 	 Added 25 lines to output
+2015-09-25 03:27:20,704 | DEBUG | hgt_lib >> 	 Added 30 lines to output
+2015-09-25 03:27:20,798 | DEBUG | hgt_lib >> 	 Added 15 lines to output
+2015-09-25 03:27:20,799 | DEBUG | hgt_lib >> 	 Added 44 lines to output
+2015-09-25 03:27:20,906 | DEBUG | hgt_lib >> 	 Added 9 lines to output
+2015-09-25 03:27:20,908 | DEBUG | hgt_lib >> 	 Added 54 lines to output
+2015-09-25 03:27:21,014 | DEBUG | hgt_lib >> 	 Added 2 lines to output
+2015-09-25 03:27:21,015 | DEBUG | hgt_lib >> 	 Added 3 lines to output
+2015-09-25 03:27:21,122 | DEBUG | hgt_lib >> 	 Added 14 lines to output
+2015-09-25 03:27:21,126 | DEBUG | hgt_lib >> 	 Added 31 lines to output
+2015-09-25 03:27:21,228 | DEBUG | hgt_lib >> 	 Added 9 lines to output
+2015-09-25 03:27:21,234 | DEBUG | hgt_lib >> 	 Added 26 lines to output
+2015-09-25 03:27:21,340 | DEBUG | hgt_lib >> 	 Added 87 lines to output
+2015-09-25 03:27:21,341 | DEBUG | hgt_lib >> 	 Added 86 lines to output
+2015-09-25 03:27:21,439 | DEBUG | hgt_lib >> 	 62 files searched
+2015-09-25 03:27:21,439 | DEBUG | hgt_lib >> 	 1155 lines found
+2015-09-25 03:27:21,444 | DEBUG | hgt_lib >> 	 /home/wnormandin/dev/.spark_log/.parsed.html reinitialized
+2015-09-25 03:27:21,446 | DEBUG | hgt_lib >> 	 Writing 1155 lines
+2015-09-25 03:28:44,065 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

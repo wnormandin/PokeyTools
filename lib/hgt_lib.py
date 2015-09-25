@@ -28,7 +28,7 @@ PURPLE_CONV_TYPE_IM=1
 
 # Spark_Log Functionality
 
-MULTIPROC=False
+MULTIPROC=True
 MAX_PROC=2
 
 # HGTools Functionality
@@ -1061,6 +1061,16 @@ class MainWindow(Gtk.Window):
 	def sl_button_exec(self, widget):
 		# Execute spark_logs
 		hgt_logger.debug("[*] MainWindow > Log Search button clicked")
+		
+		if self.sl_user_box.get_text():
+			self.selected['user']=self.sl_user_box.get_text()
+			
+		if self.sl_keyword_box.get_text():
+			self.selected['keyword']=self.sl_keyword_box.get_text()
+			
+		if self.sl_date_box.get_text():
+			self.selected['date']=self.sl_date_box.get_text()
+			
 		if 'term' in self.selected:
 			if self.selected['term']=='# of Months':
 				self.selected['term']='3'
@@ -1113,6 +1123,12 @@ class MainWindow(Gtk.Window):
 	def pc_add_button_exec(self, widget):
 		# Add a user to the pass_chats list
 		hgt_logger.debug("[*] add_button clicked")
+		
+		if self.pc_ldap_box.get_text():
+			self.selected['pc_ldap_box'] = self.pc_ldap_box.get_text()
+		else:
+			self.selected['pc_ldap_box'] = ''
+			
 		user_ldap = self.selected['pc_ldap_box']
 		pc_addline(user_ldap)
 		self.pc_ldap_box.set_text('Added!')
@@ -1188,28 +1204,28 @@ class MainWindow(Gtk.Window):
 		grid.add(menubar)
 		grid.attach_next_to(hgt_top_grid, menubar, Gtk.PositionType.BOTTOM, 1, 2)
 
-		hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+		self.hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
 		hgt_logger.debug('\tlen(hgt_widgets) : {}'.format(len(hgt_widgets)))
-		self.hgt_box_build(hgt_box, hgt_widgets)
-		grid.attach_next_to(hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
-		hgt_box.set_homogeneous(False)
+		self.hgt_box_build(self.hgt_box, hgt_widgets)
+		grid.attach_next_to(self.hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
+		self.hgt_box.set_homogeneous(False)
 		
-		hgt_opt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
-		self.hgt_opt_box_build(hgt_opt_box)
-		hgt_opt_box.set_homogeneous(False)
-		grid.attach_next_to(hgt_opt_box, hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		self.hgt_opt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+		self.hgt_opt_box_build(self.hgt_opt_box)
+		self.hgt_opt_box.set_homogeneous(False)
+		grid.attach_next_to(self.hgt_opt_box, self.hgt_box, Gtk.PositionType.BOTTOM, 1, 2)
 		
-		hgt_opt2_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
-		self.hgt_opt2_box_build(hgt_opt2_box)
-		hgt_opt2_box.set_homogeneous(False)
-		grid.attach_next_to(hgt_opt2_box, hgt_opt_box, Gtk.PositionType.BOTTOM, 1, 2)
+		self.hgt_opt2_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
+		self.hgt_opt2_box_build(self.hgt_opt2_box)
+		self.hgt_opt2_box.set_homogeneous(False)
+		grid.attach_next_to(self.hgt_opt2_box, self.hgt_opt_box, Gtk.PositionType.BOTTOM, 1, 2)
 		
 		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
 		hgt_logger.debug('\t len(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
-		grid.attach_next_to(menu_box, hgt_opt2_box, Gtk.PositionType.BOTTOM, 1, 2)
+		grid.attach_next_to(menu_box, self.hgt_opt2_box, Gtk.PositionType.BOTTOM, 1, 2)
 		menu_box.set_homogeneous(False)
 		
 	def on_hgt_restype_toggled(self, radio, name):
@@ -1265,7 +1281,6 @@ class MainWindow(Gtk.Window):
 		self.pc_ldap_box = Gtk.Entry()
 		self.pc_ldap_box.set_text(pc_widgets[4][1])
 		self.pc_ldap_box.set_tooltip_text(pc_widgets[4][2])
-		self.pc_ldap_box.connect("changed", self.pc_ldap_callback, self.pc_ldap_box)
 		
 		# pc_add_button
 		self.pc_add_button =  Gtk.Button.new_with_label(pc_widgets[5][1])
@@ -1299,64 +1314,61 @@ class MainWindow(Gtk.Window):
 		hgt_logger.debug('\tsl_box_build')
 		
 		# sl_label
-		sl_label = Gtk.Label()
-		sl_label.set_label(sl_widgets[0][1])
+		self.sl_label = Gtk.Label()
+		self.sl_label.set_label(sl_widgets[0][1])
 		
 		# sl_depth_combo
-		sl_depth_combo_store = Gtk.ListStore(str)
+		self.sl_depth_combo_store = Gtk.ListStore(str)
 		for item in sl_widgets[1][1]:
-			sl_depth_combo_store.append(['{!s}'.format(item)])
-		sl_depth_combo = Gtk.ComboBox.new_with_model(sl_depth_combo_store)
-		sl_depth_combo.set_tooltip_text(sl_widgets[1][2])
-		sl_depth_combo.connect(*sl_widgets[1][3])
-		sl_depth_combo.set_entry_text_column(0)
-		renderer_text = Gtk.CellRendererText()
-		sl_depth_combo.pack_start(renderer_text, True)
-		sl_depth_combo.add_attribute(renderer_text, "text", 0)
-		sl_depth_combo.set_active(0)
+			self.sl_depth_combo_store.append(['{!s}'.format(item)])
+		self.sl_depth_combo = Gtk.ComboBox.new_with_model(self.sl_depth_combo_store)
+		self.sl_depth_combo.set_tooltip_text(sl_widgets[1][2])
+		self.sl_depth_combo.connect(*sl_widgets[1][3])
+		self.sl_depth_combo.set_entry_text_column(0)
+		self.renderer_text = Gtk.CellRendererText()
+		self.sl_depth_combo.pack_start(self.renderer_text, True)
+		self.sl_depth_combo.add_attribute(self.renderer_text, "text", 0)
+		self.sl_depth_combo.set_active(0)
 		
 		# sl_date_box
-		sl_date_box = Gtk.Entry()
-		sl_date_box.set_text(sl_widgets[2][1])
-		sl_date_box.set_tooltip_text(sl_widgets[2][2])
-		sl_date_box.connect("changed", self.sl_date_callback, sl_date_box)
+		self.sl_date_box = Gtk.Entry()
+		self.sl_date_box.set_text(sl_widgets[2][1])
+		self.sl_date_box.set_tooltip_text(sl_widgets[2][2])
 		
 		# sl_keyword_box
-		sl_keyword_box = Gtk.Entry()
-		sl_keyword_box.set_text(sl_widgets[3][1])
-		sl_keyword_box.set_tooltip_text(sl_widgets[3][2])
-		sl_keyword_box.connect('changed', self.sl_keyword_callback, sl_keyword_box)
+		self.sl_keyword_box = Gtk.Entry()
+		self.sl_keyword_box.set_text(sl_widgets[3][1])
+		self.sl_keyword_box.set_tooltip_text(sl_widgets[3][2])
 		
 		# sl_chatroom_combo
-		sl_chatroom_combo_store = Gtk.ListStore(str)
+		self.sl_chatroom_combo_store = Gtk.ListStore(str)
 		for item in sl_widgets[4][1]:
-			sl_chatroom_combo_store.append([item])	
-		sl_chatroom_combo = Gtk.ComboBox.new_with_model(sl_chatroom_combo_store)
-		sl_chatroom_combo.set_tooltip_text(sl_widgets[4][2])
-		sl_chatroom_combo.connect(*sl_widgets[4][3])
-		renderer_text = Gtk.CellRendererText()
-		sl_chatroom_combo.pack_start(renderer_text, True)
-		sl_chatroom_combo.add_attribute(renderer_text, "text", 0)
-		sl_chatroom_combo.set_active(0)
+			self.sl_chatroom_combo_store.append([item])	
+		self.sl_chatroom_combo = Gtk.ComboBox.new_with_model(self.sl_chatroom_combo_store)
+		self.sl_chatroom_combo.set_tooltip_text(sl_widgets[4][2])
+		self.sl_chatroom_combo.connect(*sl_widgets[4][3])
+		self.renderer_text = Gtk.CellRendererText()
+		self.sl_chatroom_combo.pack_start(self.renderer_text, True)
+		self.sl_chatroom_combo.add_attribute(self.renderer_text, "text", 0)
+		self.sl_chatroom_combo.set_active(0)
 		
 		# sl_user_box
-		sl_user_box = Gtk.Entry()
-		sl_user_box.set_text(sl_widgets[5][1])
-		sl_user_box.set_tooltip_text(sl_widgets[5][2])
-		sl_user_box.connect('changed', self.sl_user_callback, sl_user_box)
+		self.sl_user_box = Gtk.Entry()
+		self.sl_user_box.set_text(sl_widgets[5][1])
+		self.sl_user_box.set_tooltip_text(sl_widgets[5][2])
 		
 		# sl_button
-		sl_button =  Gtk.Button.new_with_label(sl_widgets[6][1])
-		sl_button.set_tooltip_text(sl_widgets[6][2])
-		sl_button.connect(*sl_widgets[6][3])
+		self.sl_button =  Gtk.Button.new_with_label(sl_widgets[6][1])
+		self.sl_button.set_tooltip_text(sl_widgets[6][2])
+		self.sl_button.connect(*sl_widgets[6][3])
 		
-		sl_box.pack_start(sl_label, True, True, 1)
-		sl_box.pack_start(sl_depth_combo, True, True, 1)
-		sl_box.pack_start(sl_date_box, True, True, 1)
-		sl_box.pack_start(sl_keyword_box, True, True, 1)
-		sl_box.pack_start(sl_chatroom_combo, True, True, 1)
-		sl_box.pack_start(sl_user_box, True, True, 1)
-		sl_box.pack_start(sl_button, True, True, 1)
+		sl_box.pack_start(self.sl_label, True, True, 1)
+		sl_box.pack_start(self.sl_depth_combo, True, True, 1)
+		sl_box.pack_start(self.sl_date_box, True, True, 1)
+		sl_box.pack_start(self.sl_keyword_box, True, True, 1)
+		sl_box.pack_start(self.sl_chatroom_combo, True, True, 1)
+		sl_box.pack_start(self.sl_user_box, True, True, 1)
+		sl_box.pack_start(self.sl_button, True, True, 1)
 		
 	def hgt_opt_box_build(self, hgt_opt_box):
 		hgt_logger.debug('\t hgt_opt_box')
@@ -1400,46 +1412,17 @@ class MainWindow(Gtk.Window):
 		hgt_logger.debug('\thgt_box_build')
 		
 		# hgt_search_box
-		hgt_search_box = Gtk.Entry()
-		hgt_search_box.set_text(hgt_widgets[0][1])
-		hgt_search_box.set_tooltip_text(hgt_widgets[0][2])
-		hgt_search_box.connect("changed", self.hgt_enter_callback, hgt_search_box)
+		self.hgt_search_box = Gtk.Entry()
+		self.hgt_search_box.set_text(hgt_widgets[0][1])
+		self.hgt_search_box.set_tooltip_text(hgt_widgets[0][2])
 		
 		# hgt_button
 		hgt_button =  Gtk.Button.new_with_label(hgt_widgets[1][1])
 		hgt_button.set_tooltip_text(hgt_widgets[1][2])
 		hgt_button.connect(*hgt_widgets[1][3])
 		
-		hgt_box.pack_start(hgt_search_box, True, True, 0)
+		hgt_box.pack_start(self.hgt_search_box, True, True, 0)
 		hgt_box.pack_start(hgt_button, False, False, 0)
-		
-	def hgt_enter_callback(self, widget, entry=''):
-		if entry.get_text() != None:
-			self.selected['hgt_search_term']=entry.get_text()
-		else:
-			self.selected['hgt_search_term']=''
-		hgt_logger.debug('\t hgt_search_term = {}'.format(self.selected['hgt_search_term']))
-		
-	def sl_date_callback(self, widget, entry):
-		entry_text = entry.get_text()
-		self.selected['date']=entry_text
-		hgt_logger.debug('\t {} = {}'.format('date', entry_text))
-		
-	def sl_keyword_callback(self, widget, entry):
-		entry_text = entry.get_text()
-		if entry_text !='Keyword(s)':
-			self.selected['keyword']=entry_text
-			hgt_logger.debug('\t {} = {}'.format('keyword', entry_text))
-		
-	def pc_ldap_callback(self, widget, entry):
-		entry_text = entry.get_text()
-		self.selected['pc_ldap_box']=entry_text
-		hgt_logger.debug('\t {} = {}'.format('pc_ldap_box', entry_text))
-		
-	def sl_user_callback(self, widget, entry):
-		entry_text = entry.get_text()
-		self.selected['user']=entry_text
-		hgt_logger.debug('\t {} = {}'.format('user', entry_text))
 		
 	def menu_box_build(self, menu_box, menu_widgets):
 		hgt_logger.debug('\t menu_box_build')
@@ -1584,9 +1567,9 @@ class MainWindow(Gtk.Window):
 	def hgt_button_exec(self, widget):
 	# Execute hgtools search
 		hgt_logger.debug("[*] MainWindow > Phrase Search clicked")
-
-		if 'hgt_search_term' in self.selected:
-			search_term = self.selected['hgt_search_term']
+		
+		if self.hgt_search_box.get_text():
+			search_term=self.hgt_search_box.get_text()
 			hgt_logger.debug("\t Search Term : {}".format(search_term))
 			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
 			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
@@ -1607,25 +1590,28 @@ class MainWindow(Gtk.Window):
 				response = search_win.run()
 				if response == Gtk.ResponseType.OK:
 					hgt_logger.debug("\t Selected : {}".format(USER_SELECTION))
-				search_win.destroy()
-				try:
-					if self.selected['hgt_dest'] == '2':
-						dest = 'clipboard'
-					else:
-						dest = 'mouse'
+					search_win.destroy()
+					try:
+						if self.selected['hgt_dest'] == '2':
+							dest = 'clipboard'
+						else:
+							dest = 'mouse'
+							
+						if self.selected['hgt_rtype'] == '1':
+							src = 'Text'
+							hgfix_do_paste(USER_SELECTION, dest)
+						else:
+							src = 'HGFix URL'
+							hgfix_main(USER_SELECTION, dest)
+							
+						hgt_logger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
 						
-					if self.selected['hgt_rtype'] == '1':
-						src = 'Text'
-						hgfix_do_paste(USER_SELECTION, dest)
-					else:
-						src = 'HGFix URL'
-						hgfix_main(USER_SELECTION, dest)
-						
-				except Exception as e:
-					raise
+					except Exception as e:
+						raise
+				else:
+					hgt_logger.debug("\t User Cancelled Dialog")
+					search_win.destroy()
 					
-				hgt_logger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
-				
 			else:
 				hgt_logger.debug("\t Term not found!")
 				nf_win = InfoDialog(self, "Not Found", "No results for the specified search term!")
