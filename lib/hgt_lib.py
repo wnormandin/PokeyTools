@@ -39,6 +39,9 @@ ENV_USER = getpass.getuser()
 CSS_PATH = './lib/hgt_win_style.css'
 UI_INFO_PATH = './lib/ui_info.xml'
 
+# User Administration
+USER_LEVEL = 'USER'
+
 #******************************/GLOBALS*********************************
 
 #******************************FUNCTIONS********************************
@@ -73,6 +76,43 @@ def setup_logger(name, level, file_loc):
 
 #************************User Functions*********************************
 # Functions to grant admin permissions to some users
+
+def user_main(user=ENV_USER):
+	
+	if user_first_logon(user):
+		hgt_logger.debug('[*] First user logon detected : {}'.format(user))
+		user_db_add(user)
+	msg = 'hgtools_gtk accessed'
+	user_db_log(msg, user)
+	hgt_logger.debug('\t User Permission Level : {}'.format(USER_LEVEL))
+		
+def user_first_logon(user):
+	
+	str_sql = 'SELECT user_level FROM hgtools_users '
+	str_sql += 'WHERE user_ldap="{}"'.format(user)
+	
+	global USER_LEVEL
+	
+	result = hgt_query(str_sql)
+	
+	if result:
+		USER_LEVEL = result
+		return False
+	else:
+		USER_LEVEL = 'USER'
+		return True
+	
+def user_db_add(user):
+	str_sql = 'INSERT INTO hgtools_users (user_ldap, user_level, user_group) '
+	str_sql += 'VALUES ("{}", "{}", "{}");'.format(user, 'USER', 'NEW_USERS')
+	hgt_query(str_sql)
+	hgt_logger.debug('[*] User {} added to hgtools_users'.format(user))
+	
+def user_db_log(msg, user):
+	str_sql = 'INSERT INTO hgtools_log (log_type, log_text) '
+	str_sql += 'VALUES ("{}", "{}");'.format(user, msg)
+	hgt_query(str_sql) 
+	hgt_logger.debug('[*] DB Log Record Created > hgtools_log')
 
 #************************/User Functions********************************
 
@@ -113,8 +153,8 @@ def iahk_send_sql(file_list):
 			item[1].strip('.txt')
 			hgt_logger.debug('\t {} written'.format(item[1]))
 			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group) '
-			str_sql += 'VALUES ({},{}, {});'.format(item[2][:4].strip(' '), item[2], 'UPL')
-			hgt_logger.debug('\t SQL : {}'.format(str_sql)
+			str_sql += 'VALUES ("{}","{}", "{}");'.format(item[2][:4].strip(' '), item[2], 'UPL')
+			hgt_logger.debug('\t SQL : {}'.format(str_sql))
 			# hgt_query(str_sql)
 			this_file.close()
 		
@@ -960,6 +1000,7 @@ class MainWindow(Gtk.Window):
 	def __init__(self):
 		
 		try:
+			user_main()
 			win_title = 'HG Tools | Welcome, {}!'.format(ENV_USER) 
 			hgt_logger.setLevel(logging.DEBUG)
 			# Create dict for signal storage
@@ -980,7 +1021,7 @@ class MainWindow(Gtk.Window):
 			self.add_file_menu_actions(self.action_group)
 			self.add_data_menu_actions(self.action_group)
 			self.add_option_menu_actions(self.action_group)
-
+				
 			# Create ui manager and attach actions
 			uimanager = self.create_ui_manager()
 			uimanager.insert_action_group(self.action_group)
