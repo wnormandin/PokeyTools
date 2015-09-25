@@ -1586,9 +1586,13 @@ class MainWindow(Gtk.Window):
 		if 'hgt_search_term' in self.selected:
 			search_term = self.selected['hgt_search_term']
 			hgt_logger.debug("\t Search Term : {}".format(search_term))
+<<<<<<< HEAD
 			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
 			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
 			str_sql += 'WHERE (hgt_text like "%{}%" OR hgt_code like "%{}%") GROUP BY hgt_code;'.format(search_term, search_term)
+=======
+			str_sql = 'SELECT hgt_code, hgt_text FROM hgtools WHERE hgt_text like "%{}%" OR hgt_code like "%{}%";'.format(search_term, search_term)
+>>>>>>> 7a8935287bfe56faf51546517938a52dd54d3b20
 			outp=hgt_query(str_sql, 'phrases')
 			
 			# hgt_logger.debug("\t {}".format(outp))

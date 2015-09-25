@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2015-09-24 08:43:43,691 | DEBUG | hgt_lib >> [*] Configuring Widgets
 2015-09-24 08:43:43,691 | DEBUG | hgt_lib >> 	pc_section_widgets
 2015-09-24 08:43:43,691 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
@@ -22,3 +23,171 @@
 2015-09-24 08:43:43,923 | DEBUG | hgt_lib >> 	hgt_box_build
 2015-09-24 08:43:43,923 | DEBUG | hgt_lib >> 	 hgt_opt_box
 2015-09-24 08:43:43,924 | DEBUG | hgt_lib >> 	 2
+=======
+2015-09-23 09:41:33,669 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	Read 5 lines
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-23 09:41:33,670 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-23 09:41:33,671 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-23 09:41:33,671 | DEBUG | hgt_lib >> 	len(pc_widgets) : 7
+2015-09-23 09:41:33,672 | DEBUG | hgt_lib >> 	pc_box_build
+2015-09-23 09:41:33,675 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-23 09:41:33,676 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-23 09:41:33,686 | DEBUG | hgt_lib >> 	len(sl_widgets) : 7
+2015-09-23 09:41:33,686 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-23 09:41:33,688 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-23 09:41:33,688 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-23 09:41:33,690 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-23 09:41:33,691 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-23 09:41:33,692 | DEBUG | hgt_lib >> 	len(hgt_widgets) : 2
+2015-09-23 09:41:33,693 | DEBUG | hgt_lib >> 	hgt_box_build
+2015-09-23 09:41:33,694 | DEBUG | hgt_lib >> 	len(menu_widgets) : 2
+2015-09-23 09:41:33,695 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-23 09:41:33,696 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-23 09:41:33,696 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-23 09:41:33,743 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-23 09:41:35,876 | DEBUG | hgt_lib >> 	 hgt_search_term = 
+2015-09-23 09:41:35,876 | DEBUG | hgt_lib >> 	 hgt_search_term = t
+2015-09-23 09:41:36,019 | DEBUG | hgt_lib >> 	 hgt_search_term = te
+2015-09-23 09:41:36,219 | DEBUG | hgt_lib >> 	 hgt_search_term = tes
+2015-09-23 09:41:37,581 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
+2015-09-23 09:41:37,581 | DEBUG | hgt_lib >> 	 Search Term : tes
+2015-09-23 09:41:37,728 | DEBUG | hgt_lib >> 	 Database query took 0.001873 seconds
+2015-09-23 09:41:37,728 | DEBUG | hgt_lib >> 	 Returned : tester	This is a test of the hgtools connection.  This is only a test
+tester	Testing again this is another silly test.
+tester	Another test for the testings.
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	 Another testing tester testing test
+testing	 Yet more testing lines!
+testing	 Who wants another test?
+testy	 This is but a test.
+testy	 More testing - whats your test?
+testing	Another testing tester testing test
+testing	Yet more testing lines!
+testing	Who wants another test?
+testy	This is but a test.
+testy	More testing - whats your test?
+scripty	current_time=$(date "+%Y.%m.%d-%H.%M.%S") ; dir=`pwd` ; if [ -f latest.tar.gz ] ; then mv latest.tar.gz latest$current_time.tar.gz ; fi ; if [ -d wordpress ] ; then mv wordpress wordpress$current_time.bak ; fi ; wget no-check-certificate https://wordpress.org/latest.tar.gz ; tar -xzf latest.tar.gz ; rm -rf wordpress/wp-content/ wordpress/wp-config.php ; if [ -d wpbackup ] ; then mv wpbackup wpbackup$current_time.bak ; fi ; mkdir ./wpbackup ; mv wp-* wpbackup/ ; mv index.php wpbackup/ ; mv wpbackup/wp-config.php wpbackup/wp-content ./ ; mv wordpress/* ./ ; rm -rf latest.tar.gz wordpress/ ; echo "All WordPress files in $dir have been moved to $dir/wpbackup/" ; echo "$dir/wp-config.php and $dir/wp-content are originals. If you need these replaced, do it manually." ;
+testing	Another testing tester testing test
+testing	Yet more testing lines!
+testing	Who wants another test?
+testy	This is but a test.
+testy	More testing - whats your test?
+scripty	current_time=$(date "+%Y.%m.%d-%H.%M.%S") ; dir=`pwd` ; if [ -f latest.tar.gz ] ; then mv latest.tar.gz latest$current_time.tar.gz ; fi ; if [ -d wordpress ] ; then mv wordpress wordpress$current_time.bak ; fi ; wget no-check-certificate https://wordpress.org/latest.tar.gz ; tar -xzf latest.tar.gz ; rm -rf wordpress/wp-content/ wordpress/wp-config.php ; if [ -d wpbackup ] ; then mv wpbackup wpbackup$current_time.bak ; fi ; mkdir ./wpbackup ; mv wp-* wpbackup/ ; mv index.php wpbackup/ ; mv wpbackup/wp-config.php wpbackup/wp-content ./ ; mv wordpress/* ./ ; rm -rf latest.tar.gz wordpress/ ; echo "All WordPress files in $dir have been moved to $dir/wpbackup/" ; echo "$dir/wp-config.php and $dir/wp-content are originals. If you need these replaced, do it manually." ;
+testing	Another testing tester testing test
+testing	Yet more testing lines!
+testing	Who wants another test?
+testy	This is but a test.
+testy	More testing - whats your test?
+scripty	current_time=$(date "+%Y.%m.%d-%H.%M.%S") ; dir=`pwd` ; if [ -f latest.tar.gz ] ; then mv latest.tar.gz latest$current_time.tar.gz ; fi ; if [ -d wordpress ] ; then mv wordpress wordpress$current_time.bak ; fi ; wget no-check-certificate https://wordpress.org/latest.tar.gz ; tar -xzf latest.tar.gz ; rm -rf wordpress/wp-content/ wordpress/wp-config.php ; if [ -d wpbackup ] ; then mv wpbackup wpbackup$current_time.bak ; fi ; mkdir ./wpbackup ; mv wp-* wpbackup/ ; mv index.php wpbackup/ ; mv wpbackup/wp-config.php wpbackup/wp-content ./ ; mv wordpress/* ./ ; rm -rf latest.tar.gz wordpress/ ; echo "All WordPress files in $dir have been moved to $dir/wpbackup/" ; echo "$dir/wp-config.php and $dir/wp-content are originals. If you need these replaced, do it manually." ;
+testing	Another testing tester testing test
+testing	Yet more testing lines!
+testing	Who wants another test?
+testy	This is but a test.
+testy	More testing - whats your test?
+scripty	current_time=$(date "+%Y.%m.%d-%H.%M.%S") ; dir=`pwd` ; if [ -f latest.tar.gz ] ; then mv latest.tar.gz latest$current_time.tar.gz ; fi ; if [ -d wordpress ] ; then mv wordpress wordpress$current_time.bak ; fi ; wget no-check-certificate https://wordpress.org/latest.tar.gz ; tar -xzf latest.tar.gz ; rm -rf wordpress/wp-content/ wordpress/wp-config.php ; if [ -d wpbackup ] ; then mv wpbackup wpbackup$current_time.bak ; fi ; mkdir ./wpbackup ; mv wp-* wpbackup/ ; mv index.php wpbackup/ ; mv wpbackup/wp-config.php wpbackup/wp-content ./ ; mv wordpress/* ./ ; rm -rf latest.tar.gz wordpress/ ; echo "All WordPress files in $dir have been moved to $dir/wpbackup/" ; echo "$dir/wp-config.php and $dir/wp-content are originals. If you need these replaced, do it manually." ;
+example	Make sure to surround all text that might contain a comma with single quotes
+example	Make sure to surround all text that might contain a comma with single quotes
+example	Make sure to surround all text that might contain a comma with single quotes
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+testing	Another testing tester testing test
+testing	Yet more testing lins
+testy	This is a but test
+
+2015-09-23 09:41:49,509 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+>>>>>>> 7a8935287bfe56faf51546517938a52dd54d3b20

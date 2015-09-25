@@ -2,7 +2,7 @@
 
 import sys, time, os, datetime, webbrowser, logging, argparse
 from multiprocessing import Pool
-from libfunctions import *
+from sllib import *
 from log import *
 
 MULTIPROC=True
@@ -57,7 +57,7 @@ def main():
 	spark_logger.debug('MULTIPROC = {}'.format(MULTIPROC))
 	if not MULTIPROC:
 		for _file in _files:
-			_lines.append(find_lines(str_search, _file))
+			_lines.append(sl_find_lines(str_search, _file))
 			spark_logger.debug('File searched : {}'.format(_file))
 	else:
 		i = 0
@@ -70,7 +70,7 @@ def main():
 			results = [None for _ in range(this_min)]
 			
 			for k in range(this_min):
-				results[k] = pool.apply_async(find_lines, [str_search, chunk[k]])
+				results[k] = pool.apply_async(sl_find_lines, [str_search, chunk[k]])
 				
 			pool.close()
 			pool.join()
