@@ -1847,7 +1847,7 @@ class SearchResultDialog(Gtk.Dialog):
 			 
 		tree = Gtk.TreeView(store)
 		renderer = Gtk.CellRendererText()
-		renderer.props.wrap_width = 500
+		renderer.props.wrap_width = 800
 		scrollable_treelist = Gtk.ScrolledWindow()
 		scrollable_treelist.set_vexpand(True)
 		scrollable_treelist.set_hexpand(True)
@@ -1855,7 +1855,7 @@ class SearchResultDialog(Gtk.Dialog):
 		scrollable_treelist.add(tree)
 		
 		self.set_border_width(1)
-		self.set_size_request(1000, 300)
+		self.set_size_request(1200, 350)
 
 		col1 = Gtk.TreeViewColumn('Abbreviation', renderer, text=0) 
 		
@@ -1865,6 +1865,8 @@ class SearchResultDialog(Gtk.Dialog):
 		col3 = Gtk.TreeViewColumn('Description', renderer, text=2)
 			
 		for item in [col1, col2, col3]:
+			item.set_resizable(True)
+			item.set_sort_column_id(0)
 			tree.append_column(item)
 			
 		select = tree.get_selection()
