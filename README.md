@@ -4,9 +4,9 @@
 ##Run the following (in the folder where you desire the repository folder):
 
 ```
->$git clone https://github.com/wnormandin/hgtools_gtk.git
->$cd hgtools_gtk
-hgtools_gtk>$ls
+git clone https://github.com/wnormandin/hgtools_gtk.git
+cd hgtools_gtk
+ls
 ```
 ###You should see (barring any ls alias):
 
@@ -18,7 +18,7 @@ hgtools_gtk>$ls
 ##Run the following (from the same directory):
 
 ``` 
-hgtools_gtk>$python hgtools_gtk.py
+python hgtools_gtk.py
 ``` 
  
 ##Logging is set to logging.DEBUG by default
