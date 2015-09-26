@@ -149,13 +149,14 @@ def iahk_send_sql(file_list):
 	hgt_logger.debug('\t Writing to DB...')
 	for item in file_list:
 		with open('{}/{}'.format(item[0], item[1])) as this_file:
-			item[2] = this_file.read()
+			item[2] = this_file.read().replace('"', '\'')
 			item[1].strip('.txt')
 			hgt_logger.debug('\t {} written'.format(item[1]))
 			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group) '
-			str_sql += 'VALUES ("{}","{}", "{}");'.format(item[2][:4].strip(' '), item[2], 'UPL')
-			hgt_logger.debug('\t SQL : {}'.format(str_sql))
-			# hgt_query(str_sql)
+			str_sql += 'VALUES ("{}","{}", "{}");'.format(item[2][:4].strip(' ').replace(' ', '_'), item[2], 'UPL')
+			
+			retval = hgt_query(str_sql)
+			hgt_logger.debug('\t retval : {}'.format(retval))
 			this_file.close()
 		
 def iahk_read_paths(path):
@@ -168,7 +169,8 @@ def iahk_read_paths(path):
 			if (read and ']' in line):
 				break
 			elif read:
-				paths.append(line.strip(' ''\"\n'))
+				paths.append(line.strip(',"'' ''\"\n'))
+				hgt_logger.debug('\t Added {}'.format(line.strip(',"'' ''\"\n')))
 			if '"folders": [' in line:
 				read = True
 	j.close()
@@ -177,22 +179,30 @@ def iahk_read_paths(path):
 # Parse out duplicated paths
 def iahk_strip_dups(paths):
 	hgt_logger.debug('\t Removing duplicated (nested) paths')
-	dups = paths
-	for i in range(len(dups)):
-			for item in paths:
-				if (dups[i] in item and dups[i] != item):
-					paths.remove(item)
-	return paths
+	non_dups = []
+	ignore = []
+	for i in range(len(paths)):
+		for item in paths:
+			if paths[i] in item:
+				if paths[i] != item:
+					hgt_logger.debug('\t Skipped {}'.format(item))
+					ignore.append(item)
+				elif item not in ignore:
+					hgt_logger.debug('\t Kept {}'.format(item))
+					non_dups.append(item)
+	return non_dups
 
 # Add File Path and File Name to the outFile list
 def iahk_file_list(paths):
 	hgt_logger.debug('\t Locating AHK .txt files')
 	olist = []
 	for path in paths:
+		hgt_logger.debug('\t Looking in {}'.format(path))
 		for root, dirs, files in os.walk(path):
 			for _file in files:
 				if ".txt" in _file:
-					olist.append([path, _file, ''])
+					hgt_logger.debug('\t Located {}'.format(_file))
+					olist.append([os.path.join(root), _file, ''])
 	return olist
 	
 #************************/AHK import function***************************
@@ -591,8 +601,7 @@ def hgt_query(str_sql, qtype=''):
 	cmd=['mysql', '-h', host, '-u', user, '-p%s'%password, '-D', 
 		database, '-Bse', str_sql]
 		
-	proc=subprocess.Popen(cmd,stdout=subprocess.PIPE)
-	retval=proc.communicate()[0]
+	retval =subprocess.check_output(cmd)
 	hgt_logger.debug('\t Database query took %s seconds' % (time.clock()-start))
 	
 	return retval
@@ -1338,13 +1347,13 @@ class MainWindow(Gtk.Window):
 		hgt_top_grid = Gtk.Grid()
 
 		self.pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
-		hgt_logger.debug('\tlen(pc_widgets) : {}'.format(len(self.pc_widgets)))
+		hgt_logger.debug('\t len(pc_widgets) : {}'.format(len(self.pc_widgets)))
 		self.pc_box_build(self.pc_box, self.pc_widgets)
 		self.pc_box.set_homogeneous(False)
 
 		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
-		hgt_logger.debug('\tlen(sl_widgets) : {}'.format(len(sl_widgets)))
+		hgt_logger.debug('\t len(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
 		sl_box.set_homogeneous(False)
 
@@ -1359,7 +1368,7 @@ class MainWindow(Gtk.Window):
 
 		self.hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
-		hgt_logger.debug('\tlen(hgt_widgets) : {}'.format(len(hgt_widgets)))
+		hgt_logger.debug('\t len(hgt_widgets) : {}'.format(len(hgt_widgets)))
 		self.hgt_box_build(self.hgt_box, hgt_widgets)
 		grid.attach_next_to(self.hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
 		self.hgt_box.set_homogeneous(False)
@@ -1394,7 +1403,7 @@ class MainWindow(Gtk.Window):
 			self.selected['hgt_dest']=name
 		
 	def pc_box_build(self, pc_box, pc_widgets):
-		hgt_logger.debug('\tpc_box_build')
+		hgt_logger.debug('\t pc_box_build')
 		
 		# pc_label
 		self.pc_label = Gtk.Label()
@@ -1562,7 +1571,7 @@ class MainWindow(Gtk.Window):
 		hgt_opt2_box.pack_start(hgt_dest_radio2, False, False, 0)
 		
 	def hgt_box_build(self, hgt_box, hgt_widgets):
-		hgt_logger.debug('\thgt_box_build')
+		hgt_logger.debug('\t hgt_box_build')
 		
 		# hgt_search_box
 		self.hgt_search_box = Gtk.Entry()
@@ -1789,6 +1798,14 @@ class SearchResultDialog(Gtk.Dialog):
 		tree = Gtk.TreeView(store)
 		renderer = Gtk.CellRendererText()
 		renderer.props.wrap_width = 500
+		scrollable_treelist = Gtk.ScrolledWindow()
+		scrollable_treelist.set_vexpand(True)
+		scrollable_treelist.set_hexpand(True)
+		scrollable_treelist.set_border_width(10)
+		scrollable_treelist.add(tree)
+		
+		self.set_border_width(1)
+		self.set_size_request(1000, 300)
 
 		col1 = Gtk.TreeViewColumn('Abbreviation', renderer, text=0) 
 		
@@ -1805,7 +1822,7 @@ class SearchResultDialog(Gtk.Dialog):
 		
 		box = self.get_content_area()
 
-		box.add(tree)
+		box.add(scrollable_treelist)
 		self.show_all()
 		
 	def search_selection_changed(self, selection):
@@ -1813,5 +1830,5 @@ class SearchResultDialog(Gtk.Dialog):
 		model, treeiter = selection.get_selected()
 		if treeiter != None:
 			USER_SELECTION = model[treeiter][1]
-			hgt_logger.debug("\t Search window selection changed : {}".format(USER_SELECTION))
+			hgt_logger.debug("\t Search window selection changed : {}".format(model[treeiter][0]))
 		
