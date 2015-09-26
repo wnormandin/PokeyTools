@@ -120,6 +120,7 @@ def user_db_log(msg, user):
 #************************AHK import function****************************
 #	Path to autokey.json : ~/.config/autokey
 # 
+#	If user has custom script folders :
 #	Location in file :
 #	"folders": [
 #       "/home/wnormandin/dev/scripts/AHKs",
@@ -127,6 +128,7 @@ def user_db_log(msg, user):
 #        "/home/wnormandin/dev/scripts/AHKs/Tickets"
 #    ]
 #
+#	Otherwise AHKs are in ~/.config/autokey/data
 
 def iahk_import_ahk():
 	
