@@ -1,49 +1,388 @@
-2015-09-26 01:57:05,231 | DEBUG | hgt_lib >> 	 Database query took 0.000717 seconds
-2015-09-26 01:57:05,352 | DEBUG | hgt_lib >> 	 Database query took 0.00066 seconds
-2015-09-26 01:57:05,352 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
-2015-09-26 01:57:05,352 | DEBUG | hgt_lib >> 	 User Permission Level : USER
+2015-09-26 02:37:30,737 | DEBUG | hgt_lib >> 	 Database query took 0.00074 seconds
+2015-09-26 02:37:30,857 | DEBUG | hgt_lib >> 	 Database query took 0.000637 seconds
+2015-09-26 02:37:30,857 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
+2015-09-26 02:37:30,857 | DEBUG | hgt_lib >> 	 User Permission Level : USER
 
-2015-09-26 01:57:05,368 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-26 01:57:05,368 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-26 01:57:05,368 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 01:57:05,370 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 01:57:05,370 | DEBUG | hgt_lib >> 	Read 3 lines
-2015-09-26 01:57:05,370 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 01:57:05,370 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-26 01:57:05,370 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-26 01:57:05,370 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-26 01:57:05,371 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-26 01:57:05,371 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
-2015-09-26 01:57:05,371 | DEBUG | hgt_lib >> 	 pc_box_build
-2015-09-26 01:57:05,373 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-26 01:57:05,373 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-26 01:57:05,466 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
-2015-09-26 01:57:05,466 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-26 01:57:05,468 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-26 01:57:05,468 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-26 01:57:05,469 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-26 01:57:05,470 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-26 01:57:05,470 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
-2015-09-26 01:57:05,470 | DEBUG | hgt_lib >> 	 hgt_box_build
-2015-09-26 01:57:05,471 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-26 01:57:05,471 | DEBUG | hgt_lib >> 	 2
-2015-09-26 01:57:05,472 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-26 01:57:05,472 | DEBUG | hgt_lib >> 	 2
-2015-09-26 01:57:05,472 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
-2015-09-26 01:57:05,472 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-26 01:57:05,473 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-26 01:57:05,473 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-26 01:57:05,892 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-26 01:57:10,801 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-26 01:57:10,801 | DEBUG | hgt_lib >> 	 Search Term : test
-2015-09-26 01:57:10,938 | DEBUG | hgt_lib >> 	 Database query took 0.001038 seconds
-2015-09-26 01:57:10,956 | DEBUG | hgt_lib >> 	 Search window selection changed : cd_~
-2015-09-26 01:57:17,370 | DEBUG | hgt_lib >> 	 Search window selection changed : curr
-2015-09-26 01:57:19,560 | DEBUG | hgt_lib >> 	 Search window selection changed : scripty
-2015-09-26 01:57:20,969 | DEBUG | hgt_lib >> 	 User Cancelled Dialog
-2015-09-26 01:57:47,928 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-26 01:57:47,929 | DEBUG | hgt_lib >> 	 Search Term : IP
-2015-09-26 01:57:48,066 | DEBUG | hgt_lib >> 	 Database query took 0.000835 seconds
-2015-09-26 01:57:48,087 | DEBUG | hgt_lib >> 	 Search window selection changed : Chat
-2015-09-26 01:58:06,360 | DEBUG | hgt_lib >> 	 User Cancelled Dialog
-2015-09-26 01:58:39,192 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-26 02:37:30,885 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-26 02:37:30,885 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-26 02:37:30,885 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-26 02:37:30,888 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-26 02:37:30,888 | DEBUG | hgt_lib >> 	Read 3 lines
+2015-09-26 02:37:30,888 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-26 02:37:30,888 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-26 02:37:30,888 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-26 02:37:30,888 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-26 02:37:30,889 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-26 02:37:30,889 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
+2015-09-26 02:37:30,889 | DEBUG | hgt_lib >> 	 pc_box_build
+2015-09-26 02:37:30,891 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-26 02:37:30,891 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-26 02:37:31,125 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
+2015-09-26 02:37:31,125 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-26 02:37:31,126 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-26 02:37:31,126 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-26 02:37:31,127 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-26 02:37:31,127 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-26 02:37:31,128 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
+2015-09-26 02:37:31,128 | DEBUG | hgt_lib >> 	 hgt_box_build
+2015-09-26 02:37:31,128 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-26 02:37:31,129 | DEBUG | hgt_lib >> 	 2
+2015-09-26 02:37:31,129 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-26 02:37:31,130 | DEBUG | hgt_lib >> 	 2
+2015-09-26 02:37:31,130 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
+2015-09-26 02:37:31,130 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-26 02:37:31,130 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-26 02:37:31,130 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-26 02:37:31,671 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-26 02:37:34,717 | DEBUG | hgt_lib >> [*] Cloning user autokeys
+2015-09-26 02:37:36,179 | DEBUG | hgt_lib >> [*] Importing User AHKs
+2015-09-26 02:37:36,179 | DEBUG | hgt_lib >> 	 Locating AHK paths...
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Added /home/wnormandin/dev/scripts/AHKs
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Added /home/wnormandin/dev/scripts/AHKs/Scripts
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Added /home/wnormandin/dev/scripts/AHKs/Tickets
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Removing duplicated (nested) paths
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Kept /home/wnormandin/.config/autokey/data
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Kept /home/wnormandin/dev/scripts/AHKs
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Skipped /home/wnormandin/dev/scripts/AHKs/Scripts
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Skipped /home/wnormandin/dev/scripts/AHKs/Tickets
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Locating AHK .txt files
+2015-09-26 02:37:36,184 | DEBUG | hgt_lib >> 	 Looking in /home/wnormandin/.config/autokey/data
+2015-09-26 02:37:36,186 | DEBUG | hgt_lib >> 	 Looking in /home/wnormandin/dev/scripts/AHKs
+2015-09-26 02:37:36,202 | DEBUG | hgt_lib >> 	 Located Directory Stats.txt
+2015-09-26 02:37:36,202 | DEBUG | hgt_lib >> 	 Located WP DB Deactivate Plugins.txt
+2015-09-26 02:37:36,203 | DEBUG | hgt_lib >> 	 Located CPU Times.txt
+2015-09-26 02:37:36,203 | DEBUG | hgt_lib >> 	 Located WPUpdate.txt
+2015-09-26 02:37:36,203 | DEBUG | hgt_lib >> 	 Located Connect to WP DB.txt
+2015-09-26 02:37:36,227 | DEBUG | hgt_lib >> 	 Located JDI Partial Verification.txt
+2015-09-26 02:37:36,227 | DEBUG | hgt_lib >> 	 Located JDI eHost vDeck.txt
+2015-09-26 02:37:36,227 | DEBUG | hgt_lib >> 	 Located JDITix Package Downgrade.txt
+2015-09-26 02:37:36,227 | DEBUG | hgt_lib >> 	 Located JDITix Upgrade Success.txt
+2015-09-26 02:37:36,227 | DEBUG | hgt_lib >> 	 Located JDI Cancel Retention tix.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI Services not offered.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI JustHost.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI Brand Cancellation Policy.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI Inactive.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI Double Verification.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI Activation Underway.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI IP Request.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDI cPanel Conversion Requst.txt
+2015-09-26 02:37:36,228 | DEBUG | hgt_lib >> 	 Located JDITix Upgrade Invoiced.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Ticket Completed.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Stall1.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Mail Verification.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located CBV.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located wpcore.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Reboot.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located PIN.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located CC.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Compromised.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Transfer.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located GoMobi.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located cPanel.txt
+2015-09-26 02:37:36,321 | DEBUG | hgt_lib >> 	 Located Why Docs.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Resolution.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located First.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Open Ticket.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Restore.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Clear Cache.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Office IP.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Security Tick Done.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Security Tix.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Free SSL.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Affiliate.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Stall2.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Ticket Delay.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Reset Billing Creds.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located What Error.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Idle.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Inactive.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Failed Verification.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Open.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Customer IP.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located outage.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Which Domain.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located ETA.txt
+2015-09-26 02:37:36,322 | DEBUG | hgt_lib >> 	 Located Verification.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Security Tix Delay.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Stall.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Windows.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located gatorshell.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Propagation.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Load Through Proxy.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located New Package.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Downgrade account.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Anything Else.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Close.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Pass.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located HG.IN.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Welcome.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Pending.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located SSL.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Why Cancel.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located UnSuspend.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Upgrade account.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Prompt for Errors.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located More Details.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Restricted Ticket.txt
+2015-09-26 02:37:36,323 | DEBUG | hgt_lib >> 	 Located Cancel.txt
+2015-09-26 02:37:36,335 | DEBUG | hgt_lib >> 	 Located JDI Tix Verification.txt
+2015-09-26 02:37:36,335 | DEBUG | hgt_lib >> 	 Located Tix Retention Verified.txt
+2015-09-26 02:37:36,336 | DEBUG | hgt_lib >> 	 Located IdeaHost Tix Closing.txt
+2015-09-26 02:37:36,336 | DEBUG | hgt_lib >> 	 Located eHost Tix Closing.txt
+2015-09-26 02:37:36,336 | DEBUG | hgt_lib >> 	 Located Cancel - SB to CP.txt
+2015-09-26 02:37:36,336 | DEBUG | hgt_lib >> 	 Located Tix Cancelled wRefund.txt
+2015-09-26 02:37:36,344 | DEBUG | hgt_lib >> 	 Located Terminal Whois.txt
+2015-09-26 02:37:36,345 | DEBUG | hgt_lib >> 	 Writing to DB...
+2015-09-26 02:37:36,348 | DEBUG | hgt_lib >> 	 Directory Stats.txt written
+2015-09-26 02:37:36,473 | DEBUG | hgt_lib >> 	 Database query took 0.000857 seconds
+2015-09-26 02:37:36,474 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:36,477 | DEBUG | hgt_lib >> 	 WP DB Deactivate Plugins.txt written
+2015-09-26 02:37:36,613 | DEBUG | hgt_lib >> 	 Database query took 0.000711 seconds
+2015-09-26 02:37:36,613 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:36,616 | DEBUG | hgt_lib >> 	 CPU Times.txt written
+2015-09-26 02:37:36,738 | DEBUG | hgt_lib >> 	 Database query took 0.000742 seconds
+2015-09-26 02:37:36,738 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:36,741 | DEBUG | hgt_lib >> 	 WPUpdate.txt written
+2015-09-26 02:37:36,868 | DEBUG | hgt_lib >> 	 Database query took 0.000729 seconds
+2015-09-26 02:37:36,868 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:36,871 | DEBUG | hgt_lib >> 	 Connect to WP DB.txt written
+2015-09-26 02:37:36,995 | DEBUG | hgt_lib >> 	 Database query took 0.000794 seconds
+2015-09-26 02:37:36,996 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:36,999 | DEBUG | hgt_lib >> 	 JDI Partial Verification.txt written
+2015-09-26 02:37:37,117 | DEBUG | hgt_lib >> 	 Database query took 0.000661 seconds
+2015-09-26 02:37:37,117 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,120 | DEBUG | hgt_lib >> 	 JDI eHost vDeck.txt written
+2015-09-26 02:37:37,238 | DEBUG | hgt_lib >> 	 Database query took 0.000681 seconds
+2015-09-26 02:37:37,238 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,241 | DEBUG | hgt_lib >> 	 JDITix Package Downgrade.txt written
+2015-09-26 02:37:37,361 | DEBUG | hgt_lib >> 	 Database query took 0.000645 seconds
+2015-09-26 02:37:37,361 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,364 | DEBUG | hgt_lib >> 	 JDITix Upgrade Success.txt written
+2015-09-26 02:37:37,483 | DEBUG | hgt_lib >> 	 Database query took 0.000703 seconds
+2015-09-26 02:37:37,483 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,486 | DEBUG | hgt_lib >> 	 JDI Cancel Retention tix.txt written
+2015-09-26 02:37:37,606 | DEBUG | hgt_lib >> 	 Database query took 0.000698 seconds
+2015-09-26 02:37:37,606 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,609 | DEBUG | hgt_lib >> 	 JDI Services not offered.txt written
+2015-09-26 02:37:37,729 | DEBUG | hgt_lib >> 	 Database query took 0.000714 seconds
+2015-09-26 02:37:37,729 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,732 | DEBUG | hgt_lib >> 	 JDI JustHost.txt written
+2015-09-26 02:37:37,856 | DEBUG | hgt_lib >> 	 Database query took 0.000668 seconds
+2015-09-26 02:37:37,856 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,860 | DEBUG | hgt_lib >> 	 JDI Brand Cancellation Policy.txt written
+2015-09-26 02:37:37,980 | DEBUG | hgt_lib >> 	 Database query took 0.000651 seconds
+2015-09-26 02:37:37,980 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:37,983 | DEBUG | hgt_lib >> 	 JDI Inactive.txt written
+2015-09-26 02:37:38,103 | DEBUG | hgt_lib >> 	 Database query took 0.000663 seconds
+2015-09-26 02:37:38,103 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,106 | DEBUG | hgt_lib >> 	 JDI Double Verification.txt written
+2015-09-26 02:37:38,224 | DEBUG | hgt_lib >> 	 Database query took 0.000684 seconds
+2015-09-26 02:37:38,224 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,227 | DEBUG | hgt_lib >> 	 JDI Activation Underway.txt written
+2015-09-26 02:37:38,345 | DEBUG | hgt_lib >> 	 Database query took 0.000677 seconds
+2015-09-26 02:37:38,345 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,348 | DEBUG | hgt_lib >> 	 JDI IP Request.txt written
+2015-09-26 02:37:38,467 | DEBUG | hgt_lib >> 	 Database query took 0.000719 seconds
+2015-09-26 02:37:38,468 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,471 | DEBUG | hgt_lib >> 	 JDI cPanel Conversion Requst.txt written
+2015-09-26 02:37:38,591 | DEBUG | hgt_lib >> 	 Database query took 0.000677 seconds
+2015-09-26 02:37:38,591 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,594 | DEBUG | hgt_lib >> 	 JDITix Upgrade Invoiced.txt written
+2015-09-26 02:37:38,715 | DEBUG | hgt_lib >> 	 Database query took 0.000687 seconds
+2015-09-26 02:37:38,715 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,718 | DEBUG | hgt_lib >> 	 Ticket Completed.txt written
+2015-09-26 02:37:38,838 | DEBUG | hgt_lib >> 	 Database query took 0.000674 seconds
+2015-09-26 02:37:38,838 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,841 | DEBUG | hgt_lib >> 	 Stall1.txt written
+2015-09-26 02:37:38,961 | DEBUG | hgt_lib >> 	 Database query took 0.000659 seconds
+2015-09-26 02:37:38,961 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:38,964 | DEBUG | hgt_lib >> 	 Mail Verification.txt written
+2015-09-26 02:37:39,085 | DEBUG | hgt_lib >> 	 Database query took 0.000681 seconds
+2015-09-26 02:37:39,085 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,088 | DEBUG | hgt_lib >> 	 CBV.txt written
+2015-09-26 02:37:39,211 | DEBUG | hgt_lib >> 	 Database query took 0.000715 seconds
+2015-09-26 02:37:39,211 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,214 | DEBUG | hgt_lib >> 	 wpcore.txt written
+2015-09-26 02:37:39,348 | DEBUG | hgt_lib >> 	 Database query took 0.000926 seconds
+2015-09-26 02:37:39,349 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,351 | DEBUG | hgt_lib >> 	 Reboot.txt written
+2015-09-26 02:37:39,477 | DEBUG | hgt_lib >> 	 Database query took 0.000773 seconds
+2015-09-26 02:37:39,477 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,480 | DEBUG | hgt_lib >> 	 PIN.txt written
+2015-09-26 02:37:39,602 | DEBUG | hgt_lib >> 	 Database query took 0.00078 seconds
+2015-09-26 02:37:39,603 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,606 | DEBUG | hgt_lib >> 	 CC.txt written
+2015-09-26 02:37:39,728 | DEBUG | hgt_lib >> 	 Database query took 0.000736 seconds
+2015-09-26 02:37:39,728 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,731 | DEBUG | hgt_lib >> 	 Compromised.txt written
+2015-09-26 02:37:39,853 | DEBUG | hgt_lib >> 	 Database query took 0.000785 seconds
+2015-09-26 02:37:39,853 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,856 | DEBUG | hgt_lib >> 	 Transfer.txt written
+2015-09-26 02:37:39,983 | DEBUG | hgt_lib >> 	 Database query took 0.001683 seconds
+2015-09-26 02:37:39,983 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:39,986 | DEBUG | hgt_lib >> 	 GoMobi.txt written
+2015-09-26 02:37:40,126 | DEBUG | hgt_lib >> 	 Database query took 0.000664 seconds
+2015-09-26 02:37:40,127 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,130 | DEBUG | hgt_lib >> 	 cPanel.txt written
+2015-09-26 02:37:40,245 | DEBUG | hgt_lib >> 	 Database query took 0.000656 seconds
+2015-09-26 02:37:40,245 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,249 | DEBUG | hgt_lib >> 	 Why Docs.txt written
+2015-09-26 02:37:40,367 | DEBUG | hgt_lib >> 	 Database query took 0.000681 seconds
+2015-09-26 02:37:40,367 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,370 | DEBUG | hgt_lib >> 	 Resolution.txt written
+2015-09-26 02:37:40,489 | DEBUG | hgt_lib >> 	 Database query took 0.00073 seconds
+2015-09-26 02:37:40,489 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,492 | DEBUG | hgt_lib >> 	 First.txt written
+2015-09-26 02:37:40,615 | DEBUG | hgt_lib >> 	 Database query took 0.000699 seconds
+2015-09-26 02:37:40,615 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,618 | DEBUG | hgt_lib >> 	 Open Ticket.txt written
+2015-09-26 02:37:40,736 | DEBUG | hgt_lib >> 	 Database query took 0.000703 seconds
+2015-09-26 02:37:40,736 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,739 | DEBUG | hgt_lib >> 	 Restore.txt written
+2015-09-26 02:37:40,858 | DEBUG | hgt_lib >> 	 Database query took 0.0007 seconds
+2015-09-26 02:37:40,858 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,861 | DEBUG | hgt_lib >> 	 Clear Cache.txt written
+2015-09-26 02:37:40,979 | DEBUG | hgt_lib >> 	 Database query took 0.000646 seconds
+2015-09-26 02:37:40,979 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:40,982 | DEBUG | hgt_lib >> 	 Office IP.txt written
+2015-09-26 02:37:41,102 | DEBUG | hgt_lib >> 	 Database query took 0.000662 seconds
+2015-09-26 02:37:41,102 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,105 | DEBUG | hgt_lib >> 	 Security Tick Done.txt written
+2015-09-26 02:37:41,225 | DEBUG | hgt_lib >> 	 Database query took 0.000702 seconds
+2015-09-26 02:37:41,225 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,228 | DEBUG | hgt_lib >> 	 Security Tix.txt written
+2015-09-26 02:37:41,347 | DEBUG | hgt_lib >> 	 Database query took 0.000674 seconds
+2015-09-26 02:37:41,347 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,350 | DEBUG | hgt_lib >> 	 Free SSL.txt written
+2015-09-26 02:37:41,469 | DEBUG | hgt_lib >> 	 Database query took 0.00069 seconds
+2015-09-26 02:37:41,469 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,473 | DEBUG | hgt_lib >> 	 Affiliate.txt written
+2015-09-26 02:37:41,598 | DEBUG | hgt_lib >> 	 Database query took 0.000874 seconds
+2015-09-26 02:37:41,599 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,601 | DEBUG | hgt_lib >> 	 Stall2.txt written
+2015-09-26 02:37:41,724 | DEBUG | hgt_lib >> 	 Database query took 0.000671 seconds
+2015-09-26 02:37:41,724 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,727 | DEBUG | hgt_lib >> 	 Ticket Delay.txt written
+2015-09-26 02:37:41,847 | DEBUG | hgt_lib >> 	 Database query took 0.000706 seconds
+2015-09-26 02:37:41,847 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,850 | DEBUG | hgt_lib >> 	 Reset Billing Creds.txt written
+2015-09-26 02:37:41,969 | DEBUG | hgt_lib >> 	 Database query took 0.000671 seconds
+2015-09-26 02:37:41,969 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:41,972 | DEBUG | hgt_lib >> 	 What Error.txt written
+2015-09-26 02:37:42,090 | DEBUG | hgt_lib >> 	 Database query took 0.000683 seconds
+2015-09-26 02:37:42,090 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,094 | DEBUG | hgt_lib >> 	 Idle.txt written
+2015-09-26 02:37:42,211 | DEBUG | hgt_lib >> 	 Database query took 0.000665 seconds
+2015-09-26 02:37:42,211 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,214 | DEBUG | hgt_lib >> 	 Inactive.txt written
+2015-09-26 02:37:42,336 | DEBUG | hgt_lib >> 	 Database query took 0.000696 seconds
+2015-09-26 02:37:42,337 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,340 | DEBUG | hgt_lib >> 	 Failed Verification.txt written
+2015-09-26 02:37:42,456 | DEBUG | hgt_lib >> 	 Database query took 0.000701 seconds
+2015-09-26 02:37:42,457 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,460 | DEBUG | hgt_lib >> 	 Open.txt written
+2015-09-26 02:37:42,577 | DEBUG | hgt_lib >> 	 Database query took 0.000693 seconds
+2015-09-26 02:37:42,577 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,580 | DEBUG | hgt_lib >> 	 Customer IP.txt written
+2015-09-26 02:37:42,700 | DEBUG | hgt_lib >> 	 Database query took 0.000673 seconds
+2015-09-26 02:37:42,700 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,703 | DEBUG | hgt_lib >> 	 outage.txt written
+2015-09-26 02:37:42,823 | DEBUG | hgt_lib >> 	 Database query took 0.000684 seconds
+2015-09-26 02:37:42,824 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,826 | DEBUG | hgt_lib >> 	 Which Domain.txt written
+2015-09-26 02:37:42,944 | DEBUG | hgt_lib >> 	 Database query took 0.00068 seconds
+2015-09-26 02:37:42,944 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:42,947 | DEBUG | hgt_lib >> 	 ETA.txt written
+2015-09-26 02:37:43,068 | DEBUG | hgt_lib >> 	 Database query took 0.000695 seconds
+2015-09-26 02:37:43,068 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,071 | DEBUG | hgt_lib >> 	 Verification.txt written
+2015-09-26 02:37:43,188 | DEBUG | hgt_lib >> 	 Database query took 0.00069 seconds
+2015-09-26 02:37:43,188 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,191 | DEBUG | hgt_lib >> 	 Security Tix Delay.txt written
+2015-09-26 02:37:43,316 | DEBUG | hgt_lib >> 	 Database query took 0.000677 seconds
+2015-09-26 02:37:43,316 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,319 | DEBUG | hgt_lib >> 	 Stall.txt written
+2015-09-26 02:37:43,440 | DEBUG | hgt_lib >> 	 Database query took 0.000699 seconds
+2015-09-26 02:37:43,440 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,443 | DEBUG | hgt_lib >> 	 Windows.txt written
+2015-09-26 02:37:43,562 | DEBUG | hgt_lib >> 	 Database query took 0.000681 seconds
+2015-09-26 02:37:43,562 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,565 | DEBUG | hgt_lib >> 	 gatorshell.txt written
+2015-09-26 02:37:43,684 | DEBUG | hgt_lib >> 	 Database query took 0.000632 seconds
+2015-09-26 02:37:43,684 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,687 | DEBUG | hgt_lib >> 	 Propagation.txt written
+2015-09-26 02:37:43,807 | DEBUG | hgt_lib >> 	 Database query took 0.00067 seconds
+2015-09-26 02:37:43,808 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,811 | DEBUG | hgt_lib >> 	 Load Through Proxy.txt written
+2015-09-26 02:37:43,930 | DEBUG | hgt_lib >> 	 Database query took 0.000653 seconds
+2015-09-26 02:37:43,930 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:43,933 | DEBUG | hgt_lib >> 	 New Package.txt written
+2015-09-26 02:37:44,051 | DEBUG | hgt_lib >> 	 Database query took 0.000696 seconds
+2015-09-26 02:37:44,052 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,055 | DEBUG | hgt_lib >> 	 Downgrade account.txt written
+2015-09-26 02:37:44,181 | DEBUG | hgt_lib >> 	 Database query took 0.000687 seconds
+2015-09-26 02:37:44,181 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,184 | DEBUG | hgt_lib >> 	 Anything Else.txt written
+2015-09-26 02:37:44,305 | DEBUG | hgt_lib >> 	 Database query took 0.000671 seconds
+2015-09-26 02:37:44,305 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,308 | DEBUG | hgt_lib >> 	 Close.txt written
+2015-09-26 02:37:44,427 | DEBUG | hgt_lib >> 	 Database query took 0.000684 seconds
+2015-09-26 02:37:44,427 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,430 | DEBUG | hgt_lib >> 	 Pass.txt written
+2015-09-26 02:37:44,549 | DEBUG | hgt_lib >> 	 Database query took 0.000702 seconds
+2015-09-26 02:37:44,549 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,553 | DEBUG | hgt_lib >> 	 HG.IN.txt written
+2015-09-26 02:37:44,671 | DEBUG | hgt_lib >> 	 Database query took 0.000694 seconds
+2015-09-26 02:37:44,672 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,675 | DEBUG | hgt_lib >> 	 Welcome.txt written
+2015-09-26 02:37:44,793 | DEBUG | hgt_lib >> 	 Database query took 0.000678 seconds
+2015-09-26 02:37:44,793 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,795 | DEBUG | hgt_lib >> 	 Pending.txt written
+2015-09-26 02:37:44,915 | DEBUG | hgt_lib >> 	 Database query took 0.000679 seconds
+2015-09-26 02:37:44,915 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:44,918 | DEBUG | hgt_lib >> 	 SSL.txt written
+2015-09-26 02:37:45,039 | DEBUG | hgt_lib >> 	 Database query took 0.00069 seconds
+2015-09-26 02:37:45,039 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,042 | DEBUG | hgt_lib >> 	 Why Cancel.txt written
+2015-09-26 02:37:45,162 | DEBUG | hgt_lib >> 	 Database query took 0.000698 seconds
+2015-09-26 02:37:45,162 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,165 | DEBUG | hgt_lib >> 	 UnSuspend.txt written
+2015-09-26 02:37:45,283 | DEBUG | hgt_lib >> 	 Database query took 0.000685 seconds
+2015-09-26 02:37:45,284 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,287 | DEBUG | hgt_lib >> 	 Upgrade account.txt written
+2015-09-26 02:37:45,404 | DEBUG | hgt_lib >> 	 Database query took 0.000721 seconds
+2015-09-26 02:37:45,405 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,408 | DEBUG | hgt_lib >> 	 Prompt for Errors.txt written
+2015-09-26 02:37:45,529 | DEBUG | hgt_lib >> 	 Database query took 0.000684 seconds
+2015-09-26 02:37:45,529 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,532 | DEBUG | hgt_lib >> 	 More Details.txt written
+2015-09-26 02:37:45,662 | DEBUG | hgt_lib >> 	 Database query took 0.000782 seconds
+2015-09-26 02:37:45,662 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,666 | DEBUG | hgt_lib >> 	 Restricted Ticket.txt written
+2015-09-26 02:37:45,794 | DEBUG | hgt_lib >> 	 Database query took 0.001019 seconds
+2015-09-26 02:37:45,794 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,797 | DEBUG | hgt_lib >> 	 Cancel.txt written
+2015-09-26 02:37:45,924 | DEBUG | hgt_lib >> 	 Database query took 0.00066 seconds
+2015-09-26 02:37:45,924 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:45,927 | DEBUG | hgt_lib >> 	 JDI Tix Verification.txt written
+2015-09-26 02:37:46,054 | DEBUG | hgt_lib >> 	 Database query took 0.000706 seconds
+2015-09-26 02:37:46,054 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:46,057 | DEBUG | hgt_lib >> 	 Tix Retention Verified.txt written
+2015-09-26 02:37:46,179 | DEBUG | hgt_lib >> 	 Database query took 0.000669 seconds
+2015-09-26 02:37:46,180 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:46,182 | DEBUG | hgt_lib >> 	 IdeaHost Tix Closing.txt written
+2015-09-26 02:37:46,304 | DEBUG | hgt_lib >> 	 Database query took 0.00065 seconds
+2015-09-26 02:37:46,304 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:46,307 | DEBUG | hgt_lib >> 	 eHost Tix Closing.txt written
+2015-09-26 02:37:46,428 | DEBUG | hgt_lib >> 	 Database query took 0.000694 seconds
+2015-09-26 02:37:46,428 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:46,431 | DEBUG | hgt_lib >> 	 Cancel - SB to CP.txt written
+2015-09-26 02:37:46,551 | DEBUG | hgt_lib >> 	 Database query took 0.000679 seconds
+2015-09-26 02:37:46,551 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:46,554 | DEBUG | hgt_lib >> 	 Tix Cancelled wRefund.txt written
+2015-09-26 02:37:46,673 | DEBUG | hgt_lib >> 	 Database query took 0.000681 seconds
+2015-09-26 02:37:46,673 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:46,676 | DEBUG | hgt_lib >> 	 Terminal Whois.txt written
+2015-09-26 02:37:46,796 | DEBUG | hgt_lib >> 	 Database query took 0.000653 seconds
+2015-09-26 02:37:46,796 | DEBUG | hgt_lib >> 	 retval : 
+2015-09-26 02:37:51,050 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

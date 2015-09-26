@@ -165,7 +165,10 @@ def iahk_read_paths(path):
 	read = False
 	# Read paths to autokey files
 	with open(path) as j:
+		paths.append('{}/.config/autokey/data'.format(expanduser('~')))
 		for line in j.read().splitlines():
+			if '"folders": [],' in line:
+				break
 			if (read and ']' in line):
 				break
 			elif read:
