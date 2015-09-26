@@ -156,7 +156,8 @@ def iahk_send_sql(file_list):
 			str_sql += 'VALUES ("{}","{}", "{}");'.format(item[2][:4].strip(' ').replace(' ', '_'), item[2], 'UPL')
 			
 			retval = hgt_query(str_sql)
-			hgt_logger.debug('\t retval : {}'.format(retval))
+			if retval:
+				hgt_logger.debug('\t retval : {}'.format(retval))
 			this_file.close()
 		
 def iahk_read_paths(path):
