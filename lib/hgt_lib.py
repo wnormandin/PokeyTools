@@ -41,6 +41,7 @@ UI_INFO_PATH = './lib/ui_info.xml'
 
 # User Administration
 USER_LEVEL = 'USER'
+VERS = 0.1
 
 #******************************/GLOBALS*********************************
 
@@ -152,8 +153,8 @@ def iahk_send_sql(file_list):
 			item[2] = this_file.read().replace('"', '\'')
 			item[1].strip('.txt')
 			hgt_logger.debug('\t {} written'.format(item[1]))
-			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group) '
-			str_sql += 'VALUES ("{}","{}", "{}");'.format(item[2][:4].strip(' ').replace(' ', '_'), item[2], 'UPL')
+			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group, hgt_arg1) '
+			str_sql += 'VALUES ("{}","{}", "{}", "{}");'.format(item[1], item[2], 'UPL', ENV_USER)
 			
 			retval = hgt_query(str_sql)
 			if retval:
@@ -1151,11 +1152,13 @@ class MainWindow(Gtk.Window):
 		hgt_logger.debug('[*] Cloning user autokeys')
 		
 		# Prompt with mass upload warning
-		nf_win = InfoDialog(self, "Notice", 'Notice, this will involve the mass upload of a large amount of data.')
+		nf_win = InfoDialog(self, "Notice", 'This may take a few minutes.')
 		response = nf_win.run()
 		nf_win.destroy()
-		if response == Gtk.ResponseType.OK:
-			iahk_import_ahk()
+		iahk_import_ahk()
+		nf_win = InfoDialog(self, "Done", 'Operation Completed.')
+		response = nf_win.run()
+		nf_win.destroy()
 			
 	def on_maxprocs_changed(self, widget, current):
 		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()[-1]))
