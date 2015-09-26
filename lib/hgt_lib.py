@@ -143,7 +143,7 @@ def iahk_import_ahk():
 		iahk_send_sql(file_list)
 						
 	except Exception as e:
-		hgt_logger.error("[*] import_ahk error : {}".format(*e))
+		hgt_logger.error("[*] import_ahk error : {}".format(e))
 		raise
 		
 def iahk_send_sql(file_list):
@@ -153,8 +153,8 @@ def iahk_send_sql(file_list):
 			item[2] = this_file.read().replace('"', '\'')
 			item[1].strip('.txt')
 			hgt_logger.debug('\t {} written'.format(item[1]))
-			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group, hgt_arg1) '
-			str_sql += 'VALUES ("{}","{}", "{}", "{}");'.format(item[1], item[2], 'UPL', ENV_USER)
+			str_sql = 'INSERT INTO hgtools (hgt_code, hgt_text, hgt_group, hgt_arg1, hgt_arg2) '
+			str_sql += 'VALUES ("{}","{}", "{}", "{}", "{}");'.format(item[1].strip('.txt'), item[2], 'UPL', ENV_USER, item[0])
 			
 			retval = hgt_query(str_sql)
 			if retval:
@@ -209,6 +209,23 @@ def iahk_file_list(paths):
 					hgt_logger.debug('\t Located {}'.format(_file))
 					olist.append([os.path.join(root), _file, ''])
 	return olist
+	
+def iahk_csv_export(opath):
+	
+	str_sql = 'SELECT hgt_idx, hgt_text, hgt_group, hgt_code, hgt_arg1, '
+	str_sql += 'hgt_arg2 from hgtools'
+	
+	_data = hgt_query(str_sql)
+	
+	with open(opath, 'wb') as csvfile:
+		o_writer = csv.writer(csvfile, delimiter=',',
+							quotechar="'", quoting=csv.QUOTE_MINIMAL)
+		o_writer.writerow(('Record ID', 'Predefine', 'Group', 'Title', 
+							'User', 'Path'))
+		for line in _data.splitlines():
+			o_writer.writerow(str(line).split('\t'))
+		
+	csvfile.close()
 	
 #************************/AHK import function***************************
 	
@@ -606,7 +623,7 @@ def hgt_query(str_sql, qtype=''):
 	cmd=['mysql', '-h', host, '-u', user, '-p%s'%password, '-D', 
 		database, '-Bse', str_sql]
 		
-	retval =subprocess.check_output(cmd)
+	retval = subprocess.check_output(cmd)
 	hgt_logger.debug('\t Database query took %s seconds' % (time.clock()-start))
 	
 	return retval
@@ -1121,8 +1138,32 @@ class MainWindow(Gtk.Window):
 			("DataDeduplicate", None, "Deduplicate", None, None,
 				self.on_menu_deduplicate),
 			("CloneAHKLib", None, "Add AHK library to database", None, None,
-				self.on_clone_ahks)
+				self.on_clone_ahks),
+			("CSVExport", None, "Save Predefine Library to CSV", None, None,
+				self.on_csv_export)
 		])
+		
+	def on_csv_export(self, menuitem):
+		hgt_logger.debug("[*] CSVFileDialog Spawned!")
+		dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
+			Gtk.FileChooserAction.SAVE,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+		self.add_filters(dialog)
+
+		response = dialog.run()
+		
+		if response == Gtk.ResponseType.OK:
+			hgt_logger.debug("\t FileDialog > Open clicked")
+			ofile = dialog.get_filename()
+			hgt_logger.debug("\t File selected: {}".format(ofile))
+			dialog.destroy()
+			iahk_csv_export(ofile)
+		elif response == Gtk.ResponseType.CANCEL:
+			
+			hgt_logger.debug("\t FileDialog > Cancel clicked")
+		dialog.destroy()
 		
 	def add_option_menu_actions(self, action_group):
 		action_group.add_actions([

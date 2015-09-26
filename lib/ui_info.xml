@@ -10,6 +10,7 @@
     <menu action='DataMenu'>
       <menuitem action='DataDeduplicate' />
       <menuitem action='CloneAHKLib' />
+      <menuitem action='CSVExport' />
     </menu>
     <menu action='OptionMenu'>
       <menuitem action='DebugMode' />
