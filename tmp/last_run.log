@@ -1,133 +1,55 @@
-2015-09-26 08:14:53,809 | DEBUG | hgt_lib >> 	 Database query took 0.000645 seconds
-2015-09-26 08:14:53,874 | DEBUG | hgt_lib >> 	 Database query took 0.000613 seconds
-2015-09-26 08:14:53,874 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
-2015-09-26 08:14:53,874 | DEBUG | hgt_lib >> 	 User Permission Level : USER
-
-2015-09-26 08:14:53,881 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-26 08:14:53,881 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-26 08:14:53,882 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:14:53,882 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	Read 2 lines
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
-2015-09-26 08:14:53,883 | DEBUG | hgt_lib >> 	 pc_box_build
-2015-09-26 08:14:53,885 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-26 08:14:53,886 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-26 08:14:53,896 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
-2015-09-26 08:14:53,897 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-26 08:14:53,898 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-26 08:14:53,898 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-26 08:14:53,899 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-26 08:14:53,899 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-26 08:14:53,899 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
-2015-09-26 08:14:53,899 | DEBUG | hgt_lib >> 	 hgt_box_build
-2015-09-26 08:14:53,900 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-26 08:14:53,901 | DEBUG | hgt_lib >> 	 2
-2015-09-26 08:14:53,901 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-26 08:14:53,901 | DEBUG | hgt_lib >> 	 2
-2015-09-26 08:14:53,901 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
-2015-09-26 08:14:53,901 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-26 08:14:53,902 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-26 08:14:53,902 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-26 08:14:53,953 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-26 08:14:57,419 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-26 08:14:57,419 | DEBUG | hgt_lib >> 	 Search Term : tes
-2015-09-26 08:14:57,535 | DEBUG | hgt_lib >> 	 Database query took 0.000949 seconds
-2015-09-26 08:14:57,559 | DEBUG | hgt_lib >> 	 Search window selection changed : Account is Pending
-2015-09-26 08:18:39,071 | DEBUG | hgt_lib >> 	 User Cancelled Dialog
-2015-09-26 08:20:55,669 | DEBUG | hgt_lib >> [*] MainWindow > Phrase Search clicked
-2015-09-26 08:20:55,670 | DEBUG | hgt_lib >> 	 Search Term : tes
-2015-09-26 08:20:55,802 | DEBUG | hgt_lib >> 	 Database query took 0.001521 seconds
-2015-09-26 08:20:55,839 | DEBUG | hgt_lib >> 	 Search window selection changed : Account is Pending
-2015-09-26 08:21:07,933 | DEBUG | hgt_lib >> 	 Search window selection changed : Complain Ticke
-2015-09-26 08:21:56,756 | DEBUG | hgt_lib >> 	 User Cancelled Dialog
-2015-09-26 08:33:28,600 | DEBUG | hgt_lib >> [*] MainWindow > Your List > Selection changed to dcole
-2015-09-26 08:33:29,672 | DEBUG | hgt_lib >> [*] remove_button clicked
-2015-09-26 08:33:29,673 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:29,676 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:29,677 | DEBUG | hgt_lib >> 	Read 2 lines
-2015-09-26 08:33:29,677 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:29,681 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:29,683 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:29,683 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-26 08:33:29,683 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:30,265 | DEBUG | hgt_lib >> [*] MainWindow > Your List > Selection changed to jhowle
-2015-09-26 08:33:30,967 | DEBUG | hgt_lib >> [*] remove_button clicked
-2015-09-26 08:33:30,968 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:30,969 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:30,969 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-26 08:33:30,969 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:30,971 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:30,972 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:30,972 | DEBUG | hgt_lib >> 	Read 0 lines
-2015-09-26 08:33:30,972 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:37,007 | DEBUG | hgt_lib >> [*] add_button clicked
-2015-09-26 08:33:37,008 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:37,010 | DEBUG | hgt_lib >> 	Added : jdihosting
-2015-09-26 08:33:37,013 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:37,014 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:37,015 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:37,015 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-26 08:33:37,015 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:40,184 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-26 08:33:40,185 | DEBUG | hgt_lib >> 	 Selected Chat Count = 1
-2015-09-26 08:33:42,159 | DEBUG | hgt_lib >> [*] MainWindow > Broadcast button clicked
-2015-09-26 08:33:42,161 | DEBUG | hgt_lib >> [*] Testing dBus connection
-2015-09-26 08:33:42,162 | DEBUG | hgt_lib >> [*] Finding Pidgin Accounts
-2015-09-26 08:33:42,173 | DEBUG | hgt_lib >> 	Pidgin Acct : 2147
-2015-09-26 08:33:42,174 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : jdihosting
-2015-09-26 08:33:52,200 | DEBUG | hgt_lib >> [*] MainWindow > Your List > Selection changed to jdihosting
-2015-09-26 08:33:52,879 | DEBUG | hgt_lib >> [*] remove_button clicked
-2015-09-26 08:33:52,879 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:52,881 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:52,881 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-26 08:33:52,881 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:52,883 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:52,884 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:52,884 | DEBUG | hgt_lib >> 	Read 0 lines
-2015-09-26 08:33:52,884 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:59,064 | DEBUG | hgt_lib >> [*] add_button clicked
-2015-09-26 08:33:59,064 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:59,066 | DEBUG | hgt_lib >> 	Added : sfranklin
-2015-09-26 08:33:59,070 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:33:59,071 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:33:59,072 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:33:59,072 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-26 08:33:59,073 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:34:04,095 | DEBUG | hgt_lib >> [*] add_button clicked
-2015-09-26 08:34:04,095 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:34:04,096 | DEBUG | hgt_lib >> 	Added : cerie
-2015-09-26 08:34:04,099 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:34:04,100 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:34:04,101 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:34:04,102 | DEBUG | hgt_lib >> 	Read 2 lines
-2015-09-26 08:34:04,102 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:34:14,191 | DEBUG | hgt_lib >> [*] MainWindow > Broadcast button clicked
-2015-09-26 08:34:14,194 | DEBUG | hgt_lib >> [*] Testing dBus connection
-2015-09-26 08:34:14,194 | DEBUG | hgt_lib >> [*] Finding Pidgin Accounts
-2015-09-26 08:34:14,204 | DEBUG | hgt_lib >> 	Pidgin Acct : 2147
-2015-09-26 08:34:14,204 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : sfranklin
-2015-09-26 08:34:14,272 | DEBUG | hgt_lib >> 	Buddy Found!
-2015-09-26 08:34:14,272 | DEBUG | hgt_lib >> [*] Attempting to message user :sfranklin@openfire.houston.hostgator.com
-2015-09-26 08:34:14,273 | DEBUG | hgt_lib >> 	Message :	
-Currently I have : 1 chats to pass.
-Please reply if you can assist!
-
-	[*] This has been an automated chat pass request.
-2015-09-26 08:34:14,276 | DEBUG | hgt_lib >> 	Message Sent to sfranklin@openfire.houston.hostgator.com
-2015-09-26 08:34:14,276 | DEBUG | hgt_lib >> 	Finding Pidgin Buddy : cerie
-2015-09-26 08:35:40,643 | DEBUG | hgt_lib >> [*] MainWindow > Your List > Selection changed to sfranklin
-2015-09-26 08:35:41,397 | DEBUG | hgt_lib >> [*] remove_button clicked
-2015-09-26 08:35:41,397 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:35:41,401 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:35:41,401 | DEBUG | hgt_lib >> 	Read 2 lines
-2015-09-26 08:35:41,401 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:35:41,404 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-26 08:35:41,405 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-26 08:35:41,405 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-26 08:35:41,405 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-26 08:38:50,690 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-28 13:06:44,036 | DEBUG | hgt_lib >> 	 Database query took 0.001865 seconds
+2015-09-28 13:06:44,192 | DEBUG | hgt_lib >> 	 Database query took 0.001663 seconds
+2015-09-28 13:06:44,193 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
+2015-09-28 13:06:44,193 | DEBUG | hgt_lib >> 	 User Permission Level : ADMIN
+2015-09-28 13:06:44,203 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	Read 1 lines
+2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-28 13:06:44,205 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-28 13:06:44,205 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-28 13:06:44,205 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-28 13:06:44,206 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-28 13:06:44,207 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
+2015-09-28 13:06:44,207 | DEBUG | hgt_lib >> 	 pc_box_build
+2015-09-28 13:06:44,210 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-28 13:06:44,211 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-28 13:06:44,220 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
+2015-09-28 13:06:44,221 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-28 13:06:44,223 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-28 13:06:44,223 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-28 13:06:44,225 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-28 13:06:44,225 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-28 13:06:44,227 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
+2015-09-28 13:06:44,227 | DEBUG | hgt_lib >> 	 hgt_box_build
+2015-09-28 13:06:44,228 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-28 13:06:44,229 | DEBUG | hgt_lib >> 	 2
+2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 2
+2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
+2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-28 13:06:44,231 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-28 13:06:44,231 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-28 13:06:44,278 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-28 13:06:46,702 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org A +noall +answer
+2015-09-28 13:06:46,910 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org NS +noall +answer
+2015-09-28 13:06:47,158 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org TXT +noall +answer
+2015-09-28 13:06:47,245 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org MX +noall +answer
+2015-09-28 13:06:47,416 | DEBUG | hgt_lib >> [*] Running command : whois -H effbot.org
+2015-09-28 13:06:47,655 | DEBUG | hgt_lib >> [*] Running command : echo | openssl s_client -connect effbot.org:443 2>/dev/null | openssl x509 -noout -text
+2015-09-28 13:06:47,869 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@213.25.129.35', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:47,918 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@203.29.26.248', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:47,962 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@216.218.184.19', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,014 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@76.12.242.28', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,060 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@203.59.9.223', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,116 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@177.135.144.210', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,166 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@88.86.172.11', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,217 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@182.71.113.34', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,267 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@41.58.157.70', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,313 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@41.41.107.38', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,368 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@109.228.25.69', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,410 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@80.195.168.42', 'effbot.org', 'NS', '+short')
+2015-09-28 13:06:48,460 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@8.8.8.8', 'effbot.org', 'NS', '+short')
+2015-09-28 13:07:27,035 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

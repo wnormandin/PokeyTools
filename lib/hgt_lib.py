@@ -11,7 +11,9 @@ import re, csv, locale, random, inspect
 import subprocess
 import urllib2
 import urllib
+from urlparse import urlparse
 from subprocess import Popen, PIPE
+from lib.whois import *
 
 #******************************GLOBALS**********************************
 
@@ -97,7 +99,7 @@ def user_first_logon(user):
 	result = hgt_query(str_sql)
 	
 	if result:
-		USER_LEVEL = result
+		USER_LEVEL = result.strip('\n')
 		return False
 	else:
 		USER_LEVEL = 'USER'
@@ -116,6 +118,119 @@ def user_db_log(msg, user):
 	hgt_logger.debug('[*] DB Log Record Created > hgtools_log')
 
 #************************/User Functions********************************
+
+#**************************Domain Tools*********************************
+
+def dmn_main():
+	start=time.clock()
+	clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+	url = clip.wait_for_text()
+	print url
+	
+	flags = {}
+	
+	flags['urlparse'] = urlparse(url)
+	
+	dmn_parse(flags)
+	
+	if flags['pass']:
+		dmn_dig(flags)
+		dmn_whois(flags)
+		dmn_ssl(flags)	
+		dmn_prop(flags)
+		return flags
+	else:
+		return False
+	
+def dmn_parse(flags):
+	try:
+		parts = flags['urlparse'].hostname.split('.')
+	except AttributeError:
+		flags['pass']=False
+		parts = 'empty'
+	
+	if (len(parts) < 2 or len(parts) > 5):
+		flags['pass']=False
+		
+	else:
+		
+		response = urllib2.urlopen('http://data.iana.org/TLD/tlds-alpha-by-domain.txt')
+		tlds = response.read()
+		tlds=[tld.strip() for tld in tlds.split()]
+		
+		if parts[-1].upper() in tlds:
+		
+			if len(parts) == 2:
+				flags['domain'] = '{}.{}'.format(*parts[-2:])
+			else:
+				if parts[-2].upper() in tlds:
+					flags['domain'] = '{}.{}.{}'.format(*parts[-3:])
+				else:
+					flags['domain'] = '{}.{}'.format(*parts[-2:])
+			flags['pass']=True
+		else:
+			flags['pass']=False
+	
+def dmn_dig(flags):
+	digs = ('A', 'NS', 'TXT', 'MX')
+	flags['dns']=[]
+	
+	for dig in digs:
+		cmd = 'dig {} {} +noall +answer'.format(flags['domain'], dig)
+		flags['dns'].append(dmn_dig_parse(dmn_run_cmd(cmd)))
+	
+def dmn_dig_parse(retval):
+	result = []
+	for line in retval.splitlines():
+		if ';' not in line:
+			line.strip()
+			if line != '':
+				result.append(line.replace('\t',' '))
+	return result
+
+def dmn_whois(flags):
+	cmd = 'whois -H {}'.format(flags['domain'])
+	flags['whois'] = dmn_run_cmd(cmd).splitlines()
+	
+def dmn_run_cmd(cmd):
+	hgt_logger.debug('[*] Running command : {}'.format(cmd))
+	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+	retval = p.communicate()[0]
+	return retval
+	
+def dmn_ssl(flags):
+	cmd = 'echo | openssl s_client -connect {}:443'.format(flags['domain'])
+	cmd += ' 2>/dev/null | openssl x509 -noout -text'
+	flags['ssl'] = dmn_run_cmd(cmd).splitlines()
+	
+def dmn_prop(flags):
+	srv_list = [
+	['Poland', '213.25.129.35'],
+	['Indonesia',  '203.29.26.248'],
+	['US', '216.218.184.19', '76.12.242.28'],
+	['Australia', '203.59.9.223'],
+	['Brazil', '177.135.144.210'],
+	['Italy', '88.86.172.11'],
+	['India',  '182.71.113.34'],
+	['Nigeria', '41.58.157.70'],
+	['Egypt', '41.41.107.38'],
+	['UK', '109.228.25.69', '80.195.168.42'],
+	['Google', '8.8.8.8']]
+	
+	flags['prop'] = []
+	
+	for test in srv_list:
+		loc = test.pop(0)
+		
+		if isinstance(test, (list, tuple)):
+			for ip in test:
+				dmn_prop_append(flags, loc, ip)
+		else:
+			dmn_prop_append(flags, loc, test)
+
+def dmn_prop_append(flags, loc, ip):
+	cmd = ('dig', '@{}'.format(ip), flags['domain'], 'NS', '+short')
+	flags['prop'].append(dmn_dig_parse(dmn_run_cmd(cmd)).append('{} : {}'.format(loc, ip)))
 
 #************************AHK import function****************************
 #	Path to autokey.json : ~/.config/autokey
@@ -904,6 +1019,50 @@ class MLStripper(HTMLParser):
 	def get_data(self):
 		return ''.join(self.fed)
 		
+class DomainInfoDialog(Gtk.Dialog):
+	
+	global favicon
+	
+	def __init__(self, parent, flags):
+		Gtk.Dialog.__init__(self, "Domain Name Information", parent,
+			Gtk.DialogFlags.MODAL, buttons=(
+			Gtk.STOCK_OK, Gtk.ResponseType.OK))
+			
+		self.set_default_size(500, 500)
+		self.set_icon_from_file(favicon)
+		
+		self.box = self.get_content_area()
+		self.label = Gtk.Label(flags['urlparse'])
+		self.notebook = Gtk.Notebook()
+		
+		tabs = ('dns', 'whois', 'ssl', 'prop')
+		
+		for tab in tabs:
+			txt = ''
+			if isinstance(flags[tab], (list, tuple)):
+				for part in flags[tab]:
+					txt += '{}\n'.format(part)
+			else:
+				txt = '{}\n'.format(flags[tab])
+			label = Gtk.Label(label='  {}  '.format(tab.upper()))
+			self.notebook.append_page(self.create_textview(txt), label)
+			
+		self.box.add(label)
+		self.box.add(self.notebook)
+		
+		self.show_all()
+			
+	def create_textview(self, txt):
+		scrolledwindow = Gtk.ScrolledWindow()
+		scrolledwindow.set_hexpand(True)
+		scrolledwindow.set_vexpand(True)
+		
+		self.textview = Gtk.TextView()
+		self.textbuffer = self.textview.get_buffer()
+		self.textbuffer.set_text(txt)
+		scrolledwindow.add(self.textview)
+		return scrolledwindow
+		
 class InfoDialog(Gtk.Dialog):
 	
 	global favicon
@@ -1029,17 +1188,18 @@ class MainWindow(Gtk.Window):
 	global MAX_PROC
 	global MULTIPROC
 	global USER_SELECTION
+	global USER_LEVEL
 	
-	def __init__(self):
+	def __init__(self, level=logging.DEBUG):
 		
 		try:
 			user_main()
-			win_title = 'HG Tools | Welcome, {}!'.format(ENV_USER) 
-			hgt_logger.setLevel(logging.DEBUG)
+			self.status_update()
+			hgt_logger.setLevel(level)
 			# Create dict for signal storage
 			self.selected = {}
 			
-			Gtk.Window.__init__(self, title=win_title)
+			Gtk.Window.__init__(self, title=self.win_title)
 			
 			self.set_icon_from_file(favicon)
 			self.pc_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -1061,6 +1221,8 @@ class MainWindow(Gtk.Window):
 
 			# Get menubar
 			menubar = uimanager.get_widget("/MenuBar")
+			# Initialize Menu Access
+			self.menu_init()
 			
 			# Widget Enumeration
 			widgets = self.widget_config()
@@ -1089,6 +1251,13 @@ class MainWindow(Gtk.Window):
 			
 	# Actions
 	
+	def status_update(self, msg=None):
+		if msg == None:
+			self.win_title = 'HG Tools | Welcome, {} ({})!'.format(ENV_USER, USER_LEVEL) 
+		else:
+			self.win_title = msg
+		Gtk.Window.__init__(self, title=self.win_title)
+			
 	def on_menu_file_csv_import(self, widget):
 		hgt_logger.debug("[*] FileDialog Spawned!")
 		dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
@@ -1137,6 +1306,8 @@ class MainWindow(Gtk.Window):
 	def add_data_menu_actions(self, action_group):
 		action_group.add_actions([
 			("DataMenu", None, " Data |"),
+			("DomainReports", None, "Domain Reports", None, None,
+				self.on_domain_reports),
 			("DataDeduplicate", None, "Deduplicate", None, None,
 				self.on_menu_deduplicate),
 			("CloneAHKLib", None, "Add AHK library to database", None, None,
@@ -1145,15 +1316,26 @@ class MainWindow(Gtk.Window):
 				self.on_csv_export)
 		])
 		
+	def on_domain_reports(self, widget):
+		flags = dmn_main()
+		if flags:
+			domain_window = DomainInfoDialog(self, flags)
+			result = domain_window.run()
+			domain_window.destroy()
+		else:
+			err_window = InfoDialog(None, 'URL Error', 'The provided URL could not be parsed,\nplease be more specific\n\nHint : Select URL from your browser URL bar and hit CTRL+C before running')
+			result = err_window.run()
+			err_window.destroy()
+
 	def on_csv_export(self, menuitem):
 		hgt_logger.debug("[*] CSVFileDialog Spawned!")
+		self.status_update('CSV Export running')
 		dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
 			Gtk.FileChooserAction.SAVE,
 			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
 		self.add_filters(dialog)
-
 		response = dialog.run()
 		
 		if response == Gtk.ResponseType.OK:
@@ -1166,6 +1348,7 @@ class MainWindow(Gtk.Window):
 			
 			hgt_logger.debug("\t FileDialog > Cancel clicked")
 		dialog.destroy()
+		self.status_update()
 		
 	def add_option_menu_actions(self, action_group):
 		action_group.add_actions([
@@ -1340,7 +1523,20 @@ class MainWindow(Gtk.Window):
 		self.pc_ldap_box.set_text('Added!')
 		self.pc_ldap_box.set_text('User LDAP')
 		self.pc_list_refresh(widget)
+	
+	def menu_init(self):
+		disabled = ('FileNewStandard', 'DataDeduplicate',
+							'CloneAHKLib')
+		if USER_LEVEL != 'ADMIN':
+			for action in disabled:
+				this_act = self.action_group.get_action(action)
+				self.deactivate(this_act)
+	
+	def deactivate(self, widget):
+		widget.set_sensitive(False)
 		
+	def activate(self, widget):
+		widget.set_sensitive(True)
 		
 	def pc_remove_button_exec(self, widget):
 		# Remove a user from the pass_chats list

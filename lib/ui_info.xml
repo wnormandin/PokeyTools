@@ -8,6 +8,7 @@
       <menuitem action='FileQuit' />
     </menu>
     <menu action='DataMenu'>
+      <menuitem action='DomainReports' />
       <menuitem action='DataDeduplicate' />
       <menuitem action='CloneAHKLib' />
       <menuitem action='CSVExport' />
