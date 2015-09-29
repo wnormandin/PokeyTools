@@ -1,55 +1,55 @@
-2015-09-28 13:06:44,036 | DEBUG | hgt_lib >> 	 Database query took 0.001865 seconds
-2015-09-28 13:06:44,192 | DEBUG | hgt_lib >> 	 Database query took 0.001663 seconds
-2015-09-28 13:06:44,193 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
-2015-09-28 13:06:44,193 | DEBUG | hgt_lib >> 	 User Permission Level : ADMIN
-2015-09-28 13:06:44,203 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	Reading lines...
-2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-09-28 13:06:44,204 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-09-28 13:06:44,205 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-09-28 13:06:44,205 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-09-28 13:06:44,205 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-09-28 13:06:44,206 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-09-28 13:06:44,207 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
-2015-09-28 13:06:44,207 | DEBUG | hgt_lib >> 	 pc_box_build
-2015-09-28 13:06:44,210 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-09-28 13:06:44,211 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-09-28 13:06:44,220 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
-2015-09-28 13:06:44,221 | DEBUG | hgt_lib >> 	sl_box_build
-2015-09-28 13:06:44,223 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-09-28 13:06:44,223 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-09-28 13:06:44,225 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-09-28 13:06:44,225 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-09-28 13:06:44,227 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
-2015-09-28 13:06:44,227 | DEBUG | hgt_lib >> 	 hgt_box_build
-2015-09-28 13:06:44,228 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-28 13:06:44,229 | DEBUG | hgt_lib >> 	 2
-2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 2
-2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
-2015-09-28 13:06:44,230 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-09-28 13:06:44,231 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-09-28 13:06:44,231 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-09-28 13:06:44,278 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-09-28 13:06:46,702 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org A +noall +answer
-2015-09-28 13:06:46,910 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org NS +noall +answer
-2015-09-28 13:06:47,158 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org TXT +noall +answer
-2015-09-28 13:06:47,245 | DEBUG | hgt_lib >> [*] Running command : dig effbot.org MX +noall +answer
-2015-09-28 13:06:47,416 | DEBUG | hgt_lib >> [*] Running command : whois -H effbot.org
-2015-09-28 13:06:47,655 | DEBUG | hgt_lib >> [*] Running command : echo | openssl s_client -connect effbot.org:443 2>/dev/null | openssl x509 -noout -text
-2015-09-28 13:06:47,869 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@213.25.129.35', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:47,918 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@203.29.26.248', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:47,962 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@216.218.184.19', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,014 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@76.12.242.28', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,060 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@203.59.9.223', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,116 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@177.135.144.210', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,166 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@88.86.172.11', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,217 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@182.71.113.34', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,267 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@41.58.157.70', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,313 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@41.41.107.38', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,368 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@109.228.25.69', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,410 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@80.195.168.42', 'effbot.org', 'NS', '+short')
-2015-09-28 13:06:48,460 | DEBUG | hgt_lib >> [*] Running command : ('dig', '@8.8.8.8', 'effbot.org', 'NS', '+short')
-2015-09-28 13:07:27,035 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-09-29 05:03:48,356 | DEBUG | hgt_lib >> 	 Database query took 0.00076 seconds
+2015-09-29 05:03:48,477 | DEBUG | hgt_lib >> 	 Database query took 0.000641 seconds
+2015-09-29 05:03:48,477 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
+2015-09-29 05:03:48,478 | DEBUG | hgt_lib >> 	 User Permission Level : ADMIN
+2015-09-29 05:03:48,501 | DEBUG | hgt_lib >> [*] Configuring Widgets
+2015-09-29 05:03:48,502 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-09-29 05:03:48,502 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-09-29 05:03:48,504 | DEBUG | hgt_lib >> 	Reading lines...
+2015-09-29 05:03:48,504 | DEBUG | hgt_lib >> 	Read 1 lines
+2015-09-29 05:03:48,504 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-09-29 05:03:48,505 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-09-29 05:03:48,505 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-09-29 05:03:48,505 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-09-29 05:03:48,505 | DEBUG | hgt_lib >> [*] Configuring Boxes
+2015-09-29 05:03:48,505 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
+2015-09-29 05:03:48,505 | DEBUG | hgt_lib >> 	 pc_box_build
+2015-09-29 05:03:48,508 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-09-29 05:03:48,508 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-09-29 05:03:48,750 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
+2015-09-29 05:03:48,751 | DEBUG | hgt_lib >> 	sl_box_build
+2015-09-29 05:03:48,752 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-09-29 05:03:48,752 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-09-29 05:03:48,752 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-09-29 05:03:48,753 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-09-29 05:03:48,753 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
+2015-09-29 05:03:48,753 | DEBUG | hgt_lib >> 	 hgt_box_build
+2015-09-29 05:03:48,754 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-29 05:03:48,754 | DEBUG | hgt_lib >> 	 2
+2015-09-29 05:03:48,755 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-09-29 05:03:48,755 | DEBUG | hgt_lib >> 	 2
+2015-09-29 05:03:48,755 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
+2015-09-29 05:03:48,755 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-09-29 05:03:48,756 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-09-29 05:03:48,756 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-09-29 05:03:49,278 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-09-29 05:03:59,412 | DEBUG | hgt_lib >> [*] Running command : dig hostgator.com A +nocomments +noadditional +noauthority
+2015-09-29 05:03:59,588 | DEBUG | hgt_lib >> [*] Running command : dig hostgator.com NS +nocomments +noadditional +noauthority
+2015-09-29 05:03:59,716 | DEBUG | hgt_lib >> [*] Running command : dig hostgator.com TXT +nocomments +noadditional +noauthority
+2015-09-29 05:03:59,856 | DEBUG | hgt_lib >> [*] Running command : dig hostgator.com MX +nocomments +noadditional +noauthority
+2015-09-29 05:03:59,995 | DEBUG | hgt_lib >> [*] Running command : timeout 5 whois -H hostgator.com
+2015-09-29 05:04:00,523 | DEBUG | hgt_lib >> [*] Running command : echo "QUIT" | timeout 5 openssl s_client -connect hostgator.com:443 2>/dev/null | openssl x509 -noout -text
+2015-09-29 05:04:00,810 | DEBUG | hgt_lib >> [*] Running command : dig @213.25.129.35 hostgator.com +short
+2015-09-29 05:04:01,162 | DEBUG | hgt_lib >> [*] Running command : dig @203.29.26.248 hostgator.com +short
+2015-09-29 05:04:01,529 | DEBUG | hgt_lib >> [*] Running command : dig @216.218.184.19 hostgator.com +short
+2015-09-29 05:04:01,814 | DEBUG | hgt_lib >> [*] Running command : dig @76.12.242.28 hostgator.com +short
+2015-09-29 05:04:01,991 | DEBUG | hgt_lib >> [*] Running command : dig @203.59.9.223 hostgator.com +short
+2015-09-29 05:04:02,449 | DEBUG | hgt_lib >> [*] Running command : dig @177.135.144.210 hostgator.com +short
+2015-09-29 05:04:02,931 | DEBUG | hgt_lib >> [*] Running command : dig @88.86.172.11 hostgator.com +short
+2015-09-29 05:04:03,387 | DEBUG | hgt_lib >> [*] Running command : dig @182.71.113.34 hostgator.com +short
+2015-09-29 05:04:03,940 | DEBUG | hgt_lib >> [*] Running command : dig @41.58.157.70 hostgator.com +short
+2015-09-29 05:04:04,383 | DEBUG | hgt_lib >> [*] Running command : dig @41.41.107.38 hostgator.com +short
+2015-09-29 05:04:04,831 | DEBUG | hgt_lib >> [*] Running command : dig @109.228.25.69 hostgator.com +short
+2015-09-29 05:04:05,080 | DEBUG | hgt_lib >> [*] Running command : dig @80.195.168.42 hostgator.com +short
+2015-09-29 05:04:05,395 | DEBUG | hgt_lib >> [*] Running command : dig @8.8.8.8 hostgator.com +short
+2015-09-29 05:04:15,109 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

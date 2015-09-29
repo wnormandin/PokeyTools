@@ -13,7 +13,6 @@ import urllib2
 import urllib
 from urlparse import urlparse
 from subprocess import Popen, PIPE
-from lib.whois import *
 
 #******************************GLOBALS**********************************
 
@@ -128,8 +127,10 @@ def dmn_main():
 	print url
 	
 	flags = {}
-	
+	flags['url'] = url
 	flags['urlparse'] = urlparse(url)
+	flags['prop'] = ''
+	flags['dns'] = ''
 	
 	dmn_parse(flags)
 	
@@ -163,7 +164,7 @@ def dmn_parse(flags):
 			if len(parts) == 2:
 				flags['domain'] = '{}.{}'.format(*parts[-2:])
 			else:
-				if parts[-2].upper() in tlds:
+				if (parts[-2].upper() in tlds and parts[-3] != 'www'):
 					flags['domain'] = '{}.{}.{}'.format(*parts[-3:])
 				else:
 					flags['domain'] = '{}.{}'.format(*parts[-2:])
@@ -173,23 +174,21 @@ def dmn_parse(flags):
 	
 def dmn_dig(flags):
 	digs = ('A', 'NS', 'TXT', 'MX')
-	flags['dns']=[]
-	
 	for dig in digs:
-		cmd = 'dig {} {} +noall +answer'.format(flags['domain'], dig)
-		flags['dns'].append(dmn_dig_parse(dmn_run_cmd(cmd)))
+		cmd = 'dig {} {} +nocomments +noadditional +noauthority'.format(flags['domain'], dig)
+		flags['dns']+=dmn_dig_parse(dmn_run_cmd(cmd))
 	
 def dmn_dig_parse(retval):
-	result = []
+	result = ''
 	for line in retval.splitlines():
-		if ';' not in line:
-			line.strip()
-			if line != '':
-				result.append(line.replace('\t',' '))
+		line.strip()
+		if (line != '' and ';' not in line):
+			result += ('{}\n'.format(line))
+	result += '\n'
 	return result
 
 def dmn_whois(flags):
-	cmd = 'whois -H {}'.format(flags['domain'])
+	cmd = 'timeout 5 whois -H {}'.format(flags['domain'])
 	flags['whois'] = dmn_run_cmd(cmd).splitlines()
 	
 def dmn_run_cmd(cmd):
@@ -199,7 +198,7 @@ def dmn_run_cmd(cmd):
 	return retval
 	
 def dmn_ssl(flags):
-	cmd = 'echo | openssl s_client -connect {}:443'.format(flags['domain'])
+	cmd = 'echo "QUIT" | timeout 5 openssl s_client -connect {}:443'.format(flags['domain'])
 	cmd += ' 2>/dev/null | openssl x509 -noout -text'
 	flags['ssl'] = dmn_run_cmd(cmd).splitlines()
 	
@@ -217,7 +216,7 @@ def dmn_prop(flags):
 	['UK', '109.228.25.69', '80.195.168.42'],
 	['Google', '8.8.8.8']]
 	
-	flags['prop'] = []
+	flags['prop'] = ''
 	
 	for test in srv_list:
 		loc = test.pop(0)
@@ -227,10 +226,14 @@ def dmn_prop(flags):
 				dmn_prop_append(flags, loc, ip)
 		else:
 			dmn_prop_append(flags, loc, test)
+			
+		print flags['prop']
 
 def dmn_prop_append(flags, loc, ip):
-	cmd = ('dig', '@{}'.format(ip), flags['domain'], 'NS', '+short')
-	flags['prop'].append(dmn_dig_parse(dmn_run_cmd(cmd)).append('{} : {}'.format(loc, ip)))
+	cmd = ('dig @{} {} +short'.format(ip, flags['domain']))
+	flags['prop'] += '\n{} : {} Result\n'.format(loc, ip)
+	print cmd
+	flags['prop'] += dmn_dig_parse(dmn_run_cmd(cmd))
 
 #************************AHK import function****************************
 #	Path to autokey.json : ~/.config/autokey
@@ -1032,7 +1035,7 @@ class DomainInfoDialog(Gtk.Dialog):
 		self.set_icon_from_file(favicon)
 		
 		self.box = self.get_content_area()
-		self.label = Gtk.Label(flags['urlparse'])
+		self.label1 = Gtk.Label('Original Input : {}'.format(flags['url']))
 		self.notebook = Gtk.Notebook()
 		
 		tabs = ('dns', 'whois', 'ssl', 'prop')
@@ -1043,14 +1046,17 @@ class DomainInfoDialog(Gtk.Dialog):
 				for part in flags[tab]:
 					txt += '{}\n'.format(part)
 			else:
-				txt = '{}\n'.format(flags[tab])
+				txt = flags[tab]
 			label = Gtk.Label(label='  {}  '.format(tab.upper()))
 			self.notebook.append_page(self.create_textview(txt), label)
 			
-		self.box.add(label)
 		self.box.add(self.notebook)
-		
+		self.box.add(self.label1)
 		self.show_all()
+		
+	def create_box(self, tab):
+		box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+		return box
 			
 	def create_textview(self, txt):
 		scrolledwindow = Gtk.ScrolledWindow()
