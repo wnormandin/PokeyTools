@@ -8,10 +8,12 @@
       <menuitem action='FileQuit' />
     </menu>
     <menu action='DataMenu'>
-      <menuitem action='DomainReports' />
       <menuitem action='DataDeduplicate' />
       <menuitem action='CloneAHKLib' />
       <menuitem action='CSVExport' />
+    </menu>
+    <menu action='DomainMenu'>
+      <menuitem action='DomainReports' />
     </menu>
     <menu action='OptionMenu'>
       <menuitem action='DebugMode' />

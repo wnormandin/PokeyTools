@@ -553,27 +553,17 @@ def sl_find_lines(keyword, user, _file):
 						_lines.append('<br>{}'.format(sl_clean_line(_line.rstrip())))
 				break
 	f.close()
-	
-	if len(_lines)>0:
-		hgt_logger.debug('\t Added {} lines to output'.format(len(_lines)))
 		
 	return _lines
 
 # Filter paths for room or user as specified
 def sl_filter_rooms(_path, room, user):
-	
 	found = False
-	
 	if ((room=='Chat Room'or room==None) and (user=='User LDAP' or user==None)):
 		found = True
 	else:
-		if (_path.find(user) > 0 ):
-			hgt_logger.debug("\t Found {0} in {1}".format(user, os.path.basename(_path)))
+		if (_path.find(user) > 0 or _path.find(room) > 0):
 			found = True
-		if (_path.find(room) > 0):
-			hgt_logger.debug("\t Found {0} in {1}".format(room, os.path.basename(_path)))
-			found = True
-			
 	return found
 		
 # Calculate the date to return
@@ -1220,6 +1210,7 @@ class MainWindow(Gtk.Window):
 			self.add_file_menu_actions(self.action_group)
 			self.add_data_menu_actions(self.action_group)
 			self.add_option_menu_actions(self.action_group)
+			self.add_domain_menu_actions(self.action_group)
 				
 			# Create ui manager and attach actions
 			uimanager = self.create_ui_manager()
@@ -1312,8 +1303,6 @@ class MainWindow(Gtk.Window):
 	def add_data_menu_actions(self, action_group):
 		action_group.add_actions([
 			("DataMenu", None, " Data |"),
-			("DomainReports", None, "Domain Reports", None, None,
-				self.on_domain_reports),
 			("DataDeduplicate", None, "Deduplicate", None, None,
 				self.on_menu_deduplicate),
 			("CloneAHKLib", None, "Add AHK library to database", None, None,
@@ -1356,6 +1345,12 @@ class MainWindow(Gtk.Window):
 		dialog.destroy()
 		self.status_update()
 		
+	def add_domain_menu_actions(self, action_group):
+		action_group.add_actions([
+			("DomainMenu", None, " Domains |"),
+			("DomainReports", None, "Domain Reports", None, None,
+				self.on_domain_reports)])
+				
 	def add_option_menu_actions(self, action_group):
 		action_group.add_actions([
 			("OptionMenu", None, " Options |"),
