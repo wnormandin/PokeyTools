@@ -82,8 +82,9 @@ def setup_logger(name, level, file_loc):
 def user_main(user=ENV_USER):
 	
 	if user_first_logon(user):
-		hgt_logger.debug('[*] First user logon detected : {}'.format(user))
+		hgt_logger.info('[*] First user logon detected : {}'.format(user))
 		user_db_add(user)
+		sys_create_alias()
 	msg = 'hgtools_gtk accessed'
 	user_db_log(msg, user)
 	hgt_logger.debug('\t User Permission Level : {}'.format(USER_LEVEL))
@@ -108,16 +109,37 @@ def user_db_add(user):
 	str_sql = 'INSERT INTO hgtools_users (user_ldap, user_level, user_group) '
 	str_sql += 'VALUES ("{}", "{}", "{}");'.format(user, 'USER', 'NEW_USERS')
 	hgt_query(str_sql)
-	hgt_logger.debug('[*] User {} added to hgtools_users'.format(user))
+	hgt_logger.info('[*] User {} added to hgtools_users'.format(user))
 	
 def user_db_log(msg, user):
 	str_sql = 'INSERT INTO hgtools_log (log_type, log_text) '
 	str_sql += 'VALUES ("{}", "{}");'.format(user, msg)
 	hgt_query(str_sql) 
-	hgt_logger.debug('[*] DB Log Record Created > hgtools_log')
+	hgt_logger.info('[*] DB Log Record Created > hgtools_log')
 
 #************************/User Functions********************************
 
+#************************System Functions*******************************
+
+def sys_create_alias():
+	bashrc_path = '{}.bashrc'.format(os.path.expanduser('~/'))
+	bashrc_alias = "alias hgtools='nohup python {}/hgtools_gtk.py > /dev/null 2>&1 &'"
+	
+	with open(bashrc_path) as bashrc_file:
+		found = False
+		for line in bashrc_file:
+			if bashrc_alias in line:
+				found = True
+				break
+	
+	if not found:
+		hgt_logger.info('[*] Adding alias :')
+		cmnd='echo "{}" >> {}'.format(bashrc_alias, bashrc_path)
+		hgt_logger.debug('\t Command : {}'.format(cmnd))
+		subprocess.call(cmnd, shell=True)	# Safe since input is curated
+	else:
+		hgt_logger.info('[*] Alias Found!')
+		
 #**************************Domain Tools*********************************
 
 def dmn_main():
@@ -192,7 +214,7 @@ def dmn_whois(flags):
 	flags['whois'] = dmn_run_cmd(cmd).splitlines()
 	
 def dmn_run_cmd(cmd):
-	hgt_logger.debug('[*] Running command : {}'.format(cmd))
+	hgt_logger.info('[*] Running command : {}'.format(cmd))
 	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
 	retval = p.communicate()[0]
 	return retval
@@ -250,7 +272,7 @@ def dmn_prop_append(flags, loc, ip):
 
 def iahk_import_ahk():
 	
-	hgt_logger.debug('[*] Importing User AHKs')
+	hgt_logger.info('[*] Importing User AHKs')
 
 	conf_path = '{}/.config/autokey/autokey.json'.format(expanduser('~'))
 	ahk_paths = []
@@ -395,7 +417,7 @@ def hgfix_main(txt, destination):
 
 def sl_main(date, term, keyword, user, room):
 	
-	hgt_logger.debug('[*] Spark Log Search started')
+	hgt_logger.info('[*] Spark Log Search started')
 	hgt_logger.debug('\t date : {} | term : {} | keyword : {} |'.format(date, term, keyword))
 	hgt_logger.debug('\t user : {} | room : {} |'.format(user, room))
 	
@@ -587,7 +609,7 @@ favicon = hgt_resource_path("./images/snappyfav.png")
 # Function to open the PassChats file 
 def pc_addline(arg1, pl=PASS_LIST):
 
-	hgt_logger.debug('[*] Opening {}'.format(pl))
+	hgt_logger.info('[*] Opening {}'.format(pl))
 	
 	with open(pl, "a") as passlist:
 		passlist.write("{}\n".format(arg1))
@@ -599,7 +621,7 @@ def pc_addline(arg1, pl=PASS_LIST):
 # Function to open and return PassChats file contents
 def pc_readlines(pl=PASS_LIST):
 
-	hgt_logger.debug('[*] Opening {}'.format(pl))
+	hgt_logger.info('[*] Opening {}'.format(pl))
 	
 	with open(PASS_LIST, "r") as passlist:
 		hgt_logger.debug('\tReading lines...')
@@ -616,14 +638,14 @@ def pc_pass_req(chats, lines):
 	
 	ex_flag=False
 
-	hgt_logger.debug('[*] Testing dBus connection')
+	hgt_logger.info('[*] Testing dBus connection')
 
 	bus = dbus.SessionBus()
 	obj = bus.get_object("im.pidgin.purple.PurpleService", 
 						"/im/pidgin/purple/PurpleObject")
 	purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
 	
-	hgt_logger.debug('[*] Finding Pidgin Accounts')
+	hgt_logger.info('[*] Finding Pidgin Accounts')
 	
 	for acct in purple.PurpleAccountsGetAllActive():
 		
@@ -643,7 +665,7 @@ def pc_pass_req(chats, lines):
 					if buddy_name==line+DOM_SUFFIX:
 						
 						hgt_logger.debug('\tBuddy Found!')
-						hgt_logger.debug('[*] Attempting to message user :{}'.format(buddy_name))
+						hgt_logger.info('[*] Attempting to message user :{}'.format(buddy_name))
 							
 						conv = purple.PurpleConversationNew(1, acct, buddy_name)
 						im = purple.PurpleConvIm(conv)
@@ -663,7 +685,7 @@ def pc_do_test(dbg):
 	buddy_count = 0
 	acct_count = 0
 	
-	hgt_logger.debug('[*] Testing dBus connection')
+	hgt_logger.info('[*] Testing dBus connection')
 	
 	bus = dbus.SessionBus()
 	
@@ -673,7 +695,7 @@ def pc_do_test(dbg):
 		purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
 		
 		hgt_logger.debug('\tSuccess...')
-		hgt_logger.debug('[*] Checking for available Pidgin Buddies')
+		hgt_logger.info('[*] Checking for available Pidgin Buddies')
 		
 		for account in purple.PurpleAccountsGetAllActive():
 			for buddy in purple.PurpleFindBuddies(account, ''):
@@ -1376,7 +1398,7 @@ class MainWindow(Gtk.Window):
 			hgt_logger.setLevel(logging.WARNING)
 			
 	def on_clone_ahks(self, menuitem):
-		hgt_logger.debug('[*] Cloning user autokeys')
+		hgt_logger.info('[*] Cloning user autokeys')
 		
 		# Prompt with mass upload warning
 		nf_win = InfoDialog(self, "Notice", 'This may take a few minutes.')
@@ -1505,9 +1527,9 @@ class MainWindow(Gtk.Window):
 		hgt_logger.debug("[*] log_button clicked")
 		log_win = LogViewWindow()
 		log_win.connect("delete-event", Gtk.main_quit)
-		hgt_logger.debug('[*] Showing LogViewWindow')
+		hgt_logger.info('[*] Showing LogViewWindow')
 		log_win.show_all()
-		hgt_logger.debug('[*] Entering Gtk.main()')
+		hgt_logger.info('[*] Entering Gtk.main()')
 		Gtk.main()
 		
 	def pc_add_button_exec(self, widget):
@@ -1589,7 +1611,7 @@ class MainWindow(Gtk.Window):
 	# Window Format
 
 	def box_config(self, menubar, grid, widgets):
-		hgt_logger.debug('[*] Configuring Boxes')
+		hgt_logger.info('[*] Configuring Boxes')
 		
 		hgt_top_grid = Gtk.Grid()
 
@@ -1638,13 +1660,11 @@ class MainWindow(Gtk.Window):
 		menu_box.set_homogeneous(False)
 		
 	def on_hgt_restype_toggled(self, radio, name):
-		
 		if radio.get_active():
 			hgt_logger.debug('\t {}'.format(name))
 			self.selected['hgt_rtype']=name
 		
 	def on_hgt_dest_toggled(self, radio, name):
-		
 		if radio.get_active():
 			hgt_logger.debug('\t {}'.format(name))
 			self.selected['hgt_dest']=name
@@ -1850,7 +1870,7 @@ class MainWindow(Gtk.Window):
 		menu_box.pack_start(menu_log_button, True, True, 1)
 		
 	def widget_config(self):
-		hgt_logger.debug('[*] Configuring Widgets')
+		hgt_logger.info('[*] Configuring Widgets')
 		
 		# Button 	=	(name, label, tooltip, signal)
 		# Combo	Box	=	(name, values (default 1st), tooltip, signal)
@@ -1879,6 +1899,10 @@ class MainWindow(Gtk.Window):
 		hgt_widget.append(('pc_chats_combo', pc_chats_combo_values,
 							'The number of chats your\npass_chat message will show',
 							["changed", self.pc_chats_combo_changed]))
+							
+		# pc_msg_box widget (Entry Box)
+		hgt_widget.append(('pc_msg_box', 'Custom Message',
+							"Enter a custom message to the\nusers in your list"))
 							
 		# pc_chatlist_treeview (Selectable TreeView list)
 		hgt_widget.append(('pc_chatlist_treeview', 
@@ -1970,7 +1994,6 @@ class MainWindow(Gtk.Window):
 		hgt_widget.append(('menu_log_button', 'View Logs', 
 							'Displays the file last_run.log', 
 							["clicked", self.menu_log_button_exec]))
-		
 		return hgt_widget
 		
 	def hgt_button_exec(self, widget):
@@ -2048,7 +2071,7 @@ class SearchResultDialog(Gtk.Dialog):
 		scrollable_treelist = Gtk.ScrolledWindow()
 		scrollable_treelist.set_vexpand(True)
 		scrollable_treelist.set_hexpand(True)
-		scrollable_treelist.set_border_width(10)
+		scrollable_treelist.set_border_width(5)
 		scrollable_treelist.add(tree)
 		
 		self.set_border_width(1)

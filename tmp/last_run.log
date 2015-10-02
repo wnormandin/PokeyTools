@@ -1,36 +1,44 @@
-2015-10-01 23:19:12,517 | DEBUG | hgt_lib >> 	 Database query took 0.000749 seconds
-2015-10-01 23:19:12,638 | DEBUG | hgt_lib >> 	 Database query took 0.000694 seconds
-2015-10-01 23:19:12,638 | DEBUG | hgt_lib >> [*] DB Log Record Created > hgtools_log
-2015-10-01 23:19:12,638 | DEBUG | hgt_lib >> 	 User Permission Level : ADMIN
-2015-10-01 23:19:12,660 | DEBUG | hgt_lib >> [*] Configuring Widgets
-2015-10-01 23:19:12,660 | DEBUG | hgt_lib >> 	pc_section_widgets
-2015-10-01 23:19:12,660 | DEBUG | hgt_lib >> [*] Opening ./lib/pc_list.txt
-2015-10-01 23:19:12,662 | DEBUG | hgt_lib >> 	Reading lines...
-2015-10-01 23:19:12,662 | DEBUG | hgt_lib >> 	Read 1 lines
-2015-10-01 23:19:12,662 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
-2015-10-01 23:19:12,663 | DEBUG | hgt_lib >> 	sl_section_widgets
-2015-10-01 23:19:12,663 | DEBUG | hgt_lib >> 	hgt_section_widgets
-2015-10-01 23:19:12,663 | DEBUG | hgt_lib >> 	menu_section_widgets
-2015-10-01 23:19:12,663 | DEBUG | hgt_lib >> [*] Configuring Boxes
-2015-10-01 23:19:12,663 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
-2015-10-01 23:19:12,663 | DEBUG | hgt_lib >> 	 pc_box_build
-2015-10-01 23:19:12,665 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
-2015-10-01 23:19:12,665 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
-2015-10-01 23:19:12,878 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
-2015-10-01 23:19:12,878 | DEBUG | hgt_lib >> 	sl_box_build
-2015-10-01 23:19:12,879 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
-2015-10-01 23:19:12,879 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
-2015-10-01 23:19:12,880 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
-2015-10-01 23:19:12,880 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
-2015-10-01 23:19:12,881 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
-2015-10-01 23:19:12,881 | DEBUG | hgt_lib >> 	 hgt_box_build
-2015-10-01 23:19:12,881 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-10-01 23:19:12,882 | DEBUG | hgt_lib >> 	 2
-2015-10-01 23:19:12,882 | DEBUG | hgt_lib >> 	 hgt_opt_box
-2015-10-01 23:19:12,883 | DEBUG | hgt_lib >> 	 2
-2015-10-01 23:19:12,883 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
-2015-10-01 23:19:12,883 | DEBUG | hgt_lib >> 	 menu_box_build
-2015-10-01 23:19:12,883 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
-2015-10-01 23:19:12,883 | DEBUG | hgtools_gtk >> [*] Showing Window
-2015-10-01 23:19:13,447 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
-2015-10-01 23:19:20,904 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked
+2015-10-02 07:43:57,020 | INFO | hgt_lib >> [*] DB Log Record Created > hgtools_log
+2015-10-02 07:43:57,047 | INFO | hgt_lib >> [*] Configuring Widgets
+2015-10-02 07:43:57,047 | DEBUG | hgt_lib >> 	pc_section_widgets
+2015-10-02 07:43:57,047 | INFO | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-10-02 07:43:57,050 | DEBUG | hgt_lib >> 	Reading lines...
+2015-10-02 07:43:57,050 | DEBUG | hgt_lib >> 	Read 1 lines
+2015-10-02 07:43:57,050 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-10-02 07:43:57,050 | DEBUG | hgt_lib >> 	sl_section_widgets
+2015-10-02 07:43:57,050 | DEBUG | hgt_lib >> 	hgt_section_widgets
+2015-10-02 07:43:57,050 | DEBUG | hgt_lib >> 	menu_section_widgets
+2015-10-02 07:43:57,051 | INFO | hgt_lib >> [*] Configuring Boxes
+2015-10-02 07:43:57,051 | DEBUG | hgt_lib >> 	 len(pc_widgets) : 7
+2015-10-02 07:43:57,051 | DEBUG | hgt_lib >> 	 pc_box_build
+2015-10-02 07:43:57,053 | DEBUG | hgt_lib >> [*] MainWindow > Chat Count combo changed
+2015-10-02 07:43:57,053 | DEBUG | hgt_lib >> 	 Selected Chat Count = # of Chats
+2015-10-02 07:43:57,291 | DEBUG | hgt_lib >> 	 len(sl_widgets) : 7
+2015-10-02 07:43:57,291 | DEBUG | hgt_lib >> 	sl_box_build
+2015-10-02 07:43:57,292 | DEBUG | hgt_lib >> [*] MainWindow > Month Count combo changed
+2015-10-02 07:43:57,292 | DEBUG | hgt_lib >> 	 Selected Term  = # of Months months
+2015-10-02 07:43:57,293 | DEBUG | hgt_lib >> [*] MainWindow > Chatroom combo changed
+2015-10-02 07:43:57,293 | DEBUG | hgt_lib >> 	 Selected Chatroom = Chat Room
+2015-10-02 07:43:57,293 | DEBUG | hgt_lib >> 	 len(hgt_widgets) : 2
+2015-10-02 07:43:57,293 | DEBUG | hgt_lib >> 	 hgt_box_build
+2015-10-02 07:43:57,294 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-10-02 07:43:57,295 | DEBUG | hgt_lib >> 	 2
+2015-10-02 07:43:57,295 | DEBUG | hgt_lib >> 	 hgt_opt_box
+2015-10-02 07:43:57,295 | DEBUG | hgt_lib >> 	 2
+2015-10-02 07:43:57,295 | DEBUG | hgt_lib >> 	 len(menu_widgets) : 2
+2015-10-02 07:43:57,295 | DEBUG | hgt_lib >> 	 menu_box_build
+2015-10-02 07:43:57,296 | DEBUG | hgt_lib >> [*] HGTools GUI spawned
+2015-10-02 07:43:57,296 | DEBUG | hgtools_gtk >> [*] Showing Window
+2015-10-02 07:43:57,828 | DEBUG | hgtools_gtk >> [*] Entering Gtk.main()
+2015-10-02 07:44:22,228 | DEBUG | hgt_lib >> [*] log_button clicked
+2015-10-02 07:44:22,256 | INFO | hgt_lib >> [*] Showing LogViewWindow
+2015-10-02 07:44:22,274 | INFO | hgt_lib >> [*] Entering Gtk.main()
+2015-10-02 07:44:46,172 | DEBUG | hgt_lib >> [*] add_button clicked
+2015-10-02 07:44:46,174 | INFO | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-10-02 07:44:46,176 | DEBUG | hgt_lib >> 	Added : dcole
+2015-10-02 07:44:46,184 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-10-02 07:44:46,184 | INFO | hgt_lib >> [*] Opening ./lib/pc_list.txt
+2015-10-02 07:44:46,191 | DEBUG | hgt_lib >> 	Reading lines...
+2015-10-02 07:44:46,191 | DEBUG | hgt_lib >> 	Read 2 lines
+2015-10-02 07:44:46,191 | DEBUG | hgt_lib >> 	./lib/pc_list.txt closed
+2015-10-02 08:19:19,736 | DEBUG | hgt_lib >> [*] MainWindow > Close button clicked

@@ -15,7 +15,7 @@ _PATH = '/dev/.spark_log/lib/sparklib.txt'
 # _PATH = './lib/sparklib.txt'
 	
 # Create logger, default to logging.DEBUG
-hgt_logger = setup_logger('hgtools_gtk.py', logging.DEBUG, LOG_PATH)
+hgt_logger = setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
 	
 #*****************************END LOGGING*******************************
 
