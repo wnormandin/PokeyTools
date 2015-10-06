@@ -589,7 +589,7 @@ def sl_filter_rooms(_path, room, user):
 			found = True
 	return found
 		
-# Calculate the date to return
+# Calculate the date to return (SL section)
 def monthdelta(date, delta):
 	m, y = (date.month-delta) % 12, date.year + ((date.month)-delta-1) // 12
 	if not m: m = 12
@@ -678,7 +678,6 @@ def pc_pass_req(chats, lines):
 def pc_build_msg(opt):
 	msg = "\nCurrently I have : " + opt + " chats to pass.\nPlease reply if you can assist!\n"
 	msg = msg + "\n\t[*] This has been an automated chat pass request."
-	hgt_logger.debug('\tMessage :\t{}'.format(msg))
 	return msg
 
 def pc_do_test(dbg):
