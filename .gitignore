@@ -4,8 +4,7 @@
 
 # Temporary files
 ########################
-tmp/.
-last_run.log
+tmp/
 
 # Log files
 ########################
