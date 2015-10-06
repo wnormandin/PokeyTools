@@ -66,13 +66,7 @@ class MainWindow(Gtk.Window):
 			hgt_logger.debug("[*] HGTools GUI spawned")
 			
 		except Exception as e:
-			
-			raise
-			#if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
-			#	nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
-			#	response = nf_win.run()
-			#	nf_win.destroy()
-			#hgt_logger.error('[*] Details - {:}'.format(*e))
+			err_raise(e)
 			
 #***********************************************************************
 #***************************Window Config*******************************
@@ -95,12 +89,7 @@ class MainWindow(Gtk.Window):
 			return uimanager
 			
 		except Exception as e:
-			if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
-				nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
-				response = nf_win.run()
-				nf_win.destroy()
-				raise
-			hgt_logger.error('[*] Details - {:}'.format(*e))
+			err_raise(e)
 			
 	def box_config(self, menubar, grid, widgets):
 		hgt_logger.info('[*] Configuring Boxes')
@@ -171,9 +160,14 @@ class MainWindow(Gtk.Window):
 		self.pc_chats_combo.add_attribute(self.renderer_text, "text", 0)
 		self.pc_chats_combo.set_active(0)
 		
+		# pc_msg_box
+		self.pc_msg_box = Gtk.Entry()
+		self.pc_msg_box.set_text(pc_widgets[2][1])
+		self.pc_msg_box.set_tooltip_text(pc_widgets[2][2])
+		
 		# pc_chatlist_store
 		self.pc_chatlist_store = Gtk.ListStore(str)
-		for item in pc_widgets[2][1]:
+		for item in pc_widgets[3][1]:
 			self.pc_chatlist_store.append([item])
 		self.pc_chatlist_treeview = Gtk.TreeView(self.pc_chatlist_store)
 		self.renderer = Gtk.CellRendererText()
@@ -210,6 +204,7 @@ class MainWindow(Gtk.Window):
 		
 		self.pc_box.pack_start(self.pc_label, True, True, 1)
 		self.pc_box.pack_start(self.pc_chats_combo, True, True, 1)
+		self.pc_box.pack_start(self.pc_msg_box, True, True, 1)
 		self.pc_box.pack_start(self.pc_chatlist_treeview, True, True, 1)
 		self.pc_box.pack_start(self.pc_remove_button, True, True, 1)
 		self.pc_box.pack_start(self.pc_subbox, True, True, 1)
@@ -477,6 +472,16 @@ class MainWindow(Gtk.Window):
 							'Displays the file last_run.log', 
 							["clicked", self.menu_log_button_exec]))
 		return hgt_widget
+		
+	def err_raise(e):
+		hgt_logger.error("[*] Exception Captured")
+		if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
+			nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
+			response = nf_win.run()
+			nf_win.destroy()
+		else:
+			raise
+		hgt_logger.error('[*] Details - {:}'.format(*e))
 					
 #***********************************************************************
 #***************************Dialog Config*******************************
@@ -569,7 +574,6 @@ class MainWindow(Gtk.Window):
 	def on_maxprocs_changed(self, widget, current):
 		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()[-1]))
 		global MAX_PROC
-		global MAX_PROC
 		MAX_PROC = int(current.get_name()[-1])
 			
 	def on_multiproc(self, widget):
@@ -634,14 +638,6 @@ class MainWindow(Gtk.Window):
 		keys_to_select = ('user', 'room', 'date', 'keyword', 'term')
 		sl_vars = dict((k, self.selected[k]) for k in keys_to_select)			
 		sl_main(**sl_vars)
-		
-			# Arguments : (key - default - description)
-	#
-	#			date 	- None 	- Specific date (supercedes term)
-	#			term 	- 3 	- Search depth in months
-	#			room 	- None	- Search a specific chat room
-	#			user 	- None 	- Search for a specific user
-	#			keyword	- None	- Search for a keyword
 		
 	def sl_chatroom_combo_changed(self, combo):
 		# Chatroom Combo Changed
@@ -797,7 +793,7 @@ class MainWindow(Gtk.Window):
 						hgt_logger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
 						
 					except Exception as e:
-						raise
+						err_raise(e)
 				else:
 					hgt_logger.debug("\t User Cancelled Dialog")
 					search_win.destroy()
@@ -814,7 +810,6 @@ class MainWindow(Gtk.Window):
 			response = nf_win.run()
 			nf_win.destroy()
 			
-
 #***********************************************************************
 #***************************MenuBar Actions*****************************
 			
@@ -873,6 +868,9 @@ class MainWindow(Gtk.Window):
 			("Choice4", None, "4 Max", None, None, 2),
 			("Choice5", None, "5 Max", None, None, 3)
 			], 1, self.on_maxprocs_changed)
+			
+#***********************************************************************
+#***************************END MAIN WINDOW*****************************
 			
 class DedupeSelectionWindow(Gtk.Window):
 	
