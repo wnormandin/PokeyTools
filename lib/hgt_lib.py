@@ -196,9 +196,9 @@ def dmn_parse(flags):
 			flags['pass']=False
 	
 def dmn_dig(flags):
-	digs = ('A', 'NS', 'TXT', 'MX')
+	digs = ('A', 'NS', 'TXT', 'MX', 'CNAME')
 	for dig in digs:
-		cmd = 'dig {} {} +nocomments +noadditional +noauthority'.format(flags['domain'], dig)
+		cmd = 'timeout 3 dig {} {} +nocomments +noadditional +noauthority'.format(flags['domain'], dig)
 		flags['dns']+=dmn_dig_parse(dmn_run_cmd(cmd))
 	
 def dmn_dig_parse(retval):
@@ -264,9 +264,9 @@ def dmn_prop_append(flags, loc, ip):
 #	If user has custom script folders :
 #	Location in file :
 #	"folders": [
-#       "/home/wnormandin/dev/scripts/AHKs",
-#        "/home/wnormandin/dev/scripts/AHKs/Scripts",
-#        "/home/wnormandin/dev/scripts/AHKs/Tickets"
+#       "CUSTOM"
+#       "FOLDER"
+#       "PATHS"
 #    ]
 #
 #	Otherwise AHKs are in ~/.config/autokey/data

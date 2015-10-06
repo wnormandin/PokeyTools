@@ -329,10 +329,10 @@ def dd_jarwink(arg1, arg2):
 	# Check for bonus criteria :
 	#
 	# Set the PREFIX_LEN to 0 to apply the bonus to all comparisons
-	# where the Jaro Distance is greater than the Boost Threshold
+	# where the Jaro Distance is less than the Boost Threshold
 	# stored in the global variable BOOST_THRESH
 	
-	if (prefix_len<=0 and jaro_dist > BOOST_THRESH):
+	if (prefix_len<=0 and jaro_dist < BOOST_THRESH):
 		
 		bonus = PREFIX_VAL*(1-jaro_dist)
 		
@@ -533,18 +533,17 @@ def dd_jw_prefix(arg1, arg2):
 		else:
 			break
 			
-	dd_logger.debug('Prefix matches : %s' % ''.join(match_list))		
-	dd_logger.debug('prefix_len : %s' % str(retval))
+	dd_logger.debug('Prefix matches : {}'.format(match_list))		
+	dd_logger.debug('prefix_len : {}'.format(retval))
 	
 	return retval
 	
 # Prints the strings and their lengths
 def print_lengths(arg1, arg2):
-
-	dd_logger.debug('STRING_1 	: %s' % arg1)
-	dd_logger.debug('LENGTH	: %s' % str(len(arg1)))
-	dd_logger.debug('STRING_2	: %s' % arg2)
-	dd_logger.debug('LENGTH	: %s' % str(len(arg2))	)
+	dd_logger.debug('STRING_1\t: {}'.format(arg1))
+	dd_logger.debug('LENGTH\t: {}'.format(len(arg1)))
+	dd_logger.debug('STRING_2\t: {}'.format(arg2))
+	dd_logger.debug('LENGTH\t: {}'.format(len(arg2)))
 
 # Tabular print function for dd_runall, dd_match
 def print_table(labels, values):
@@ -552,7 +551,7 @@ def print_table(labels, values):
 	col_width = max(max_width(labels), max_width(values), max_width(COL_HEADERS))
 	
 	dd_logger.debug('Generating Table')
-	dd_logger.debug('Max column width : %s' % str(col_width+1))
+	dd_logger.debug('Max column width : {}'.format(col_width+1))
 	
 	line=''	
 	for c in COL_HEADERS:
@@ -590,7 +589,7 @@ def collect_results(result):
 def match_process(arg1, arg2, match_thresh):
 	
 	if MULTI_PROC:
-		dd_logger.debug("PID %s spawned, parent PID %s" % (os.getpid(), os.getppid()))
+		dd_logger.debug("PID {} spawned, parent PID {}".format(os.getpid(), os.getppid()))
 		
 	result = list()
 	for row1 in arg1:
