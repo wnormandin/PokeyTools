@@ -657,7 +657,7 @@ class MainWindow(Gtk.Window):
 	def menu_log_button_exec(self, widget):
 		# Show the last_run log file
 		hgt_logger.debug("[*] log_button clicked")
-		log_win = LogViewWindow()
+		log_win = LogViewWindow(self)
 		log_win.connect("delete-event", Gtk.main_quit)
 		hgt_logger.info('[*] Showing LogViewWindow')
 		log_win.show_all()
@@ -874,9 +874,10 @@ class MainWindow(Gtk.Window):
 			
 class DedupeSelectionWindow(Gtk.Window):
 	
-	def __init__(self, liststore, stats):
+	def __init__(self, parent, liststore, stats):
 	
 		Gtk.Window.__init__(self, title="HGTools Deduplication Window")
+		self.set_transient_for(parent)
 		hgt_logger.debug("HGTools Deduplication Window")
 		hgt_logger.debug("Building grid")
 		# Set Window/Grid attributes
@@ -1066,6 +1067,7 @@ class InfoDialog(Gtk.Dialog):
 	def __init__(self, parent, ttl, msg):
 		Gtk.Dialog.__init__(self, ttl, parent, 0,
 			(Gtk.STOCK_OK, Gtk.ResponseType.OK))
+		self.set_transient_for(parent)
 
 		self.set_default_size(150, 100)
 		self.set_icon_from_file(favicon)
@@ -1102,8 +1104,9 @@ class LogViewWindow(Gtk.Window):
 	
 	global favicon
 	
-	def __init__(self):
+	def __init__(self, parent):
 		Gtk.Window.__init__(self, title=LAST_RUN_PATH)
+		self.set_transient_for(parent)
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.set_icon_from_file(favicon)
 
