@@ -28,12 +28,15 @@ class MainWindow(Gtk.Window):
 	def __init__(self, level=logging.DEBUG):
 		
 		try:
+			hgt_logger.setLevel(level)
+			
 			## USER INIT
-			user_main()
+			hgt_logger.debug('[*] Loading User...')
+			USER_LEVEL = user_main()
 			
 			## WINDOW INIT
 			self.status_update()
-			hgt_logger.setLevel(level)
+			
 			self.selected = {}
 			self.set_name("hgt_window") # Set CSS-Equivalent ID
 			self.set_icon_from_file(favicon)
@@ -680,8 +683,8 @@ class MainWindow(Gtk.Window):
 		self.pc_list_refresh(widget)
 	
 	def menu_init(self):
-		disabled = ('FileNewStandard', 'DataDeduplicate',
-							'CloneAHKLib')
+		disabled = ('FileNewStandard', 'DataDeduplicate')#,
+							#'CloneAHKLib')
 		if USER_LEVEL != 'ADMIN':
 			for action in disabled:
 				this_act = self.action_group.get_action(action)

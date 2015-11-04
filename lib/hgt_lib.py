@@ -42,7 +42,7 @@ CSS_PATH = './lib/hgt_win_style.css'
 UI_INFO_PATH = './lib/ui_info.xml'
 
 # User Administration
-USER_LEVEL = 'USER'
+USER_LEVEL = ''
 VERS = 0.1
 
 #******************************/GLOBALS*********************************
@@ -57,7 +57,7 @@ def setup_logger(name, level, file_loc):
 	logger.setLevel(level)
 	
 	# Create the formatters
-	file_formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(module)s >> %(message)s')
+	file_formatter = logging.Formatter('%(asctime)s %(levelname)s\t%(message)s', '%d-%m-%Y %H:%M:%S')
 	cons_formatter = logging.StreamHandler('%(message)s')
 	
 	# Create the handlers
@@ -82,29 +82,27 @@ def setup_logger(name, level, file_loc):
 
 def user_main(user=ENV_USER):
 	
-	if user_first_logon(user):
+	first_flag, u_lvl = user_first_logon(user)
+	if first_flag:
 		hgt_logger.info('[*] First user logon detected : {}'.format(user))
 		user_db_add(user)
 		sys_create_alias()
 	msg = 'hgtools_gtk accessed'
 	user_db_log(msg, user)
-	hgt_logger.debug('\t User Permission Level : {}'.format(USER_LEVEL))
+	hgt_logger.debug('\t User Permission Level : {}'.format(u_lvl))
+	return u_lvl
 		
 def user_first_logon(user):
 	
 	str_sql = 'SELECT user_level FROM hgtools_users '
 	str_sql += 'WHERE user_ldap="{}"'.format(user)
-	
-	global USER_LEVEL
-	
 	result = hgt_query(str_sql)
 	
-	if result:
-		USER_LEVEL = result.strip('\n')
-		return False
-	else:
-		USER_LEVEL = 'USER'
-		return True
+	try:
+		hgt_logger.debug('\t User found! Access : {}'.format(result.strip('\n')))
+		return False, result.strip('\n')
+	except:
+		return True, 'USER'
 	
 def user_db_add(user):
 	str_sql = 'INSERT INTO hgtools_users (user_ldap, user_level, user_group) '
