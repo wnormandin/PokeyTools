@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-from lib.hgt_lib import *
-from lib.hgt_cls import *
+import lib.hgt_lib as hgt_lib
+import lib.hgt_cls as hgt_cls
 #from lib.dedupe import *
 from gi.repository import Gtk
 
