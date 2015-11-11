@@ -69,8 +69,8 @@ class MainWindow(Gtk.Window):
 			hgt_logger.debug("[*] HGTools GUI spawned")
 			
 		except Exception as e:
-			err_raise(e)
-			
+			raise
+						
 #***********************************************************************
 #***************************Window Config*******************************
 	def status_update(self, msg=None):

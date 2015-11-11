@@ -23,14 +23,16 @@ hgt_logger = setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
 def main():
 	
 	global favicon
-	
-	gtk_style()
-	win = MainWindow()
-	win.connect("delete-event", Gtk.main_quit)
-	hgt_logger.debug('[*] Showing Window')
-	win.show_all()
-	hgt_logger.debug('[*] Entering Gtk.main()')
-	Gtk.main()
+	try:
+		gtk_style()
+		win = MainWindow()
+		win.connect("delete-event", Gtk.main_quit)
+		hgt_logger.debug('[*] Showing Window')
+		win.show_all()
+		hgt_logger.debug('[*] Entering Gtk.main()')
+		Gtk.main()
+	except (KeyboardInterrupt, SystemExit):
+		Gtk.main_quit()
 	
 if __name__ == '__main__':
 	main()

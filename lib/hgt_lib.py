@@ -13,6 +13,7 @@ import urllib2
 import urllib
 from urlparse import urlparse
 from subprocess import Popen, PIPE
+from hgt_cls import *
 
 #******************************GLOBALS**********************************
 
