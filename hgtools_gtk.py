@@ -4,6 +4,7 @@ import lib.hgt_lib as hgt_lib
 import lib.hgt_cls as hgt_cls
 #from lib.dedupe import *
 from gi.repository import Gtk
+import time, logging
 
 #*******************************LOGGING*********************************
 
@@ -16,7 +17,7 @@ _PATH = '/dev/.spark_log/lib/sparklib.txt'
 # _PATH = './lib/sparklib.txt'
 	
 # Create logger, default to logging.DEBUG
-hgt_logger = setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
+hgt_logger = hgt_lib.setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
 	
 #*****************************END LOGGING*******************************
 
