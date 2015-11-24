@@ -602,7 +602,7 @@ def hgt_resource_path(rel_path):
 	abs_path_to_resource = os.path.abspath(rel_path_to_resource)
 	return abs_path_to_resource
 	
-favicon = hgt_resource_path("./images/snappyfav.png")
+favicon = hgt_resource_path("./resources/images/snappyfav.png")
 
 #******************************PASS_CHATS*******************************
     

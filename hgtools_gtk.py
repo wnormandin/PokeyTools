@@ -1,10 +1,41 @@
 #!/usr/bin/python
 
-import lib.hgt_lib as hgt_lib
-import lib.hgt_cls as hgt_cls
+from lib import *
 #from lib.dedupe import *
 from gi.repository import Gtk
-import time, logging
+import time, logging, getpass
+
+#******************************GLOBALS**********************************
+
+# Logging
+# Default logging configuration settings
+# https://docs.python.org/2/library/logging.html#logger-objects
+
+LAST_RUN_PATH = './tmp/last_run.log'
+hgt_logger = logging.getLogger('hgtools_gtk.py')
+
+#Pass_Chats Functionality
+PASS_LIST='./lib/pc_list.txt'
+DOM_SUFFIX='@openfire.houston.hostgator.com'
+PURPLE_CONV_TYPE_IM=1
+
+# Spark_Log Functionality
+
+MULTIPROC=True
+MAX_PROC=2
+
+# HGTools Functionality
+USER_SELECTION=0
+
+# GUI
+ENV_USER = getpass.getuser()
+CSS_PATH = './lib/hgt_win_style.css'
+UI_INFO_PATH = './lib/ui_info.xml'
+favicon = hgt_resource_path("./resources/images/snappyfav.png")
+
+# User Administration
+USER_LEVEL = ''
+VERS = 0.1
 
 #*******************************LOGGING*********************************
 
