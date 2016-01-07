@@ -31,7 +31,7 @@ USER_SELECTION=0
 ENV_USER = getpass.getuser()
 CSS_PATH = './lib/hgt_win_style.css'
 UI_INFO_PATH = './lib/ui_info.xml'
-favicon = hgt_resource_path("./resources/images/snappyfav.png")
+favicon = utils.hgt_resource_path("./resources/images/snappyfav.png")
 
 # User Administration
 USER_LEVEL = ''
@@ -48,7 +48,7 @@ _PATH = '/dev/.spark_log/lib/sparklib.txt'
 # _PATH = './lib/sparklib.txt'
 	
 # Create logger, default to logging.DEBUG
-hgt_logger = hgt_lib.setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
+hgt_logger = utils.setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
 	
 #*****************************END LOGGING*******************************
 
@@ -56,8 +56,8 @@ def main():
 	
 	global favicon
 	try:
-		gtk_style()
-		win = MainWindow()
+		gui.gtk_style(CSS_PATH)
+		win = gui.MainWindow(ENV_USER)
 		win.connect("delete-event", Gtk.main_quit)
 		hgt_logger.debug('[*] Showing Window')
 		win.show_all()

@@ -1,5 +1,9 @@
 #!/usr/bin/python
-#************************System Functions*******************************
+#************************Utility Functions******************************
+from HTMLParser import HTMLParser
+import os
+import logging
+
 def sys_create_alias():
 	bashrc_path = '{}.bashrc'.format(os.path.expanduser('~/'))
 	bashrc_alias = "alias hgtools='nohup python {}/hgtools_gtk.py > /dev/null 2>&1 &'"
@@ -35,7 +39,7 @@ def setup_logger(name, level, file_loc):
 	file_handler.setFormatter(file_formatter)
 	logger.addHandler(file_handler)
 	
-	last_run = logging.FileHandler(LAST_RUN_PATH, 'w')
+	last_run = logging.FileHandler('./tmp/last_run', 'w')
 	last_run.setFormatter(file_formatter)
 	logger.addHandler(last_run)
 	
@@ -173,7 +177,7 @@ def valid_date(s):
 		response = ve_win.run()
 		ve_win.destroy()
 		
-# Return path to a resource based on relative path passed
+# Return absolute path to a resource
 def hgt_resource_path(rel_path):
 	dir_of_py_file = os.path.dirname(__file__)
 	rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)

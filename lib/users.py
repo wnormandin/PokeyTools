@@ -1,8 +1,9 @@
 #!/usr/bin/python
 #************************User Functions*********************************
 # Functions to grant admin permissions to some users
+import dbsearch
 
-def user_main(user=ENV_USER):
+def user_main(user):
 	
 	first_flag, u_lvl = user_first_logon(user)
 	if first_flag:
@@ -18,7 +19,7 @@ def user_first_logon(user):
 	
 	str_sql = 'SELECT user_level FROM hgtools_users '
 	str_sql += 'WHERE user_ldap="{}"'.format(user)
-	result = hgt_query(str_sql)
+	result = dbsearch.hgt_query(str_sql)
 	
 	try:
 		hgt_logger.debug('\t User found! Access : {}'.format(result.strip('\n')))

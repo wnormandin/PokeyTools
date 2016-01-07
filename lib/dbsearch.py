@@ -1,5 +1,7 @@
 #!/usr/bin/python
 #********************************HGTOOLS********************************
+import time
+import subprocess
 
 #	Function takes str_sql, connects to the database, and returns 
 #	the passed query results.
@@ -11,7 +13,7 @@ def hgt_query(str_sql, qtype=''):
 	database='wnrmndn_hgtools'
 	host='hgtools.normandindev.net'
 	
-	cmd=['mysql', '-h', host, '-u', user, '-p%s'%password, '-D', 
+	cmd=['mysql', '-h', host, '-u', user, '-p{}'.format(password), '-D', 
 		database, '-Bse', str_sql]
 		
 	retval = subprocess.check_output(cmd)

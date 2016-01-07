@@ -1,12 +1,13 @@
 #!/usr/bin/python
 import logging
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
+import users
 
 #*********************************STYLE*********************************
-def gtk_style():
+def gtk_style(css_path):
 	
 	style_provider = Gtk.CssProvider()
-	css = open(CSS_PATH, 'rb')
+	css = open(css_path, 'rb')
 	css_data = css.read()
 	css.close()
 	style_provider.load_from_data(css_data)
@@ -43,14 +44,14 @@ class MainWindow(Gtk.Window):
 	global USER_SELECTION
 	global USER_LEVEL
 	
-	def __init__(self, level=logging.DEBUG):
+	def __init__(self, u, level=logging.DEBUG):
 		
 		try:
 			hgt_logger.setLevel(level)
 			
 			## USER INIT
 			hgt_logger.debug('[*] Loading User...')
-			USER_LEVEL = user_main()
+			USER_LEVEL = users.user_main(u)
 			
 			## WINDOW INIT
 			self.status_update()
