@@ -55,7 +55,7 @@ hgt_logger = utils.setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
 
 def main():
 	
-	parser = argparse.getparser()
+	parser = argparse.ArgumentParser()
 	
 	parser.add_argument("-d", "--debug", help="Enable Debugging mode",
                     action="store_true")
