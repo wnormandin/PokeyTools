@@ -2,6 +2,7 @@
 import logging
 from gi.repository import Gtk, Gdk
 import users
+import passchats
 
 #*********************************STYLE*********************************
 def gtk_style(css_path):
@@ -37,21 +38,20 @@ hgt_logger = logging.getLogger('hgtools_gtk.py')
 
 class MainWindow(Gtk.Window):
 
-	global favicon
-	global ENV_USER
 	global MAX_PROC
 	global MULTIPROC
 	global USER_SELECTION
-	global USER_LEVEL
 	
-	def __init__(self, u, level=logging.DEBUG):
+	def __init__(self, u, favicon, level=logging.DEBUG):
 		
 		try:
 			hgt_logger.setLevel(level)
 			
 			## USER INIT
 			hgt_logger.debug('[*] Loading User...')
-			USER_LEVEL = users.user_main(u)
+			self.user_level = users.user_main(u)
+			self.user = u
+			self.favicon = favicon
 			
 			## WINDOW INIT
 			self.status_update()
@@ -94,7 +94,7 @@ class MainWindow(Gtk.Window):
 #***************************Window Config*******************************
 	def status_update(self, msg=None):
 			if msg == None:
-				self.win_title = 'HG Tools | Welcome, {} ({})!'.format(ENV_USER, USER_LEVEL) 
+				self.win_title = 'HG Tools | Welcome, {} ({})!'.format(self.user, self.user_level) 
 			else:
 				self.win_title = msg
 			Gtk.Window.__init__(self, title=self.win_title)
@@ -111,7 +111,7 @@ class MainWindow(Gtk.Window):
 			return uimanager
 			
 		except Exception as e:
-			err_raise(e)
+			self.err_raise(e)
 			
 	def box_config(self, menubar, grid, widgets):
 		hgt_logger.info('[*] Configuring Boxes')
@@ -234,7 +234,7 @@ class MainWindow(Gtk.Window):
 		
 	def pc_list_refresh(self, widget):
 		store = Gtk.ListStore(str)
-		for item in pc_readlines():
+		for item in passchats.pc_readlines():
 			store.append([item])
 		self.pc_chatlist_treeview.set_model(store)
 		
@@ -405,7 +405,7 @@ class MainWindow(Gtk.Window):
 							
 		# pc_chatlist_treeview (Selectable TreeView list)
 		hgt_widget.append(('pc_chatlist_treeview', 
-							[line for line in pc_readlines()],
+							[line for line in passchats.pc_readlines()],
 							'Your list of agents to broadcast\nrequests to'))
 							
 		# pc_remove_button widget (Action Button)
@@ -495,10 +495,10 @@ class MainWindow(Gtk.Window):
 							["clicked", self.menu_log_button_exec]))
 		return hgt_widget
 		
-	def err_raise(e):
+	def err_raise(self,e):
 		hgt_logger.error("[*] Exception Captured")
 		if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
-			nf_win = InfoDialog(self, "Error", 'Details : {:}'.format(*e))
+			nf_win = InfoDialog(self.favicon, self, "Error", 'Details : {:}'.format(*e))
 			response = nf_win.run()
 			nf_win.destroy()
 		else:
@@ -704,7 +704,7 @@ class MainWindow(Gtk.Window):
 	def menu_init(self):
 		disabled = ('FileNewStandard', 'DataDeduplicate')#,
 							#'CloneAHKLib')
-		if USER_LEVEL != 'ADMIN':
+		if self.user_level != 'ADMIN':
 			for action in disabled:
 				this_act = self.action_group.get_action(action)
 				self.deactivate(this_act)
@@ -721,7 +721,7 @@ class MainWindow(Gtk.Window):
 		
 		if 'user_selected' in self.selected:
 			slctn = self.selected['user_selected']
-			lines = pc_readlines()
+			lines = passchats.pc_readlines()
 			with open(PASS_LIST, "w") as passlist:
 				for idx, val in enumerate(lines):
 					if val!=slctn:
@@ -1028,9 +1028,7 @@ class DedupeSelectionWindow(Gtk.Window):
 		
 class DomainInfoDialog(Gtk.Dialog):
 	
-	global favicon
-	
-	def __init__(self, parent, flags):
+	def __init__(self, parent, favicon, flags):
 		Gtk.Dialog.__init__(self, "Domain Name Information", parent,
 			Gtk.DialogFlags.MODAL, buttons=(
 			Gtk.STOCK_OK, Gtk.ResponseType.OK))
@@ -1074,10 +1072,8 @@ class DomainInfoDialog(Gtk.Dialog):
 		return scrolledwindow
 		
 class InfoDialog(Gtk.Dialog):
-	
-	global favicon
 
-	def __init__(self, parent, ttl, msg):
+	def __init__(self, favicon, parent, ttl, msg):
 		Gtk.Dialog.__init__(self, ttl, parent, 0,
 			(Gtk.STOCK_OK, Gtk.ResponseType.OK))
 		self.set_transient_for(parent)
@@ -1092,10 +1088,8 @@ class InfoDialog(Gtk.Dialog):
 		self.show_all()
 
 class SearchDialog(Gtk.Dialog):
-	
-	global favicon
 
-	def __init__(self, parent):
+	def __init__(self, parent, favicon):
 		Gtk.Dialog.__init__(self, "Search", parent,
 			Gtk.DialogFlags.MODAL, buttons=(
 			Gtk.STOCK_FIND, Gtk.ResponseType.OK,
@@ -1115,9 +1109,7 @@ class SearchDialog(Gtk.Dialog):
 
 class LogViewWindow(Gtk.Window):
 	
-	global favicon
-	
-	def __init__(self, parent):
+	def __init__(self, parent, favicon):
 		Gtk.Window.__init__(self, title=LAST_RUN_PATH)
 		self.set_transient_for(parent)
 		self.set_position(Gtk.WindowPosition.CENTER)

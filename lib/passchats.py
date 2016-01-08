@@ -1,8 +1,11 @@
 #!/usr/bin/python
 #******************************PASS_CHATS*******************************
+import logging
 
+PASS_LIST='./lib/pc_list.txt'
+hgt_logger = logging.getLogger('hgt_logger')
 # Function to open the PassChats file 
-def pc_addline(arg1, pl):
+def pc_addline(arg1, pl=PASS_LIST):
 
 	hgt_logger.info('[*] Opening {}'.format(pl))
 	
@@ -14,7 +17,7 @@ def pc_addline(arg1, pl):
 	hgt_logger.debug('\t{} closed'.format(pl))
 	
 # Function to open and return PassChats file contents
-def pc_readlines(pl):
+def pc_readlines(pl=PASS_LIST):
 
 	hgt_logger.info('[*] Opening {}'.format(pl))
 	

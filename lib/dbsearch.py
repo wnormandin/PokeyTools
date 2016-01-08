@@ -2,14 +2,17 @@
 #********************************HGTOOLS********************************
 import time
 import subprocess
+import logging
 
 #	Function takes str_sql, connects to the database, and returns 
 #	the passed query results.
 def hgt_query(str_sql, qtype=''):
-	
+
+	hgt_logger = logging.getLogger('hgt_logger')
+
 	start = time.clock()
 	user='wnrmndn_remote'
-	password=''
+	password='^kb?i8kLByDL!'
 	database='wnrmndn_hgtools'
 	host='hgtools.normandindev.net'
 	
@@ -24,7 +27,8 @@ def hgt_query(str_sql, qtype=''):
 #	Function splits returned query output into a two-dimensional list
 #	and passes it to the Gtk.window for user selection
 def hgtools_buildlist(dinput, store):
-
+	
+	hgt_logger = logging.getLogger('hgt_logger')
 	hgt_logger.debug('\t Populating Gtk.ListStore...')
 	
 	hgt_loadstore(dinput, store)	
@@ -36,6 +40,7 @@ def hgtools_buildlist(dinput, store):
 #	to the hgtools database if possible
 def hgt_imports(infile):
 	
+	hgt_logger = logging.getLogger('hgt_logger')
 	hgt_logger.info('[*] Beginning import routine')
 
 	row_count=0
@@ -75,6 +80,7 @@ def hgt_imports(infile):
 
 def validate_import(rows, csvfile):
 	
+	hgt_logger = logging.getLogger('hgt_logger')
 	hgt_logger.info('\t Validating import format...')
 	
 	for row in rows:
@@ -87,6 +93,7 @@ def validate_import(rows, csvfile):
 #	deduplicated values (chosen by the user)
 def hgt_dedupe(rows):
 	
+	hgt_logger = logging.getLogger('hgt_logger')
 	str_sql='SELECT DISTINCT hgt_text FROM hgtools ORDER BY hgt_idx ASC;'
 	db_rec=trim_invalid(hgt_query(str_sql, 'dedupe'))
 	rows = trim_invalid(rows[1])

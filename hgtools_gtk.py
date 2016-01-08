@@ -4,6 +4,7 @@ from lib import *
 #from lib.dedupe import *
 from gi.repository import Gtk
 import time, logging, getpass
+import argparse
 
 #******************************GLOBALS**********************************
 
@@ -31,7 +32,7 @@ USER_SELECTION=0
 ENV_USER = getpass.getuser()
 CSS_PATH = './lib/hgt_win_style.css'
 UI_INFO_PATH = './lib/ui_info.xml'
-favicon = utils.hgt_resource_path("./resources/images/snappyfav.png")
+favicon = utils.hgt_resource_path("./resources/images/snappyfav.png").replace('lib/','')
 
 # User Administration
 USER_LEVEL = ''
@@ -54,10 +55,17 @@ hgt_logger = utils.setup_logger('hgtools_gtk.py', logging.INFO, LOG_PATH)
 
 def main():
 	
+	parser = argparse.getparser()
+	
+	parser.add_argument("-d", "--debug", help="Enable Debugging mode",
+                    action="store_true")
+	
+	args = parser.parse_args()
+	
 	global favicon
 	try:
 		gui.gtk_style(CSS_PATH)
-		win = gui.MainWindow(ENV_USER)
+		win = gui.MainWindow(ENV_USER, favicon, logging.DEBUG)
 		win.connect("delete-event", Gtk.main_quit)
 		hgt_logger.debug('[*] Showing Window')
 		win.show_all()
