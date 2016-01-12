@@ -1,5 +1,12 @@
 #!/usr/bin/python
 #************************hgfix functionality****************************
+
+import urllib2
+import urllib
+import re
+from gi.repository import Gtk, Gdk
+from subprocess import Popen, PIPE
+
 def hgfix_do_encode(post_arguments):
 
 	# Encode It Properly

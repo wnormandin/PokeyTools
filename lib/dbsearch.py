@@ -12,7 +12,7 @@ def hgt_query(str_sql, qtype=''):
 
 	start = time.clock()
 	user='wnrmndn_remote'
-	password='^kb?i8kLByDL!'
+	password=''
 	database='wnrmndn_hgtools'
 	host='hgtools.normandindev.net'
 	

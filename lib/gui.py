@@ -10,6 +10,7 @@ import dbsearch
 import utils
 import sparklog
 import domain
+import hgfix
 
 UI_INFO_PATH = './lib/ui_info.xml'
 LAST_RUN_PATH = './tmp/last_run'
@@ -559,7 +560,7 @@ class MainWindow(Gtk.Window):
 	def on_domain_reports(self, widget):
 		flags = domain.dmn_main()
 		if flags:
-			domain_window = DomainInfoDialog(self, flags)
+			domain_window = DomainInfoDialog(self, self.favicon, flags)
 			result = domain_window.run()
 			domain_window.destroy()
 		else:
