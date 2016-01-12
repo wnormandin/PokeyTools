@@ -1,8 +1,24 @@
 #!/usr/bin/python
 import logging
 from gi.repository import Gtk, Gdk
+from gi.repository import GObject, Pango
+import dbus, dbus.glib, dbus.decorators
+
 import users
 import passchats
+import dbsearch
+import utils
+import sparklog
+import domain
+
+UI_INFO_PATH = './lib/ui_info.xml'
+LAST_RUN_PATH = './tmp/last_run'
+
+#Pass_Chats Functionality
+PASS_LIST='./lib/pc_list.txt'
+DOM_SUFFIX='@openfire.houston.hostgator.com'
+PURPLE_CONV_TYPE_IM=1
+
 
 #*********************************STYLE*********************************
 def gtk_style(css_path):
@@ -111,7 +127,8 @@ class MainWindow(Gtk.Window):
 			return uimanager
 			
 		except Exception as e:
-			self.err_raise(e)
+			raise
+			#self.err_raise(e)
 			
 	def box_config(self, menubar, grid, widgets):
 		hgt_logger.info('[*] Configuring Boxes')
@@ -497,12 +514,13 @@ class MainWindow(Gtk.Window):
 		
 	def err_raise(self,e):
 		hgt_logger.error("[*] Exception Captured")
-		if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
-			nf_win = InfoDialog(self.favicon, self, "Error", 'Details : {:}'.format(*e))
-			response = nf_win.run()
-			nf_win.destroy()
-		else:
-			raise
+		#if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
+			#nf_win = InfoDialog(self.favicon, self, "Error", 'Details : {:}'.format(*e))
+			#response = nf_win.run()
+			#nf_win.destroy()
+		#else:
+			#raise
+		raise
 		hgt_logger.error('[*] Details - {:}'.format(*e))
 					
 #***********************************************************************
@@ -539,15 +557,16 @@ class MainWindow(Gtk.Window):
 				dialog.destroy()
 				
 	def on_domain_reports(self, widget):
-		flags = dmn_main()
+		flags = domain.dmn_main()
 		if flags:
 			domain_window = DomainInfoDialog(self, flags)
 			result = domain_window.run()
 			domain_window.destroy()
 		else:
-			err_window = InfoDialog(None, 'URL Error', 'The provided URL could not be parsed,\nplease be more specific\n\nHint : Select URL from your browser URL bar and hit CTRL+C before running')
-			result = err_window.run()
-			err_window.destroy()
+			raise
+			#err_window = InfoDialog(None, 'URL Error', 'The provided URL could not be parsed,\nplease be more specific\n\nHint : Select URL from your browser URL bar and hit CTRL+C before running')
+			#result = err_window.run()
+			#err_window.destroy()
 
 	def on_csv_export(self, menuitem):
 		hgt_logger.debug("[*] CSVFileDialog Spawned!")
@@ -626,9 +645,9 @@ class MainWindow(Gtk.Window):
 		# Execute pass_chats
 		hgt_logger.debug("[*] MainWindow > Broadcast button clicked")
 		if self.selected['chats']!='# of Chats':
-			pc_main(list=True, chats=self.selected['chats'])
+			passchats.pc_main(list=True, chats=self.selected['chats'])
 		else:
-			nf_win = InfoDialog(self, "Error", 'Select a chat count')
+			nf_win = InfoDialog(self, favicon, "Error", 'Select a chat count')
 			response = nf_win.run()
 			nf_win.destroy()
 
@@ -659,7 +678,7 @@ class MainWindow(Gtk.Window):
 			
 		keys_to_select = ('user', 'room', 'date', 'keyword', 'term')
 		sl_vars = dict((k, self.selected[k]) for k in keys_to_select)			
-		sl_main(**sl_vars)
+		sparklog.sl_main(**sl_vars)
 		
 	def sl_chatroom_combo_changed(self, combo):
 		# Chatroom Combo Changed
@@ -679,7 +698,7 @@ class MainWindow(Gtk.Window):
 	def menu_log_button_exec(self, widget):
 		# Show the last_run log file
 		hgt_logger.debug("[*] log_button clicked")
-		log_win = LogViewWindow(self)
+		log_win = LogViewWindow(self, self.favicon)
 		log_win.connect("delete-event", Gtk.main_quit)
 		hgt_logger.info('[*] Showing LogViewWindow')
 		log_win.show_all()
@@ -696,7 +715,7 @@ class MainWindow(Gtk.Window):
 			self.selected['pc_ldap_box'] = ''
 			
 		user_ldap = self.selected['pc_ldap_box']
-		pc_addline(user_ldap)
+		passchats.pc_addline(user_ldap)
 		self.pc_ldap_box.set_text('Added!')
 		self.pc_ldap_box.set_text('User LDAP')
 		self.pc_list_refresh(widget)
@@ -730,7 +749,7 @@ class MainWindow(Gtk.Window):
 			self.pc_list_refresh(widget)
 		else:
 			hgt_logger.debug("\t No user specified!")
-			nf_win = InfoDialog(self, "No user specified", "Please specify a user to remove!")
+			nf_win = InfoDialog(self, self.favicon, "No user specified", "Please specify a user to remove!")
 			response = nf_win.run()
 			nf_win.destroy()
 		
@@ -782,7 +801,7 @@ class MainWindow(Gtk.Window):
 			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
 			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
 			str_sql += 'WHERE (hgt_text like "%{}%" OR hgt_code like "%{}%") GROUP BY hgt_code;'.format(search_term, search_term)
-			outp=hgt_query(str_sql, 'phrases')
+			outp=dbsearch.hgt_query(str_sql, 'phrases')
 			
 			# hgt_logger.debug("\t {}".format(outp))
 			store = Gtk.ListStore(str, str, str)
@@ -807,28 +826,29 @@ class MainWindow(Gtk.Window):
 							
 						if self.selected['hgt_rtype'] == '1':
 							src = 'Text'
-							hgfix_do_paste(USER_SELECTION, dest)
+							hgfix.hgfix_do_paste(USER_SELECTION, dest)
 						else:
 							src = 'HGFix URL'
-							hgfix_main(USER_SELECTION, dest)
+							hgfix.hgfix_main(USER_SELECTION, dest)
 							
 						hgt_logger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
 						
 					except Exception as e:
-						err_raise(e)
+						raise
+						# err_raise(e)
 				else:
 					hgt_logger.debug("\t User Cancelled Dialog")
 					search_win.destroy()
 					
 			else:
 				hgt_logger.debug("\t Term not found!")
-				nf_win = InfoDialog(self, "Not Found", "No results for the specified search term!")
+				nf_win = InfoDialog(self, self.favicon, "Not Found", "No results for the specified search term!")
 				response = nf_win.run()
 				nf_win.destroy()
 			
 		else:
 			hgt_logger.debug("\t No Term Specified")
-			nf_win = InfoDialog(self, "No Term Specified", "Please enter a valid search term")
+			nf_win = InfoDialog(self, self.favicon, "No Term Specified", "Please enter a valid search term")
 			response = nf_win.run()
 			nf_win.destroy()
 			

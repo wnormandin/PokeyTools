@@ -2,6 +2,70 @@
 # Search for files within the specified term
 # (Months or specific date)
 # Returns a list of files matching the criteria
+import logging
+import datetime
+import os
+from os.path import expanduser
+
+hgt_logger = logging.getLogger('hgtools_gtk.py')
+
+MULTIPROC=True
+MAX_PROC=2
+
+def sl_main(date, term, keyword, user, room):
+	
+	hgt_logger.info('[*] Spark Log Search started')
+	hgt_logger.debug('\t date : {} | term : {} | keyword : {} |'.format(date, term, keyword))
+	hgt_logger.debug('\t user : {} | room : {} |'.format(user, room))
+	
+	# Define Output Path
+	fpath = './.parsed/'
+	hgt_logger.debug('\t Output path : {}'.format(fpath))
+
+	_lines = []
+	_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
+
+	# Filter by Absolute Date or Term
+	if date != 'Date':
+		_files = sl_find_files(room, user, datetime.datetime.strptime(date, '%Y-%m-%d').date())
+		hgt_logger.debug("\t Searching on {}".format(date))
+	else:
+		_files = sl_find_files(room, user, 1, term)
+		hgt_logger.debug("\t Searching the past {} months".format(term))
+
+	# Check for MULTIPROC and process accordingly
+	hgt_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
+	if not MULTIPROC:
+		for _file in _files:
+			_lines.append(sl_find_lines(keyword, user, _file))
+			hgt_logger.debug('\t File searched : {}'.format(os.path.basename(_file)))
+	else:
+		i = 0
+		hgt_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
+		while i in range(len(_files)):
+			j = len(_files)-i
+			this_min = min(MAX_PROC, j)
+			pool = Pool(processes=this_min)
+			chunk = _files[i:i+this_min]
+			results = [None for _ in range(this_min)]
+		
+			for k in range(this_min):
+				results[k] = pool.apply_async(sl_find_lines, [keyword, user, chunk[k]])
+				
+			pool.close()
+			pool.join()
+			
+			for k in range (this_min):
+				_lines.extend(results[k].get())
+				
+			i += this_min
+			
+	hgt_logger.debug('\t {} files searched'.format(len(_files)))
+	hgt_logger.debug('\t {} lines found'.format(len(_lines)))
+
+	open(_opath, 'w').close() # Empty File Contents
+	hgt_logger.debug('\t {} reinitialized'.format(_opath))
+	
 def sl_find_files(room, user, d, t=3):
 	hgt_logger.debug('\t sl_find_files args : {} :: {}'.format(d, t))
 

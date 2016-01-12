@@ -1,6 +1,12 @@
 #!/usr/bin/python
 #******************************PASS_CHATS*******************************
 import logging
+import dbus, dbus.glib, dbus.decorators
+
+#Pass_Chats Functionality
+PASS_LIST='./lib/pc_list.txt'
+DOM_SUFFIX='@openfire.houston.hostgator.com'
+PURPLE_CONV_TYPE_IM=1
 
 PASS_LIST='./lib/pc_list.txt'
 hgt_logger = logging.getLogger('hgt_logger')

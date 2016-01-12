@@ -2,6 +2,18 @@
 #**************************Domain Tools*********************************
 #(DNS, Whois, SSL, Propagation)
 
+import time
+import os
+from gi.repository import Gtk, Gdk
+from HTMLParser import HTMLParser
+from urlparse import urlparse
+import urllib2
+import urllib
+import logging
+import subprocess
+
+hgt_logger = logging.getLogger('hgtools_gtk.py')
+
 def dmn_main():
 	start=time.clock()
 	clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
