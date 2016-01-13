@@ -6,10 +6,10 @@ import dbus, dbus.glib, dbus.decorators
 #Pass_Chats Functionality
 PASS_LIST='./lib/pc_list.txt'
 DOM_SUFFIX='@openfire.houston.hostgator.com'
-PURPLE_CONV_TYPE_IM=1
 
-PASS_LIST='./lib/pc_list.txt'
+PURPLE_CONV_TYPE_IM=1
 hgt_logger = logging.getLogger('hgt_logger')
+
 # Function to open the PassChats file 
 def pc_addline(arg1, pl=PASS_LIST):
 
