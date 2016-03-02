@@ -1,24 +1,24 @@
-#hgtools_gtk - Installation and Basic Usage
+#pokeytools - Installation and Basic Usage
 
-#To Install hgtools_gtk:
-##Run the following (in the folder where you desire the repository folder (~/tools):
+#To Install pokeytools:
+##Run the following (in the folder where you desire the repository folder:
 
 ```
-git clone https://github.com/wnormandin/hgtools_gtk.git
-cd hgtools_gtk
+git clone https://github.com/wnormandin/pokeytools.git
+cd pokeytools
 ls
 ```
 ###This will download the project files and create a new repository in the folder for easy updating in the future.
 ###You should see (barring any ls alias):
 
 ``` 
- .  ..  .git  .gitignore  hgtools_gtk.py  __init__.py  lib  README.md  tmp
+ .  ..  .git  .gitignore  pokeytools.py  __init__.py  lib  README.md  tmp
 ```
 
 ##Once you see the files listed, to execute run the following command :
 
 ``` 
-python hgtools_gtk.py
+python pokeytools.py
 ``` 
 ###An automatic installation script will soon be implemented, along with automatic updating upon user login. 
 ###Logging is set to logging.DEBUG by default
