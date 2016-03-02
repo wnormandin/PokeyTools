@@ -1,7 +1,7 @@
-#hgtools_gtk - Installation and Basic Usage
+#pokeytools - Installation and Basic Usage
 
-#To Install hgtools_gtk:
-##Run the following (in the folder where you desire the repository folder (~/tools):
+#To Install pokeytools:
+##Run the following (in the folder where you desire the repository folder:
 
 ```
 git clone https://github.com/wnormandin/pokeytools.git
