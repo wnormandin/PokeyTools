@@ -1,14 +1,14 @@
 #pokeytools - Installation and Basic Usage
 
 #To Install pokeytools:
-##Run the following (in the folder where you desire the repository folder:
+##Run the following in your desired installation location (the pokeytools folder will be created in this directory):
 
 ```
 git clone https://github.com/wnormandin/pokeytools.git
 cd pokeytools
 ls
 ```
-###This will download the project files and create a new repository in the folder for easy updating in the future.
+###The tool files and folders will be downloaded, and the location will be connected to the repository for easy updates
 ###You should see (barring any ls alias):
 
 ``` 
@@ -31,7 +31,7 @@ python pokeytools.py
 ###Select a chat count and click "Broadcast" to send your message to the recipients on your list
 ### *Custom Message Functionality to come
 
-##Spark Log Search
+##Log Search
 ###Set the search criteria :
 - # of Months OR Date (if a date is present, # of Months is ignored)
 - Keyword(s) spaces should be ok but single word terms yield broader results
