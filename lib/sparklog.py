@@ -7,20 +7,20 @@ import datetime
 import os
 from os.path import expanduser
 
-hgt_logger = logging.getLogger('hgtools_gtk.py')
+pokeylogger = logging.getLogger('pokeylogger')
 
 MULTIPROC=True
 MAX_PROC=2
 
 def sl_main(date, term, keyword, user, room):
 	
-	hgt_logger.info('[*] Spark Log Search started')
-	hgt_logger.debug('\t date : {} | term : {} | keyword : {} |'.format(date, term, keyword))
-	hgt_logger.debug('\t user : {} | room : {} |'.format(user, room))
+	pokeylogger.info('[*] Spark Log Search started')
+	pokeylogger.debug('\t date : {} | term : {} | keyword : {} |'.format(date, term, keyword))
+	pokeylogger.debug('\t user : {} | room : {} |'.format(user, room))
 	
 	# Define Output Path
 	fpath = './.parsed/'
-	hgt_logger.debug('\t Output path : {}'.format(fpath))
+	pokeylogger.debug('\t Output path : {}'.format(fpath))
 
 	_lines = []
 	_opath = ('{}/dev/.spark_log/.parsed.html'.format(expanduser('~')))
@@ -28,20 +28,20 @@ def sl_main(date, term, keyword, user, room):
 	# Filter by Absolute Date or Term
 	if date != 'Date':
 		_files = sl_find_files(room, user, datetime.datetime.strptime(date, '%Y-%m-%d').date())
-		hgt_logger.debug("\t Searching on {}".format(date))
+		pokeylogger.debug("\t Searching on {}".format(date))
 	else:
 		_files = sl_find_files(room, user, 1, term)
-		hgt_logger.debug("\t Searching the past {} months".format(term))
+		pokeylogger.debug("\t Searching the past {} months".format(term))
 
 	# Check for MULTIPROC and process accordingly
-	hgt_logger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
+	pokeylogger.debug('\t MULTIPROC = {}'.format(MULTIPROC))
 	if not MULTIPROC:
 		for _file in _files:
 			_lines.append(sl_find_lines(keyword, user, _file))
-			hgt_logger.debug('\t File searched : {}'.format(os.path.basename(_file)))
+			pokeylogger.debug('\t File searched : {}'.format(os.path.basename(_file)))
 	else:
 		i = 0
-		hgt_logger.debug('\t Parent (this) process : {}'.format(os.getpid()))
+		pokeylogger.debug('\t Parent (this) process : {}'.format(os.getpid()))
 		while i in range(len(_files)):
 			j = len(_files)-i
 			this_min = min(MAX_PROC, j)
@@ -60,21 +60,21 @@ def sl_main(date, term, keyword, user, room):
 				
 			i += this_min
 			
-	hgt_logger.debug('\t {} files searched'.format(len(_files)))
-	hgt_logger.debug('\t {} lines found'.format(len(_lines)))
+	pokeylogger.debug('\t {} files searched'.format(len(_files)))
+	pokeylogger.debug('\t {} lines found'.format(len(_lines)))
 
 	open(_opath, 'w').close() # Empty File Contents
-	hgt_logger.debug('\t {} reinitialized'.format(_opath))
+	pokeylogger.debug('\t {} reinitialized'.format(_opath))
 	
 def sl_find_files(room, user, d, t=3):
-	hgt_logger.debug('\t sl_find_files args : {} :: {}'.format(d, t))
+	pokeylogger.debug('\t sl_find_files args : {} :: {}'.format(d, t))
 
 	_dir = expanduser('~') + '/.purple/logs/jabber/'
-	hgt_logger.debug('\t Pidgin log path : {}'.format(_dir))
+	pokeylogger.debug('\t Pidgin log path : {}'.format(_dir))
 
 	# Check if a date was passed
 	if type(d) is datetime.date:
-		hgt_logger.debug('\t Searching on date : {}'.format(d))
+		pokeylogger.debug('\t Searching on date : {}'.format(d))
 		exact_date = d
 
 	# If not a date, process monthly term passed
@@ -82,7 +82,7 @@ def sl_find_files(room, user, d, t=3):
 		if t == '# of Months':
 			t=3
 		begin_date = monthdelta(datetime.date.today(), int(t))
-		hgt_logger.debug('\t Searching for term : {}'.format(t))
+		pokeylogger.debug('\t Searching for term : {}'.format(t))
 		exact_date = 1
 
 	_files = []
@@ -100,14 +100,14 @@ def sl_find_files(room, user, d, t=3):
 					if sl_filter_rooms(_path, room, user):
 						_files.append(_path)
 	
-	hgt_logger.debug('\t Added {!s} files to the list'.format(len(_files)))
-	hgt_logger.debug('\t Sorting files...')					
+	pokeylogger.debug('\t Added {!s} files to the list'.format(len(_files)))
+	pokeylogger.debug('\t Sorting files...')					
 	_files.sort(key=lambda x: os.path.getmtime(x))
 	return _files
 
 # Returns all lines matching the passed term
 def sl_find_lines(keyword, user, _file):
-	#hgt_logger.debug('\t sl_find_lines pid({})'.format(os.getpid()))
+	#pokeylogger.debug('\t sl_find_lines pid({})'.format(os.getpid()))
 	
 	_lines = []
 	

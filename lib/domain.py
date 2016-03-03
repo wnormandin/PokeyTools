@@ -12,7 +12,7 @@ import urllib
 import logging
 import subprocess
 
-hgt_logger = logging.getLogger('hgtools_gtk.py')
+pokeylogger = logging.getLogger('pokeylogger')
 
 def dmn_main():
 	start=time.clock()
@@ -86,7 +86,7 @@ def dmn_whois(flags):
 	flags['whois'] = dmn_run_cmd(cmd).splitlines()
 	
 def dmn_run_cmd(cmd):
-	hgt_logger.info('[*] Running command : {}'.format(cmd))
+	pokeylogger.info('[*] Running command : {}'.format(cmd))
 	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
 	retval = p.communicate()[0]
 	return retval

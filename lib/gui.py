@@ -41,7 +41,7 @@ def ui_xml():
 	ui_info.close
 	return ui_info_data
 	
-hgt_logger = logging.getLogger('hgtools_gtk.py')
+pokeylogger = logging.getLogger('pokeylogger')
 
 #***********************************************************************
 #******************************MainWindow*******************************
@@ -62,10 +62,10 @@ class MainWindow(Gtk.Window):
 	def __init__(self, u, favicon, level=logging.DEBUG):
 		
 		try:
-			hgt_logger.setLevel(level)
+			pokeylogger.setLevel(level)
 			
 			## USER INIT
-			hgt_logger.debug('[*] Loading User...')
+			pokeylogger.debug('[*] Loading User...')
 			self.user_level = users.user_main(u)
 			self.user = u
 			self.favicon = favicon
@@ -102,7 +102,7 @@ class MainWindow(Gtk.Window):
 			grid.set_row_spacing(10)
 			self.add(grid)
 			
-			hgt_logger.debug("[*] HGTools GUI spawned")
+			pokeylogger.debug("[*] HGTools GUI spawned")
 			
 		except Exception as e:
 			raise
@@ -132,18 +132,18 @@ class MainWindow(Gtk.Window):
 			#self.err_raise(e)
 			
 	def box_config(self, menubar, grid, widgets):
-		hgt_logger.info('[*] Configuring Boxes')
+		pokeylogger.info('[*] Configuring Boxes')
 		
 		hgt_top_grid = Gtk.Grid()
 
 		self.pc_widgets =  [widget for widget in widgets if '{!s}'.format(widget[0]).startswith('pc_')]
-		hgt_logger.debug('\t len(pc_widgets) : {}'.format(len(self.pc_widgets)))
+		pokeylogger.debug('\t len(pc_widgets) : {}'.format(len(self.pc_widgets)))
 		self.pc_box_build(self.pc_box, self.pc_widgets)
 		self.pc_box.set_homogeneous(False)
 
 		sl_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
 		sl_widgets =  [widget for widget in widgets if widget[0].startswith('sl_')]
-		hgt_logger.debug('\t len(sl_widgets) : {}'.format(len(sl_widgets)))
+		pokeylogger.debug('\t len(sl_widgets) : {}'.format(len(sl_widgets)))
 		self.sl_box_build(sl_box, sl_widgets)
 		sl_box.set_homogeneous(False)
 
@@ -158,7 +158,7 @@ class MainWindow(Gtk.Window):
 
 		self.hgt_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		hgt_widgets = [widget for widget in widgets if widget[0].startswith('hgt_')]
-		hgt_logger.debug('\t len(hgt_widgets) : {}'.format(len(hgt_widgets)))
+		pokeylogger.debug('\t len(hgt_widgets) : {}'.format(len(hgt_widgets)))
 		self.hgt_box_build(self.hgt_box, hgt_widgets)
 		grid.attach_next_to(self.hgt_box, hgt_top_grid, Gtk.PositionType.BOTTOM, 1, 2)
 		self.hgt_box.set_homogeneous(False)
@@ -175,13 +175,13 @@ class MainWindow(Gtk.Window):
 		
 		menu_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 		menu_widgets = [widget for widget in widgets if widget[0].startswith('menu_')]
-		hgt_logger.debug('\t len(menu_widgets) : {}'.format(len(menu_widgets)))
+		pokeylogger.debug('\t len(menu_widgets) : {}'.format(len(menu_widgets)))
 		self.menu_box_build(menu_box, menu_widgets)
 		grid.attach_next_to(menu_box, self.hgt_opt2_box, Gtk.PositionType.BOTTOM, 1, 2)
 		menu_box.set_homogeneous(False)
 		
 	def pc_box_build(self, pc_box, pc_widgets):
-		hgt_logger.debug('\t pc_box_build')
+		pokeylogger.debug('\t pc_box_build')
 		
 		# pc_label
 		self.pc_label = Gtk.Label()
@@ -257,7 +257,7 @@ class MainWindow(Gtk.Window):
 		self.pc_chatlist_treeview.set_model(store)
 		
 	def sl_box_build(self, sl_box, sl_widgets):
-		hgt_logger.debug('\tsl_box_build')
+		pokeylogger.debug('\tsl_box_build')
 		
 		# sl_label
 		self.sl_label = Gtk.Label()
@@ -317,7 +317,7 @@ class MainWindow(Gtk.Window):
 		sl_box.pack_start(self.sl_button, True, True, 1)
 		
 	def hgt_opt_box_build(self, hgt_opt_box):
-		hgt_logger.debug('\t hgt_opt_box')
+		pokeylogger.debug('\t hgt_opt_box')
 		
 		# hgt_opt_label
 		hgt_opt_label = Gtk.Label()
@@ -336,7 +336,7 @@ class MainWindow(Gtk.Window):
 		hgt_opt_box.pack_start(hgt_dest_radio2, False, False, 0)
 		
 	def hgt_opt2_box_build(self, hgt_opt2_box):
-		hgt_logger.debug('\t hgt_opt_box')
+		pokeylogger.debug('\t hgt_opt_box')
 		
 		# hgt_opt_label
 		hgt_opt_label = Gtk.Label()
@@ -355,7 +355,7 @@ class MainWindow(Gtk.Window):
 		hgt_opt2_box.pack_start(hgt_dest_radio2, False, False, 0)
 		
 	def hgt_box_build(self, hgt_box, hgt_widgets):
-		hgt_logger.debug('\t hgt_box_build')
+		pokeylogger.debug('\t hgt_box_build')
 		
 		# hgt_search_box
 		self.hgt_search_box = Gtk.Entry()
@@ -371,7 +371,7 @@ class MainWindow(Gtk.Window):
 		hgt_box.pack_start(hgt_button, False, False, 0)
 		
 	def menu_box_build(self, menu_box, menu_widgets):
-		hgt_logger.debug('\t menu_box_build')
+		pokeylogger.debug('\t menu_box_build')
 		
 		# menu_cl_button
 		menu_cl_button =  Gtk.Button.new_with_label(menu_widgets[0][1])
@@ -387,7 +387,7 @@ class MainWindow(Gtk.Window):
 		menu_box.pack_start(menu_log_button, True, True, 1)
 		
 	def widget_config(self):
-		hgt_logger.info('[*] Configuring Widgets')
+		pokeylogger.info('[*] Configuring Widgets')
 		
 		# Button 	=	(name, label, tooltip, signal)
 		# Combo	Box	=	(name, values (default 1st), tooltip, signal)
@@ -403,7 +403,7 @@ class MainWindow(Gtk.Window):
 		return hgt_widget
 		
 	def pc_section_widgets(self, hgt_widget):
-		hgt_logger.debug('\tpc_section_widgets')
+		pokeylogger.debug('\tpc_section_widgets')
 		# Pass Chats Section
 		# pc_label (Section title label)
 		hgt_widget.append(('pc_label', 'Pass Chats'))
@@ -446,7 +446,7 @@ class MainWindow(Gtk.Window):
 							['clicked', self.pc_button_exec]))
 							
 	def sl_section_widgets(self, hgt_widget):
-		hgt_logger.debug('\tsl_section_widgets')
+		pokeylogger.debug('\tsl_section_widgets')
 		
 		# Log Search Section
 		# sl_label (Section title label)
@@ -486,7 +486,7 @@ class MainWindow(Gtk.Window):
 							["clicked", self.sl_button_exec]))
 		
 	def hgt_section_widgets(self, hgt_widget):
-		hgt_logger.debug('\thgt_section_widgets')
+		pokeylogger.debug('\thgt_section_widgets')
 		
 		# HGTools Search Section
 		# hgt_search_box (Entry Box)
@@ -499,7 +499,7 @@ class MainWindow(Gtk.Window):
 							["clicked", self.hgt_button_exec]))
 
 	def menu_section_widgets(self, hgt_widget):
-		hgt_logger.debug('\tmenu_section_widgets')
+		pokeylogger.debug('\tmenu_section_widgets')
 		
 		# Menu Section
 		# menu_cl_button (Action Button)
@@ -514,7 +514,7 @@ class MainWindow(Gtk.Window):
 		return hgt_widget
 		
 	def err_raise(self,e):
-		hgt_logger.error("[*] Exception Captured")
+		pokeylogger.error("[*] Exception Captured")
 		#if logging.getLogger().getEffectiveLevel() != logging.DEBUG:
 			#nf_win = InfoDialog(self.favicon, self, "Error", 'Details : {:}'.format(*e))
 			#response = nf_win.run()
@@ -522,7 +522,7 @@ class MainWindow(Gtk.Window):
 		#else:
 			#raise
 		raise
-		hgt_logger.error('[*] Details - {:}'.format(*e))
+		pokeylogger.error('[*] Details - {:}'.format(*e))
 					
 #***********************************************************************
 #***************************Dialog Config*******************************
@@ -540,7 +540,7 @@ class MainWindow(Gtk.Window):
 #***********************************************************************
 #***************************Signal Actions******************************
 	def on_menu_file_csv_import(self, widget):
-				hgt_logger.debug("[*] FileDialog Spawned!")
+				pokeylogger.debug("[*] FileDialog Spawned!")
 				dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
 					Gtk.FileChooserAction.OPEN,
 					(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -550,10 +550,10 @@ class MainWindow(Gtk.Window):
 
 				response = dialog.run()
 				if response == Gtk.ResponseType.OK:
-					hgt_logger.debug("\t FileDialog > Open clicked")
-					hgt_logger.debug("\t File selected: {}".format(dialog.get_filename()))
+					pokeylogger.debug("\t FileDialog > Open clicked")
+					pokeylogger.debug("\t File selected: {}".format(dialog.get_filename()))
 				elif response == Gtk.ResponseType.CANCEL:
-					hgt_logger.debug("\t FileDialog > Cancel clicked")
+					pokeylogger.debug("\t FileDialog > Cancel clicked")
 
 				dialog.destroy()
 				
@@ -570,7 +570,7 @@ class MainWindow(Gtk.Window):
 			#err_window.destroy()
 
 	def on_csv_export(self, menuitem):
-		hgt_logger.debug("[*] CSVFileDialog Spawned!")
+		pokeylogger.debug("[*] CSVFileDialog Spawned!")
 		self.status_update('CSV Export running')
 		dialog = Gtk.FileChooserDialog("Please choose a CSV file", self,
 			Gtk.FileChooserAction.SAVE,
@@ -581,28 +581,28 @@ class MainWindow(Gtk.Window):
 		response = dialog.run()
 		
 		if response == Gtk.ResponseType.OK:
-			hgt_logger.debug("\t FileDialog > Open clicked")
+			pokeylogger.debug("\t FileDialog > Open clicked")
 			ofile = dialog.get_filename()
-			hgt_logger.debug("\t File selected: {}".format(ofile))
+			pokeylogger.debug("\t File selected: {}".format(ofile))
 			dialog.destroy()
 			iahk_csv_export(ofile)
 		elif response == Gtk.ResponseType.CANCEL:
 			
-			hgt_logger.debug("\t FileDialog > Cancel clicked")
+			pokeylogger.debug("\t FileDialog > Cancel clicked")
 		dialog.destroy()
 		self.status_update()
 		
 	def on_debugmode(self, widget):
-		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
+		pokeylogger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
 		if widget.get_active():
-			hgt_logger.setLevel(logging.DEBUG)
-			hgt_logger.debug("\t Debug Logging ON")
+			pokeylogger.setLevel(logging.DEBUG)
+			pokeylogger.debug("\t Debug Logging ON")
 		else:
-			hgt_logger.debug("\t Debug Logging OFF")
-			hgt_logger.setLevel(logging.WARNING)
+			pokeylogger.debug("\t Debug Logging OFF")
+			pokeylogger.setLevel(logging.WARNING)
 			
 	def on_clone_ahks(self, menuitem):
-		hgt_logger.info('[*] Cloning user autokeys')
+		pokeylogger.info('[*] Cloning user autokeys')
 		
 		# Prompt with mass upload warning
 		nf_win = InfoDialog(self, "Notice", 'This may take a few minutes.')
@@ -614,37 +614,37 @@ class MainWindow(Gtk.Window):
 		nf_win.destroy()
 			
 	def on_maxprocs_changed(self, widget, current):
-		hgt_logger.debug("\t Max procs changed to : {}".format(current.get_name()[-1]))
+		pokeylogger.debug("\t Max procs changed to : {}".format(current.get_name()[-1]))
 		global MAX_PROC
 		MAX_PROC = int(current.get_name()[-1])
 			
 	def on_multiproc(self, widget):
-		hgt_logger.debug("\t Multiprocessing set to : {}".format(widget.get_active()))
+		pokeylogger.debug("\t Multiprocessing set to : {}".format(widget.get_active()))
 		global MULTIPROC
 		MULTIPROC = widget.get_active()
 
 	def on_menu_deduplicate(self, widget):
-		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
+		pokeylogger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
 		
 	def on_menu_file_quit(self, widget):
-		hgt_logger.debug("[*] File > Quit Selected")
+		pokeylogger.debug("[*] File > Quit Selected")
 		Gtk.main_quit()
 
 	def on_menu_others(self, widget):
-		hgt_logger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
+		pokeylogger.debug("[*] Menu item {} {}".format(widget.get_name(), " was selected"))
 
 	def on_menu_choices_changed(self, widget, current):
-		hgt_logger.debug("[*] {} {}".format(current.get_name(), " was selected."))
+		pokeylogger.debug("[*] {} {}".format(current.get_name(), " was selected."))
 
 	def on_menu_choices_toggled(self, widget):
 		if widget.get_active():
-			hgt_logger.debug("[*] {} {}".format(widget.get_name(), " activated"))
+			pokeylogger.debug("[*] {} {}".format(widget.get_name(), " activated"))
 		else:
-			hgt_logger.debug("[*] {} {}".format(widget.get_name(), " deactivated"))
+			pokeylogger.debug("[*] {} {}".format(widget.get_name(), " deactivated"))
 			
 	def pc_button_exec(self, widget):
 		# Execute pass_chats
-		hgt_logger.debug("[*] MainWindow > Broadcast button clicked")
+		pokeylogger.debug("[*] MainWindow > Broadcast button clicked")
 		if self.selected['chats']!='# of Chats':
 			passchats.pc_main(list=True, chats=self.selected['chats'])
 		else:
@@ -654,7 +654,7 @@ class MainWindow(Gtk.Window):
 
 	def sl_button_exec(self, widget):
 		# Execute spark_logs
-		hgt_logger.debug("[*] MainWindow > Log Search button clicked")
+		pokeylogger.debug("[*] MainWindow > Log Search button clicked")
 		
 		if self.sl_user_box.get_text():
 			self.selected['user']=self.sl_user_box.get_text()
@@ -683,32 +683,32 @@ class MainWindow(Gtk.Window):
 		
 	def sl_chatroom_combo_changed(self, combo):
 		# Chatroom Combo Changed
-		hgt_logger.debug("[*] MainWindow > Chatroom combo changed")
+		pokeylogger.debug("[*] MainWindow > Chatroom combo changed")
 		tree_iter = combo.get_active_iter()
 		if tree_iter != None:
 			model = combo.get_model()
 			name = model[tree_iter][0]
-			hgt_logger.debug("\t Selected Chatroom = {}".format(name))
+			pokeylogger.debug("\t Selected Chatroom = {}".format(name))
 		self.selected['room']=name
 
 	def menu_cl_button_exec(self, widget):
 		# Close the window
-		hgt_logger.debug("[*] MainWindow > Close button clicked")
+		pokeylogger.debug("[*] MainWindow > Close button clicked")
 		Gtk.main_quit()
 		
 	def menu_log_button_exec(self, widget):
 		# Show the last_run log file
-		hgt_logger.debug("[*] log_button clicked")
+		pokeylogger.debug("[*] log_button clicked")
 		log_win = LogViewWindow(self, self.favicon)
 		log_win.connect("delete-event", Gtk.main_quit)
-		hgt_logger.info('[*] Showing LogViewWindow')
+		pokeylogger.info('[*] Showing LogViewWindow')
 		log_win.show_all()
-		hgt_logger.info('[*] Entering Gtk.main()')
+		pokeylogger.info('[*] Entering Gtk.main()')
 		Gtk.main()
 		
 	def pc_add_button_exec(self, widget):
 		# Add a user to the pass_chats list
-		hgt_logger.debug("[*] add_button clicked")
+		pokeylogger.debug("[*] add_button clicked")
 		
 		if self.pc_ldap_box.get_text():
 			self.selected['pc_ldap_box'] = self.pc_ldap_box.get_text()
@@ -737,7 +737,7 @@ class MainWindow(Gtk.Window):
 		
 	def pc_remove_button_exec(self, widget):
 		# Remove a user from the pass_chats list
-		hgt_logger.debug("[*] remove_button clicked")
+		pokeylogger.debug("[*] remove_button clicked")
 		
 		if 'user_selected' in self.selected:
 			slctn = self.selected['user_selected']
@@ -749,29 +749,29 @@ class MainWindow(Gtk.Window):
 			passlist.close()
 			self.pc_list_refresh(widget)
 		else:
-			hgt_logger.debug("\t No user specified!")
+			pokeylogger.debug("\t No user specified!")
 			nf_win = InfoDialog(self, self.favicon, "No user specified", "Please specify a user to remove!")
 			response = nf_win.run()
 			nf_win.destroy()
 		
 	def pc_chats_combo_changed(self, combo):
 		# Chat count combo changed
-		hgt_logger.debug("[*] MainWindow > Chat Count combo changed")
+		pokeylogger.debug("[*] MainWindow > Chat Count combo changed")
 		tree_iter = combo.get_active_iter()
 		if tree_iter != None:
 			model = combo.get_model()
 			name = model[tree_iter][0]
-			hgt_logger.debug("\t Selected Chat Count = {}".format(name))
+			pokeylogger.debug("\t Selected Chat Count = {}".format(name))
 		self.selected['chats']=name
 		
 	def sl_depth_combo_changed(self, combo):
 		# Search depth combo changed
-		hgt_logger.debug("[*] MainWindow > Month Count combo changed")
+		pokeylogger.debug("[*] MainWindow > Month Count combo changed")
 		tree_iter = combo.get_active_iter()
 		if tree_iter != None:
 			model = combo.get_model()
 			name = model[tree_iter][0]
-			hgt_logger.debug("\t Selected Term  = {} months".format(name))
+			pokeylogger.debug("\t Selected Term  = {} months".format(name))
 			self.selected['term']=name
 		
 	def pc_chatlist_selection_changed(self, selection):
@@ -779,45 +779,45 @@ class MainWindow(Gtk.Window):
 		model, treeiter = selection.get_selected()
 		if treeiter != None:
 			sel = model[treeiter][0]
-			hgt_logger.debug("[*] MainWindow > Your List > Selection changed to {}".format(sel))
+			pokeylogger.debug("[*] MainWindow > Your List > Selection changed to {}".format(sel))
 			self.selected['user_selected']=sel
 			
 	def on_hgt_restype_toggled(self, radio, name):
 		if radio.get_active():
-			hgt_logger.debug('\t {}'.format(name))
+			pokeylogger.debug('\t {}'.format(name))
 			self.selected['hgt_rtype']=name
 		
 	def on_hgt_dest_toggled(self, radio, name):
 		if radio.get_active():
-			hgt_logger.debug('\t {}'.format(name))
+			pokeylogger.debug('\t {}'.format(name))
 			self.selected['hgt_dest']=name
 			
 	def hgt_button_exec(self, widget):
 	# Execute hgtools search
-		hgt_logger.debug("[*] MainWindow > Phrase Search clicked")
+		pokeylogger.debug("[*] MainWindow > Phrase Search clicked")
 		
 		if self.hgt_search_box.get_text():
 			search_term=self.hgt_search_box.get_text()
-			hgt_logger.debug("\t Search Term : {}".format(search_term))
+			pokeylogger.debug("\t Search Term : {}".format(search_term))
 			str_sql = 'SELECT hgt_code, hgt_text, hgt_desc FROM hgtools '
 			str_sql += 'LEFT JOIN hgtools_codes ON hgt_code = hgtools_codes.code '
 			str_sql += 'WHERE (hgt_text like "%{}%" OR hgt_code like "%{}%") GROUP BY hgt_code;'.format(search_term, search_term)
 			outp=dbsearch.hgt_query(str_sql, 'phrases')
 			
-			# hgt_logger.debug("\t {}".format(outp))
+			# pokeylogger.debug("\t {}".format(outp))
 			store = Gtk.ListStore(str, str, str)
 			
 			for line in outp.split('\n'):
 				listed = line.split('\t')
 				if listed != ['']:
-					# hgt_logger.debug(listed)
+					# pokeylogger.debug(listed)
 					store.append(listed)
 				
 			if len(store)>0:
 				search_win = SearchResultDialog(self, store)
 				response = search_win.run()
 				if response == Gtk.ResponseType.OK:
-					hgt_logger.debug("\t Selected : {}".format(USER_SELECTION))
+					pokeylogger.debug("\t Selected : {}".format(USER_SELECTION))
 					search_win.destroy()
 					try:
 						if self.selected['hgt_dest'] == '2':
@@ -832,23 +832,23 @@ class MainWindow(Gtk.Window):
 							src = 'HGFix URL'
 							hgfix.hgfix_main(USER_SELECTION, dest)
 							
-						hgt_logger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
+						pokeylogger.debug("\t Response : {} - {} > {}".format(src, USER_SELECTION, dest))
 						
 					except Exception as e:
 						raise
 						# err_raise(e)
 				else:
-					hgt_logger.debug("\t User Cancelled Dialog")
+					pokeylogger.debug("\t User Cancelled Dialog")
 					search_win.destroy()
 					
 			else:
-				hgt_logger.debug("\t Term not found!")
+				pokeylogger.debug("\t Term not found!")
 				nf_win = InfoDialog(self, self.favicon, "Not Found", "No results for the specified search term!")
 				response = nf_win.run()
 				nf_win.destroy()
 			
 		else:
-			hgt_logger.debug("\t No Term Specified")
+			pokeylogger.debug("\t No Term Specified")
 			nf_win = InfoDialog(self, self.favicon, "No Term Specified", "Please enter a valid search term")
 			response = nf_win.run()
 			nf_win.destroy()
@@ -921,8 +921,8 @@ class DedupeSelectionWindow(Gtk.Window):
 	
 		Gtk.Window.__init__(self, title="HGTools Deduplication Window")
 		self.set_transient_for(parent)
-		hgt_logger.debug("HGTools Deduplication Window")
-		hgt_logger.debug("Building grid")
+		pokeylogger.debug("HGTools Deduplication Window")
+		pokeylogger.debug("Building grid")
 		# Set Window/Grid attributes
 		self.set_border_width(10)
 		self.grid = Gtk.Grid()
@@ -937,7 +937,7 @@ class DedupeSelectionWindow(Gtk.Window):
 		self.liststore = liststore
 		self.treeview = Gtk.TreeView.new_with_model(self.liststore)
 		
-		hgt_logger.debug("Attaching columns")
+		pokeylogger.debug("Attaching columns")
 		# Set Checkbox Column
 		renderer_checkbox = Gtk.CellRendererToggle()
 		renderer_checkbox.connect("toggled", self.on_toggle, self.liststore)
@@ -985,13 +985,13 @@ class DedupeSelectionWindow(Gtk.Window):
 		self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, 
 								Gtk.PositionType.BOTTOM, 1, 1)
 		
-		hgt_logger.debug("Attaching buttons")
+		pokeylogger.debug("Attaching buttons")
 		# Attach Buttons	
 		for i, button in enumerate(self.buttons[1:]):
 			self.grid.attach_next_to(button, self.buttons[i], 
 								Gtk.PositionType.RIGHT, 1, 1)
 								
-		hgt_logger.debug("Attaching labels")						
+		pokeylogger.debug("Attaching labels")						
 		# Attach Labels
 		self.grid.attach(self.comparisons_label, 0, 0, 1, 1)
 		self.grid.attach_next_to(self.potentials_label, self.comparisons_label, 
@@ -1004,7 +1004,7 @@ class DedupeSelectionWindow(Gtk.Window):
 			if liststore[i][0]==True:
 				self.selected.append(liststore[i][3])
 		
-		hgt_logger.debug("Showing window")
+		pokeylogger.debug("Showing window")
 		# Add the treelist in a scrollable window, center and show					
 		self.scrollable_treelist.add(self.treeview)
 		self.set_position(Gtk.WindowPosition.CENTER)
@@ -1014,7 +1014,7 @@ class DedupeSelectionWindow(Gtk.Window):
 	def on_selection_button_clicked(self, widget):
 		
 		button_selection = widget.get_label()
-		hgt_logger.debug("Button clicked : %s" % button_selection)
+		pokeylogger.debug("Button clicked : %s" % button_selection)
 		
 		if button_selection=="Cancel Import":
 			while Gtk.events_pending():
@@ -1033,18 +1033,18 @@ class DedupeSelectionWindow(Gtk.Window):
 			if model[it][0]:
 				if model[it][1] not in self.selected:
 					self.selected.append(model[it][1])
-					hgt_logger.debug("Selected : %s" % model[it][1])
+					pokeylogger.debug("Selected : %s" % model[it][1])
 			else:
 				if model[it][1] in self.selected:
 					self.selected.remove(model[it][1])
-					hgt_logger.debug("Deselected : %s" % model[it][1])
+					pokeylogger.debug("Deselected : %s" % model[it][1])
 			
 	def delete_event(self, widget, event, data=None):
-		hgt_logger.debug("Window deleted")
+		pokeylogger.debug("Window deleted")
 		Gtk.main_quit()
 		
 	def on_destroy(self, widget):
-		hgt_logger.debug("Window destroyed")
+		pokeylogger.debug("Window destroyed")
 		Gtk.main_quit()
 		
 class DomainInfoDialog(Gtk.Dialog):
@@ -1181,17 +1181,17 @@ class LogViewWindow(Gtk.Window):
 		response = dialog.run()
 		
 		if response == Gtk.ResponseType.CANCEL:
-			hgt_logger.debug("[*] SearchDialog > Cancel clicked")
+			pokeylogger.debug("[*] SearchDialog > Cancel clicked")
 			dialog.destroy()
 			
 		if response == Gtk.ResponseType.OK:
-			hgt_logger.debug("[*] SearchDialog > Find clicked")
+			pokeylogger.debug("[*] SearchDialog > Find clicked")
 			cursor_mark = self.textbuffer.get_insert()
 			start = self.textbuffer.get_iter_at_mark(cursor_mark)
 			if start.get_offset() == self.textbuffer.get_char_count():
 				start = self.textbuffer.get_start_iter()
 			search_term = dialog.entry.get_text()
-			hgt_logger.debug("\t Search term : {}".format(search_term))
+			pokeylogger.debug("\t Search term : {}".format(search_term))
 			self.search_and_mark(search_term, start)
 		dialog.destroy()
 
@@ -1250,5 +1250,5 @@ class SearchResultDialog(Gtk.Dialog):
 		model, treeiter = selection.get_selected()
 		if treeiter != None:
 			USER_SELECTION = model[treeiter][1]
-			hgt_logger.debug("\t Search window selection changed : {}".format(model[treeiter][0]))
+			pokeylogger.debug("\t Search window selection changed : {}".format(model[treeiter][0]))
 		
