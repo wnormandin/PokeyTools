@@ -4,7 +4,7 @@
 #
 # ** Tweaks
 #
-#		For longer scripts, you may want to separate them into a 
+#		For longer datasets, you may want to separate them into a 
 #		second import file, and tweak the settings to look only at
 #		the dd_commonchars, dd_ratio, and dd_lev tests to handle potential
 #		syntax variations.  
