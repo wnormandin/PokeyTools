@@ -22,10 +22,10 @@ pokeylogger = fw.setup_logger('pokeylogger', logging.DEBUG, LOG_PATH)
 
 #*****************************END LOGGING*******************************
 
-class HGToolsApplication(object):
+class AdminToolsApplication(object):
 
 	def __init__(self):
-		pokeylogger.debug('[*] Begin HGToolsApplication.__init__()')
+		pokeylogger.debug('[*] Begin AdminToolsApplication.__init__()')
 
 		try:
 			# Set up command-line argument handler
@@ -40,7 +40,10 @@ class HGToolsApplication(object):
 			# Initialize and populate config values
 
 			# File Values
-			config = fw.PokeyConfig('./application.conf')
+			# The application.cfg file must be a PokeyConfig Base64-encoded JSON
+			# file in the current implementation, need to allow for more flexible
+			# configuration, see issue https://github.com/wnormandin/pokeytools/issues/8
+			config = fw.PokeyConfig('./application.cfg',fw.PokeyConfig.encoded,True)
 			# Other Values
 			config.timepart = time.strftime("%Y%m%d")
 			config.log_path = ('./tmp/{!s}.log'.format(config.timepart))
@@ -64,7 +67,7 @@ class HGToolsApplication(object):
 
 	def execute(self):
 		""" Executes the main application, window, and Gtk Loop """
-		pokeylogger.debug('[*] Begin HGToolsApplication.execute()')
+		pokeylogger.debug('[*] Begin AdminToolsApplication.execute()')
 
 		try:
 			# Initiate stle
@@ -103,4 +106,4 @@ class HGToolsApplication(object):
 		pass
 
 if __name__ == '__main__':
-	HGToolsApplication()
+	AdminToolsApplication()
