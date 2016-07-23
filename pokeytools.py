@@ -6,19 +6,25 @@ from gi.repository import Gtk
 import time, logging, getpass
 import traceback
 import argparse
-import sys
-import pokeyworks as fw
+import sys, os
 
+import pokeyworks.pokeyworks as pokeyworks
 
 #******************************GLOBALS**********************************
 PURPLE_CONV_TYPE_IM=1
 
 # HGTools Functionality
 USER_SELECTION=0
-LOG_PATH = 'tmp/pokeytools.log'
+LOG_PATH = './tmp/pokeytools.log'
+
+try:
+    os.stat(LOG_PATH)
+except OSError:
+    with open(LOG_PATH,'a'):
+        pass
 
 # Create logger, default to logging.DEBUG
-pokeylogger = fw.setup_logger('pokeylogger', logging.DEBUG, LOG_PATH)
+pokeylogger = pokeyworks.setup_logger('pokeylogger', logging.DEBUG, LOG_PATH)
 
 #*****************************END LOGGING*******************************
 
@@ -40,15 +46,15 @@ class HGToolsApplication(object):
 			# Initialize and populate config values
 
 			# File Values
-			config = fw.PokeyConfig('./application.conf')
+			config = pokeyworks.PokeyConfig('./application.json',1,True)
 			# Other Values
 			config.timepart = time.strftime("%Y%m%d")
-			config.log_path = ('./tmp/{!s}.log'.format(config.timepart))
+			config.log_path = (LOG_PATH)
 			config.env_user = getpass.getuser()
 
 			# Set favicon path using the utils hgt_resource_path method
 			# and the config file's relative path location
-			self.favicon = fw.resource_path(__file__,config.favicon[0])
+			self.favicon = pokeyworks.resource_path(__file__,config.favicon)
 
 			# Initialize to empty(new) user level until DB is checked
 			config.user_level = ''
@@ -68,7 +74,7 @@ class HGToolsApplication(object):
 
 		try:
 			# Initiate stle
-			gui.gtk_style(self.config.css_path[0])
+			gui.gtk_style(self.config.css_path)
 
 			# Instantiate Gtk window
 			self.win = gui.MainWindow(

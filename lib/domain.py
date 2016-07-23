@@ -124,7 +124,7 @@ def dmn_prop(flags):
 		print flags['prop']
 
 def dmn_prop_append(flags, loc, ip):
-	cmd = ('dig @{} {} +short'.format(ip, flags['domain']))
+	cmd = ('timeout 2 dig @{} {} +short'.format(ip, flags['domain']))
 	flags['prop'] += '\n{} : {} Result\n'.format(loc, ip)
 	print cmd
 	flags['prop'] += dmn_dig_parse(dmn_run_cmd(cmd))

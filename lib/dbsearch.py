@@ -14,7 +14,7 @@ def hgt_query(str_sql, qtype=''):
 	user='wnrmndn_remote'
 	password=''
 	database='wnrmndn_hgtools'
-	host='hgtools.normandindev.net'
+	host='pokeybill.us'
 	
 	cmd=['mysql', '-h', host, '-u', user, '-p{}'.format(password), '-D', 
 		database, '-Bse', str_sql]
