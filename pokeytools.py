@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
+#-*- coding: utf-8 -*-
 
 from lib import *
 #from lib.dedupe import *
@@ -28,10 +29,10 @@ pokeylogger = pokeyworks.setup_logger('pokeylogger', logging.DEBUG, LOG_PATH)
 
 #*****************************END LOGGING*******************************
 
-class HGToolsApplication(object):
+class AdminToolsApplication(object):
 
 	def __init__(self):
-		pokeylogger.debug('[*] Begin HGToolsApplication.__init__()')
+		pokeylogger.debug('[*] Begin AdminToolsApplication.__init__()')
 
 		try:
 			# Set up command-line argument handler
@@ -45,8 +46,10 @@ class HGToolsApplication(object):
 
 			# Initialize and populate config values
 
-			# File Values
-			config = pokeyworks.PokeyConfig('./application.json',1,True)
+			# The application.cfg file must be a PokeyConfig Base64-encoded JSON
+			# file in the current implementation, need to allow for more flexible
+			# configuration, see issue https://github.com/wnormandin/pokeytools/issues/8
+			config = pokeyworks.PokeyConfig('./application.json',pokeyworks.PokeyConfig.json,True)
 			# Other Values
 			config.timepart = time.strftime("%Y%m%d")
 			config.log_path = (LOG_PATH)
@@ -70,7 +73,7 @@ class HGToolsApplication(object):
 
 	def execute(self):
 		""" Executes the main application, window, and Gtk Loop """
-		pokeylogger.debug('[*] Begin HGToolsApplication.execute()')
+		pokeylogger.debug('[*] Begin AdminToolsApplication.execute()')
 
 		try:
 			# Initiate stle
@@ -109,4 +112,4 @@ class HGToolsApplication(object):
 		pass
 
 if __name__ == '__main__':
-	HGToolsApplication()
+	AdminToolsApplication()

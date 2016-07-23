@@ -17,7 +17,7 @@ LAST_RUN_PATH = '../tmp/pokeytools.log'
 
 #Pass_Chats Functionality
 PASS_LIST='./lib/pc_list.txt'
-DOM_SUFFIX='@openfire.houston.hostgator.com'
+DOM_SUFFIX='@chat.asmallorange.com'
 PURPLE_CONV_TYPE_IM=1
 
 
