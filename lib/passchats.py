@@ -32,9 +32,6 @@ def pc_readlines(pl=PASS_LIST):
 		lines = [line.strip() for line in passlist]
 	pokeylogger.debug('\tRead {} lines'.format(len(lines)))	
 	
-	passlist.close()
-	pokeylogger.debug('\t{} closed'.format(pl))
-	
 	return lines
 
 # Pass Chats Request
