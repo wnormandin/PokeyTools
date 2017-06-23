@@ -35,7 +35,7 @@ Select a chat count and click "Broadcast" to send your message to the recipients
 Set the search criteria :
 - # of Months OR Date (if a date is present, # of Months is ignored)
 - Keyword(s) spaces should be ok but single word terms yield broader results
-- Specify a Chat Room or User LDAP (Or Both)
+- Specify a Chat Room or User name (Or Both)
 
 Click "Search" and the results will be shown in a browser window
 
