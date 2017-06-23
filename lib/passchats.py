@@ -5,7 +5,7 @@ import dbus, dbus.glib, dbus.decorators
 
 #Pass_Chats Functionality
 PASS_LIST='./lib/pc_list.txt'
-DOM_SUFFIX='@openfire.houston.hostgator.com'
+DOM_SUFFIX=''	# This should be the xmpp domain
 
 PURPLE_CONV_TYPE_IM=1
 pokeylogger = logging.getLogger('pokeylogger')
