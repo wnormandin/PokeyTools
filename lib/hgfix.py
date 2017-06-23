@@ -7,13 +7,15 @@ import re
 from gi.repository import Gtk, Gdk
 from subprocess import Popen, PIPE
 
+PB_URL = ''	# URL to basebin API
+
 def hgfix_do_encode(post_arguments):
 
 	# Encode It Properly
 	uri = urllib.urlencode(post_arguments)
 	uri = uri.encode('utf-8') # data should be bytes
 	
-	return urllib2.Request('http://hgfix.net/paste/api/create', uri)
+	return urllib2.Request(PB_URL, uri)
 	
 def hgfix_do_post(request):
 
@@ -22,8 +24,8 @@ def hgfix_do_post(request):
 	
 	# Read the Response
 	paste_url = response.read().decode("utf-8").rstrip()  
-	match = re.search(r"http://hgfix.net/paste/view/(.+)", paste_url)
-	paste_url = "http://hgfix.net/paste/view/raw/" + match.group(1)
+	match = re.search(r"{}(.+)".format(PB_URL), paste_url)
+	paste_url = PB_URL + match.group(1)
 	
 	return paste_url
 	
