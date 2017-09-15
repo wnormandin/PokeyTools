@@ -17,7 +17,7 @@ LAST_RUN_PATH = '../tmp/pokeytools.log'
 
 #Pass_Chats Functionality
 PASS_LIST='./lib/pc_list.txt'
-DOM_SUFFIX='@chat.asmallorange.com'
+DOM_SUFFIX='@chat.domain.com'
 PURPLE_CONV_TYPE_IM=1
 
 
@@ -50,7 +50,7 @@ pokeylogger = logging.getLogger('pokeylogger')
 # DEPENDENCIES
 #
 # Required module(s)	: logging, Gtk (from gi.repository), HTMLParser
-# UI Information		: ui_info.xml
+# UI Information	: ui_info.xml
 # 
 
 class MainWindow(Gtk.Window):
@@ -415,7 +415,7 @@ class MainWindow(Gtk.Window):
 		pc_chats_combo_values.extend(range(6))
 
 		hgt_widget.append(('pc_chats_combo', pc_chats_combo_values,
-							'The number of chats your\npass_chat message will show',
+							'The custom string your\npass_chat message will show',
 							["changed", self.pc_chats_combo_changed]))
 
 		# pc_msg_box widget (Entry Box)
@@ -483,7 +483,7 @@ class MainWindow(Gtk.Window):
 
 		# sl_button widget (Action Button)
 		hgt_widget.append(('sl_button', 'Search',
-							'Search your Spark Logs with the\nspecified parameters',
+							'Search your chat logs with the\nspecified parameters',
 							["clicked", self.sl_button_exec]))
 
 	def hgt_section_widgets(self, hgt_widget):
