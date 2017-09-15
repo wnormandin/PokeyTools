@@ -76,8 +76,8 @@ def pc_pass_req(chats, lines):
 						ex_flag=True			
 	
 def pc_build_msg(opt):
-	msg = "\nCurrently I have : " + opt + " chats to pass.\nPlease reply if you can assist!\n"
-	msg = msg + "\n\t[*] This has been an automated chat pass request."
+	msg = "\nSample Message : " + opt + "\nPlease reply if you can assist!\n"
+	msg = msg + "\n\t[*] This has been an automated request."
 	return msg
 
 def pc_do_test(dbg):
